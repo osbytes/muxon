@@ -9,18 +9,20 @@ const (
 )
 
 var planningTools = map[string]bool{
-	"search": true,
-	"list":   true,
-	"read":   true,
+	"search":   true,
+	"list":     true,
+	"read":     true,
+	"repo-map": true,
 }
 
 var editingTools = map[string]bool{
-	"read":   true,
-	"search": true,
-	"patch":  true,
-	"write":  true,
-	"delete": true,
-	"finish": true,
+	"read":     true,
+	"search":   true,
+	"patch":    true,
+	"write":    true,
+	"delete":   true,
+	"finish":   true,
+	"repo-map": true,
 }
 
 // Check returns an error when the tool is not allowed in the phase.
