@@ -1,0 +1,5 @@
+{
+  "id": "dep-bump-001",
+  "prompt": "bump the uuid dependency in go.mod",
+  "fixture": "dep-bump"
+}

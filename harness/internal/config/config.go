@@ -13,6 +13,8 @@ type EffectiveConfig struct {
 	MaxPermission string
 	Permission    string
 	VerifyCommand string
+	FilterCommand string
+	AllowCommit   bool
 	Baseline      bool
 }
 
@@ -38,9 +40,13 @@ type fileConfig struct {
 		MaxPermission string `toml:"max_permission"`
 	} `toml:"security"`
 	Verify struct {
-		Command  string `toml:"command"`
-		Baseline *bool  `toml:"baseline"`
+		Command       string `toml:"command"`
+		FilterCommand string `toml:"filter_command"`
+		Baseline      *bool  `toml:"baseline"`
 	} `toml:"verify"`
+	Git struct {
+		AllowCommit bool `toml:"allow_commit"`
+	} `toml:"git"`
 }
 
 func mergeFile(out *EffectiveConfig, path string, project bool) {
@@ -63,6 +69,12 @@ func mergeFile(out *EffectiveConfig, path string, project bool) {
 	}
 	if fc.Verify.Command != "" {
 		out.VerifyCommand = fc.Verify.Command
+	}
+	if fc.Verify.FilterCommand != "" {
+		out.FilterCommand = fc.Verify.FilterCommand
+	}
+	if fc.Git.AllowCommit {
+		out.AllowCommit = true
 	}
 	if fc.Verify.Baseline != nil {
 		out.Baseline = *fc.Verify.Baseline

@@ -18,18 +18,20 @@ type Task struct {
 
 // ResultRow is one line in results.jsonl.
 type ResultRow struct {
-	TaskID       string    `json:"task_id"`
-	Trial        int       `json:"trial"`
-	Reward       int       `json:"reward"`
-	ModelID      string    `json:"model_id"`
-	InputTokens  int       `json:"input_tokens"`
-	OutputTokens int       `json:"output_tokens"`
-	CachedTokens int       `json:"cached_tokens"`
-	CostUSD      float64   `json:"cost_usd"`
-	ToolRounds   int       `json:"tool_rounds"`
-	Escalations  int       `json:"escalations"`
-	WallS        float64   `json:"wall_s"`
-	RecordedAt   time.Time `json:"recorded_at"`
+	TaskID             string    `json:"task_id"`
+	Trial              int       `json:"trial"`
+	Reward             int       `json:"reward"`
+	ModelID            string    `json:"model_id"`
+	InputTokens        int       `json:"input_tokens"`
+	OutputTokens       int       `json:"output_tokens"`
+	CachedTokens       int       `json:"cached_tokens"`
+	CostUSD            float64   `json:"cost_usd"`
+	ToolRounds         int       `json:"tool_rounds"`
+	Escalations        int       `json:"escalations"`
+	MalformedToolCalls int       `json:"malformed_tool_calls"`
+	LoopsDetected      int       `json:"loops_detected"`
+	WallS              float64   `json:"wall_s"`
+	RecordedAt         time.Time `json:"recorded_at"`
 }
 
 // LoadTask reads a task JSON file.

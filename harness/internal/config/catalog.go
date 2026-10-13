@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -134,6 +135,40 @@ func mergeModel(base, over ModelDef) ModelDef {
 	base.Capabilities = mergeCaps(base.Capabilities, over.Capabilities)
 	ApplyDefaults(&base.Capabilities)
 	return base
+}
+
+// RememberProvider records a provider id in the user catalog without storing a key.
+func RememberProvider(id, baseURL, keyEnv string) error {
+	if id == "" {
+		return fmt.Errorf("provider id required")
+	}
+	path, err := CatalogPath()
+	if err != nil {
+		return err
+	}
+	cat, err := LoadCatalog()
+	if err != nil {
+		return err
+	}
+	if cat.Providers == nil {
+		cat.Providers = map[string]ProviderDef{}
+	}
+	cur := cat.Providers[id]
+	if baseURL != "" {
+		cur.BaseURL = baseURL
+	}
+	if keyEnv != "" {
+		cur.APIKeyEnv = keyEnv
+	}
+	cat.Providers[id] = cur
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return err
+	}
+	b, err := json.MarshalIndent(cat, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, append(b, '\n'), 0o644)
 }
 
 func mergeCaps(base, over Capabilities) Capabilities {

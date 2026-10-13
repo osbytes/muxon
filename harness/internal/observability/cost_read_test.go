@@ -17,7 +17,7 @@ func TestReadSessionCostFromTrace(t *testing.T) {
 		OutputTokens: 50,
 		CachedTokens: 800,
 		CostUSD:      0.42,
-	}, 3, 1, 0))
+	}, 3, 1, 0, 0, 0))
 	w.Close()
 	sum, _, err := ReadSessionCost(path)
 	if err != nil {

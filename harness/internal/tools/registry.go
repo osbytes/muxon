@@ -28,11 +28,14 @@ type WorkspaceOps interface {
 
 // Env is per-run tool execution context.
 type Env struct {
-	Workspace WorkspaceOps
-	Trusted   bool
-	Session   *SessionState
-	Policy    *security.Policy
-	Ignore    *security.IgnoreRules
+	Workspace      WorkspaceOps
+	Trusted        bool
+	Session        *SessionState
+	Policy         *security.Policy
+	Ignore         *security.IgnoreRules
+	Headless       bool
+	AllowGitCommit bool
+	FilterCommand  string
 }
 
 // EnsureSecurity fills default policy/ignore when unset.

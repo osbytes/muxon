@@ -27,6 +27,8 @@ var editingTools = map[string]bool{
 	"checkpoint": true,
 	"todo":       true,
 	"ask_user":   true,
+	"test":       true,
+	"git":        true,
 }
 
 // CheckPhase returns an error when the tool is not allowed in the phase.

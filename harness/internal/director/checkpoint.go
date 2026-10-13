@@ -33,6 +33,46 @@ func (c *CheckpointStore) Save(relPath string) error {
 	return copyFile(src, dest)
 }
 
+// RestoreNewest copies the newest on-disk snapshot for relPath back into the workspace.
+func RestoreNewest(root, sessionID, relPath string) error {
+	base := filepath.Base(relPath)
+	cpRoot := filepath.Join(root, ".thee", "sessions", sessionID, "snapshots", "cp")
+	entries, err := os.ReadDir(cpRoot)
+	if err != nil {
+		return err
+	}
+	best := ""
+	bestN := -1
+	for _, e := range entries {
+		if !e.IsDir() {
+			continue
+		}
+		n := 0
+		for _, c := range e.Name() {
+			if c < '0' || c > '9' {
+				n = -1
+				break
+			}
+			n = n*10 + int(c-'0')
+		}
+		if n < 0 {
+			continue
+		}
+		cand := filepath.Join(cpRoot, e.Name(), base)
+		if _, err := os.Stat(cand); err != nil {
+			continue
+		}
+		if n >= bestN {
+			bestN = n
+			best = cand
+		}
+	}
+	if best == "" {
+		return os.ErrNotExist
+	}
+	return copyFile(best, filepath.Join(root, relPath))
+}
+
 // RestoreLatest puts the latest snapshot back for relPath basename.
 func (c *CheckpointStore) RestoreLatest(relPath string) error {
 	if c.seq == 0 {

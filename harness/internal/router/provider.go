@@ -12,7 +12,7 @@ import (
 func NewProvider(b *Binding) (provider.Provider, error) {
 	switch b.Provider.API {
 	case "openai_chat", "":
-		key, err := config.ResolveAPIKey(b.Provider.APIKeyEnv)
+		key, err := config.ResolveProviderKey(b.Provider.APIKeyEnv, b.ProviderName)
 		if err != nil {
 			return nil, err
 		}

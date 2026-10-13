@@ -8,7 +8,7 @@ Monorepo for **thee**: an open-source, CLI-first coding agent harness (small mod
 | [`api/`](api/) | Placeholder for the closed inference API module (not implemented here) |
 | [`docs/`](docs/) | Architecture specs, research, benchmarks |
 
-**Status:** **M0** and **milestone A** (headless CLI) are implemented — scripted `thee run` fixes the [`go-failing-test`](harness/testdata/fixtures/go-failing-test) fixture; BYOK worker binding, `doctor`, `cost`, `trust`, and `eval run` are wired. TUI and probe/eval matrix are Part 8–9; see [implementation plan](docs/harness-architecture/implementation-plan.md).
+**Status:** Milestones **M0**, **A** (headless), **B** (TUI), **C** (replay and local eval report), and **D** (release stubs) are in the tree. Scripted `thee run` and `thee chat` can fix [`go-failing-test`](harness/testdata/fixtures/go-failing-test). Live model-matrix scoring, probe thresholds, and a tagged release are still open. See [implementation plan](docs/harness-architecture/implementation-plan.md). The module path is still `github.com/PLACEHOLDER/thee/harness`.
 
 ---
 
@@ -67,18 +67,34 @@ go test ./...
 
 ---
 
-## Commands (milestone A)
+## Install
 
-Headless commands from the [CLI spec](docs/harness-architecture/cli.md) (interactive `thee chat` is Part 8).
+Release archives are built with [`.goreleaser.yml`](.goreleaser.yml) (`linux` and `darwin`, `amd64` and `arm64`). This repo does not publish tags yet. Until then:
+
+```bash
+go build -o thee ./harness/cmd/thee
+```
+
+## Commands (milestone D)
 
 | Command | Description |
 |---------|-------------|
-| `thee version` | Print build version (`dev` unless set at link time) |
+| `thee` / `thee chat` | Interactive TUI |
 | `thee run` | Headless agent session |
+| `thee resume [session-id]` | Continue the newest session, or a named one |
 | `thee doctor` | Keys, providers, `rg` on PATH (never prints secrets) |
 | `thee cost` | Token and USD totals from the latest session trace |
 | `thee trust list\|add\|rm` | Workspace trust store under `THEE_HOME` |
-| `thee eval run <task.json>` | Self-graded eval task → `.thee/eval/results.jsonl` |
+| `thee models list\|show\|probe` | Merged manifest; probe writes a catalog snippet |
+| `thee auth login <provider>` | Keyring entry; catalog records the provider id only |
+| `thee trace record\|replay\|export` | Scripted replay file, load it, or redact a trace |
+| `thee eval run\|report` | Local basket row and aggregate report |
+| `thee gc` | Drop session dirs older than 14 days and `refs/thee/sessions/*` |
+| `thee completion bash\|zsh\|fish` | Shell completion |
+| `thee serve` | Exits 3; IDE protocol is not in this build |
+| `thee version` | Print build version |
+
+Eval task ids: `fix-test-001`, `feature-add-001`, `lint-two-file-001`, `dep-bump-001`, `rename-001`.
 
 Global flags: `-C` / `--directory`, `--json`, `-q` / `--quiet`, `-v` / `--verbose`.
 
