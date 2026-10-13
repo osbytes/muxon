@@ -29,18 +29,19 @@ type writeArgs struct {
 }
 
 func (writeTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) (tools.Result, error) {
+	_ = env.EnsureSecurity()
 	var a writeArgs
 	if err := json.Unmarshal(args, &a); err != nil {
-		return tools.Result{OK: false, Text: "invalid write args"}, nil
+		return tools.Fail(env, "write", "invalid write args"), nil
 	}
 	if len(a.Content) > maxWriteBytes {
-		return tools.Result{OK: false, Text: "content exceeds 32KiB cap"}, nil
+		return tools.Fail(env, "write", "content exceeds 32KiB cap"), nil
 	}
 	if err := env.Workspace.CheckFresh(a.Path); err != nil {
-		return tools.Result{OK: false, Text: err.Error()}, nil
+		return tools.Fail(env, "write", err.Error()), nil
 	}
 	if err := env.Workspace.WriteFile(a.Path, []byte(a.Content)); err != nil {
-		return tools.Result{OK: false, Text: err.Error()}, nil
+		return tools.Fail(env, "write", err.Error()), nil
 	}
-	return tools.Result{OK: true, Text: "wrote " + a.Path}, nil
+	return tools.OK(env, "write", "wrote "+a.Path, 0, 0), nil
 }

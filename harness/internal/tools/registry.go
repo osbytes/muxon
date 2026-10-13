@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
+	"github.com/PLACEHOLDER/thee/harness/internal/security"
 )
 
 // Result is returned to the model from a tool.
@@ -14,11 +16,13 @@ type Result struct {
 
 // WorkspaceOps is implemented by workspace.Workspace.
 type WorkspaceOps interface {
+	Root() string
 	Resolve(string) (string, error)
 	ReadFile(string) ([]byte, error)
 	WriteFile(string, []byte) error
 	CheckFresh(string) error
 	NoteRead(string, []byte)
+	NoteReadRange(string, []byte, int, int)
 	Changed() bool
 }
 
@@ -27,6 +31,23 @@ type Env struct {
 	Workspace WorkspaceOps
 	Trusted   bool
 	Session   *SessionState
+	Policy    *security.Policy
+	Ignore    *security.IgnoreRules
+}
+
+// EnsureSecurity fills default policy/ignore when unset.
+func (e *Env) EnsureSecurity() error {
+	if e.Policy == nil {
+		e.Policy = security.NewPolicy()
+	}
+	if e.Ignore == nil && e.Workspace != nil {
+		ign, err := security.LoadIgnore(e.Workspace.Root(), e.Policy)
+		if err != nil {
+			return err
+		}
+		e.Ignore = ign
+	}
+	return nil
 }
 
 // SessionState holds cross-tool session flags.

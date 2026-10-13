@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/PLACEHOLDER/thee/harness/internal/security"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools/patch"
 )
@@ -31,31 +32,35 @@ type patchArgs struct {
 
 func (patchTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) (tools.Result, error) {
 	var a patchArgs
+	_ = env.EnsureSecurity()
 	if err := json.Unmarshal(args, &a); err != nil {
-		return tools.Result{OK: false, Text: "invalid patch args"}, nil
+		return tools.Fail(env, "patch", "invalid patch args"), nil
+	}
+	if env.Policy.DenyRead(a.Path) {
+		return tools.Fail(env, "patch", security.DenyReadMessage), nil
 	}
 	if err := env.Workspace.CheckFresh(a.Path); err != nil {
-		return tools.Result{OK: false, Text: err.Error()}, nil
+		return tools.Fail(env, "patch", err.Error()), nil
 	}
 	cur, err := env.Workspace.ReadFile(a.Path)
 	if err != nil {
-		return tools.Result{OK: false, Text: err.Error()}, nil
+		return tools.Fail(env, "patch", err.Error()), nil
 	}
 	var newContent []byte
 	var strategy string
 	switch a.Format {
 	case "", "search_replace":
-		newContent, strategy, err = patch.ApplySearchReplaceExact(string(cur), a.Replacements)
+		newContent, strategy, err = patch.ApplySearchReplace(string(cur), a.Replacements)
 	case "udiff":
-		newContent, strategy, err = patch.ApplyUDiffExact(string(cur), a.Diff)
+		newContent, strategy, err = patch.ApplyUDiff(string(cur), a.Diff)
 	default:
-		return tools.Result{OK: false, Text: "unknown patch format"}, nil
+		return tools.Fail(env, "patch", "unknown patch format"), nil
 	}
 	if err != nil {
-		return tools.Result{OK: false, Text: err.Error()}, nil
+		return tools.Fail(env, "patch", err.Error()), nil
 	}
 	if err := env.Workspace.WriteFile(a.Path, newContent); err != nil {
-		return tools.Result{OK: false, Text: err.Error()}, nil
+		return tools.Fail(env, "patch", err.Error()), nil
 	}
-	return tools.Result{OK: true, Text: "patched " + a.Path + " (" + strategy + ")"}, nil
+	return tools.OK(env, "patch", "patched "+a.Path+" ("+strategy+")", 0, 0), nil
 }

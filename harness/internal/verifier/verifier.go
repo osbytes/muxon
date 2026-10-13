@@ -1,13 +1,11 @@
 package verifier
 
 import (
-	"bytes"
 	"context"
-	"fmt"
-	"os"
-	"os/exec"
 	"strings"
 	"time"
+
+	"github.com/PLACEHOLDER/thee/harness/internal/subproc"
 )
 
 // Result is a verify run outcome.
@@ -22,26 +20,18 @@ type Result struct {
 // Run executes argv directly (no shell).
 func Run(ctx context.Context, workspaceRoot string, argv []string) (Result, error) {
 	if len(argv) == 0 {
-		return Result{}, fmt.Errorf("empty verify command")
+		return Result{}, errEmptyVerify
 	}
 	start := time.Now()
-	cmd := exec.CommandContext(ctx, argv[0], argv[1:]...)
-	cmd.Dir = workspaceRoot
-	cmd.Env = os.Environ()
-	var buf bytes.Buffer
-	cmd.Stdout = &buf
-	cmd.Stderr = &buf
-	err := cmd.Run()
+	out, exitCode, err := subproc.Run(ctx, workspaceRoot, argv, nil)
 	dur := time.Since(start).Milliseconds()
-	exitCode := 0
-	if err != nil {
-		if ee, ok := err.(*exec.ExitError); ok {
-			exitCode = ee.ExitCode()
-		} else {
-			return Result{}, err
-		}
+	if err != nil && exitCode != 0 && exitCode != 1 {
+		return Result{}, err
 	}
-	excerpt := excerptOutput(buf.String(), 20)
+	if exitCode < 0 {
+		return Result{}, err
+	}
+	excerpt := excerptOutput(string(out), 20)
 	return Result{
 		Command:    argv,
 		ExitCode:   exitCode,
@@ -50,6 +40,12 @@ func Run(ctx context.Context, workspaceRoot string, argv []string) (Result, erro
 		Excerpt:    excerpt,
 	}, nil
 }
+
+var errEmptyVerify = &verifyError{"empty verify command"}
+
+type verifyError struct{ msg string }
+
+func (e *verifyError) Error() string { return e.msg }
 
 func excerptOutput(s string, maxLines int) string {
 	lines := strings.Split(strings.TrimSpace(s), "\n")

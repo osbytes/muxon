@@ -1,0 +1,53 @@
+thee harness — implementation progress
+======================================
+Spec / build order: docs/harness-architecture/implementation-plan.md
+Code module: harness/
+Last updated: 2026-10-13
+
+Summary
+-------
+Part 1 (walking skeleton) is DONE for M0.
+Part 2 (workspace tools and safety) is DONE.
+
+Milestone M0: PASS
+Milestone M1: pending (Part 4)
+
+Monorepo layout: DONE
+Module path: github.com/PLACEHOLDER/thee/harness (replace PLACEHOLDER before publish)
+
+
+Parts (plan order)
+------------------
+[done]  Part 1  — Walking skeleton (M0)
+[done]  Part 2  — Workspace tools and safety
+[todo]  Part 3  — Context engine and repo-map
+[todo]  Part 4  — Tool-calling stack (M1)
+[todo]  Part 5  — Director, verifier, trust
+[todo]  Part 6  — Router, escalation, cost
+[todo]  Part 7  — Headless CLI milestone A
+[todo]  Part 8  — TUI milestone B
+[todo]  Part 9  — Probe, eval, replay milestone C
+[todo]  Part 10 — Release milestone D
+
+
+Part 2 step checklist (harness/)
+--------------------------------
+2.1  secret deny + gitignore/theeignore + bulk dirs     done
+2.2  result caps, redaction, tool_result wrappers       done
+2.3  search (rg) + list                                 done
+2.4  delete / move                                      done
+2.5  patch ladder + stale read lines                    done
+2.6  phases + Registry.Check                            done
+2.7  subproc argv-only (verifier + rg)                    done
+
+
+Part 1 step checklist (harness/)
+--------------------------------
+1.1–1.14  done (see prior entries)
+1.15       skipped (optional live smoke)
+
+
+Notes
+-----
+- M0 scripted loop unchanged (read → patch → finish).
+- Next: Part 3 (compact prompts, repo-map) or Part 4 toward M1.
