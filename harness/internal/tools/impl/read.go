@@ -8,6 +8,7 @@ import (
 
 	"github.com/PLACEHOLDER/thee/harness/internal/security"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/thee/harness/internal/tools/schema"
 )
 
 const maxReadLines = 400
@@ -22,14 +23,14 @@ func (readTool) Spec() tools.Spec {
 	return tools.Spec{
 		Name:        "read",
 		Description: "Read a line range from a file",
-		Parameters:  json.RawMessage(`{"type":"object","properties":{"path":{"type":"string"},"start_line":{"type":"integer"},"end_line":{"type":"integer"}},"required":["path","start_line","end_line"]}`),
+		Parameters:  schema.FromStruct(readArgs{}),
 	}
 }
 
 type readArgs struct {
-	Path      string `json:"path"`
-	StartLine int    `json:"start_line"`
-	EndLine   int    `json:"end_line"`
+	Path      string `json:"path" jsonschema:"required"`
+	StartLine int    `json:"start_line" jsonschema:"required"`
+	EndLine   int    `json:"end_line" jsonschema:"required"`
 }
 
 func (readTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) (tools.Result, error) {

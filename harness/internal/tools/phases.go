@@ -9,24 +9,28 @@ const (
 )
 
 var planningTools = map[string]bool{
-	"search":   true,
-	"list":     true,
-	"read":     true,
-	"repo-map": true,
+	"search":    true,
+	"list":      true,
+	"read":      true,
+	"repo-map":  true,
+	"ask_user":  true,
 }
 
 var editingTools = map[string]bool{
-	"read":     true,
-	"search":   true,
-	"patch":    true,
-	"write":    true,
-	"delete":   true,
-	"finish":   true,
-	"repo-map": true,
+	"read":       true,
+	"search":     true,
+	"patch":      true,
+	"write":      true,
+	"delete":     true,
+	"finish":     true,
+	"repo-map":   true,
+	"checkpoint": true,
+	"todo":       true,
+	"ask_user":   true,
 }
 
-// Check returns an error when the tool is not allowed in the phase.
-func (r *Registry) Check(name, phase string) error {
+// CheckPhase returns an error when the tool is not allowed in the phase.
+func CheckPhase(phase, name string) error {
 	switch phase {
 	case PhasePlanning:
 		if !planningTools[name] {
@@ -40,4 +44,9 @@ func (r *Registry) Check(name, phase string) error {
 		return fmt.Errorf("unknown phase %q", phase)
 	}
 	return nil
+}
+
+// Check returns an error when the tool is not allowed in the phase.
+func (r *Registry) Check(name, phase string) error {
+	return CheckPhase(phase, name)
 }

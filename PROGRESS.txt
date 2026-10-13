@@ -9,9 +9,11 @@ Summary
 Part 1 (walking skeleton) is DONE for M0.
 Part 2 (workspace tools and safety) is DONE.
 Part 3 (context engine and repo-map) is DONE.
+Part 4 (tool-calling stack) is DONE (M1 live smoke skipped — no API key).
+Part 5 (director, verifier, trust) is DONE.
 
 Milestone M0: PASS
-Milestone M1: pending (Part 4)
+Milestone M1: pending (4.10 skipped — no API key)
 
 Monorepo layout: DONE
 Module path: github.com/PLACEHOLDER/thee/harness (replace PLACEHOLDER before publish)
@@ -20,47 +22,65 @@ Module path: github.com/PLACEHOLDER/thee/harness (replace PLACEHOLDER before pub
 Parts (plan order)
 ------------------
 [done]  Part 1  — Walking skeleton (M0)
-[done]  Part 2  — Workspace tools and safety
-[done]  Part 3  — Context engine and repo-map
-[todo]  Part 4  — Tool-calling stack (M1)
-[todo]  Part 5  — Director, verifier, trust
-[todo]  Part 6  — Router, escalation, cost
-[todo]  Part 7  — Headless CLI milestone A
-[todo]  Part 8  — TUI milestone B
-[todo]  Part 9  — Probe, eval, replay milestone C
+[done]  Part  2 — Workspace tools and safety
+[done]  Part  3 — Context engine and repo-map
+[done]  Part  4 — Tool-calling stack (M1)
+[done]  Part  5 — Director, verifier, trust
+[todo]  Part  6 — Router, escalation, cost
+[todo]  Part  7 — Headless CLI milestone A
+[todo]  Part  8 — TUI milestone B
+[todo]  Part  9 — Probe, eval, replay milestone C
 [todo]  Part 10 — Release milestone D
+
+
+Part 4 step checklist (harness/)
+--------------------------------
+4.1  reasoning strip before parse                           done
+4.2  JSON schema from structs                               done
+4.3  salvage before repair                                    done
+4.4  constraint builder + downgrade                         done
+4.5  two_step driver                                        done
+4.6  fenced driver                                          done
+4.7  repair once + director hook                            done
+4.8  wire toolcall dispatch into director                     done
+4.9  truncation / served_context trace event                done
+4.10 live small-model smoke                                 skipped (no API key)
+
+
+Part 5 step checklist (harness/)
+--------------------------------
+5.1  full state machine + transitions                       done
+5.2  caps and token budget                                  done
+5.3  trust store + thee trust CLI                           done
+5.4  config.toml / thee.toml precedence                     done
+5.5  verify resolution order                                done
+5.6  Go test failure parser + signature                     done
+5.7  baseline parallel to first turn                        done
+5.8  verify gaming (test_edits flag)                        done
+5.9  session base shadow ref / snapshot dir                 done
+5.10 checkpoints + restore tool (minimal)                     done
+5.11 loop detection nudge / escalate                          done
+5.12 todo + ask_user tools                                  done
+5.13 director replay integration test                       done
 
 
 Part 3 step checklist (harness/)
 --------------------------------
-3.1  compact prompt templates, render, golden hash          done
-3.2  standard prompt variant and golden                     done
-3.3  approx token estimate + correction ratio               done
-3.4  AGENTS.md precedence + untrusted wrap                  done
-3.5  Go repo-map, JSON cache, repo-map tool                 done
-3.6  12-section BuildTurn + prefix_hash                       done
-3.7  elision/truncate compaction; keep verify failure         done
-3.8  32k window trims repo-map before AGENTS.md               done
+3.1–3.8  done (see prior entries)
 
 
 Part 2 step checklist (harness/)
 --------------------------------
-2.1  secret deny + gitignore/theeignore + bulk dirs     done
-2.2  result caps, redaction, tool_result wrappers       done
-2.3  search (rg) + list                                 done
-2.4  delete / move                                      done
-2.5  patch ladder + stale read lines                    done
-2.6  phases + Registry.Check                            done
-2.7  subproc argv-only (verifier + rg)                    done
+2.1–2.7  done (see prior entries)
 
 
 Part 1 step checklist (harness/)
 --------------------------------
-1.1–1.14  done (see prior entries)
+1.1–1.14  done
 1.15       skipped (optional live smoke)
 
 
 Notes
 -----
 - M0 scripted loop unchanged (read → patch → finish).
-- Next: Part 4 (tool-calling stack) toward M1.
+- Next: Part 6 (router, escalation, cost).

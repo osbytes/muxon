@@ -16,8 +16,9 @@ type Event struct {
 	From string `json:"from,omitempty"`
 	To   string `json:"to,omitempty"`
 
-	Name string `json:"name,omitempty"`
-	OK   bool   `json:"ok,omitempty"`
+	Name     string `json:"name,omitempty"`
+	OK       bool   `json:"ok,omitempty"`
+	Salvaged bool   `json:"salvaged,omitempty"`
 
 	Command    []string `json:"command,omitempty"`
 	ExitCode   int      `json:"exit_code,omitempty"`
@@ -53,6 +54,14 @@ func StateTransitionEvent(from, to, reason string) Event {
 
 func ToolCallEvent(name string) Event {
 	return Event{Type: "tool.call", Name: name}
+}
+
+func ToolCallSalvagedEvent(name string) Event {
+	return Event{Type: "tool.call", Name: name, Salvaged: true}
+}
+
+func TruncatedByServerEvent() Event {
+	return Event{Type: "truncated_by_server"}
 }
 
 func ToolResultEvent(ok bool) Event {

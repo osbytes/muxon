@@ -11,12 +11,29 @@ type Provider interface {
 	Stream(ctx context.Context, req Request) (Stream, error)
 }
 
+// ResponseFormatKind selects structured output mode.
+type ResponseFormatKind string
+
+const (
+	FormatNone       ResponseFormatKind = "none"
+	FormatJSONObject ResponseFormatKind = "json_object"
+	FormatJSONSchema ResponseFormatKind = "json_schema"
+)
+
+// ResponseFormat is optional structured output for completions.
+type ResponseFormat struct {
+	Kind   ResponseFormatKind
+	Schema map[string]interface{}
+	Name   string
+}
+
 // Request is a normalized completion request.
 type Request struct {
 	ModelID         string
 	Messages        []Message
 	Tools           []ToolDef
 	MaxOutputTokens int
+	ResponseFormat  ResponseFormat
 }
 
 // Message is a chat message.

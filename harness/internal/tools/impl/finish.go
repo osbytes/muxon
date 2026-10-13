@@ -33,6 +33,9 @@ func (finishTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage)
 	if env.Session == nil {
 		return tools.Fail(env, "finish", "no session"), nil
 	}
+	if len(env.Session.OpenTodos) > 0 {
+		return tools.Fail(env, "finish", "open todo items remain"), nil
+	}
 	env.Session.FinishSummary = a.Summary
 	if env.Workspace.Changed() {
 		env.Session.PendingVerify = true
