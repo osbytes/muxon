@@ -8,6 +8,7 @@ Summary
 -------
 Part 1 (walking skeleton) is DONE for M0.
 Part 2 (workspace tools and safety) is DONE.
+Part 3 (context engine and repo-map) is DONE.
 
 Milestone M0: PASS
 Milestone M1: pending (Part 4)
@@ -20,7 +21,7 @@ Parts (plan order)
 ------------------
 [done]  Part 1  — Walking skeleton (M0)
 [done]  Part 2  — Workspace tools and safety
-[todo]  Part 3  — Context engine and repo-map
+[done]  Part 3  — Context engine and repo-map
 [todo]  Part 4  — Tool-calling stack (M1)
 [todo]  Part 5  — Director, verifier, trust
 [todo]  Part 6  — Router, escalation, cost
@@ -28,6 +29,18 @@ Parts (plan order)
 [todo]  Part 8  — TUI milestone B
 [todo]  Part 9  — Probe, eval, replay milestone C
 [todo]  Part 10 — Release milestone D
+
+
+Part 3 step checklist (harness/)
+--------------------------------
+3.1  compact prompt templates, render, golden hash          done
+3.2  standard prompt variant and golden                     done
+3.3  approx token estimate + correction ratio               done
+3.4  AGENTS.md precedence + untrusted wrap                  done
+3.5  Go repo-map, JSON cache, repo-map tool                 done
+3.6  12-section BuildTurn + prefix_hash                       done
+3.7  elision/truncate compaction; keep verify failure         done
+3.8  32k window trims repo-map before AGENTS.md               done
 
 
 Part 2 step checklist (harness/)
@@ -50,4 +63,4 @@ Part 1 step checklist (harness/)
 Notes
 -----
 - M0 scripted loop unchanged (read → patch → finish).
-- Next: Part 3 (compact prompts, repo-map) or Part 4 toward M1.
+- Next: Part 4 (tool-calling stack) toward M1.

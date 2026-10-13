@@ -10,6 +10,7 @@ import (
 	"github.com/PLACEHOLDER/thee/harness/internal/contextengine"
 	"github.com/PLACEHOLDER/thee/harness/internal/observability"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/thee/harness/internal/security"
 	"github.com/PLACEHOLDER/thee/harness/internal/toolcall"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools/impl"
@@ -72,9 +73,13 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 
 	session := &tools.SessionState{}
 	toolEnv := &tools.Env{Workspace: ws, Trusted: cfg.Trusted, Session: session}
+	estimator := contextengine.NewEstimator()
+	pol := security.NewPolicy()
+	ign, _ := security.LoadIgnore(ws.Root(), pol)
 
 	state := "acting"
 	history := []provider.Message{}
+	phase := tools.PhaseEditing
 	maxRounds := cfg.MaxRounds
 	if maxRounds == 0 {
 		maxRounds = 20
@@ -84,10 +89,18 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		switch state {
 		case "acting":
 			turn := contextengine.BuildTurn(contextengine.TurnInput{
-				Goal:         cfg.Goal,
-				History:      history,
-				ToolProtocol: model.Capabilities.ToolProtocol,
-				ToolSpecs:    reg.Specs(),
+				Goal:          cfg.Goal,
+				History:       history,
+				ToolProtocol:  model.Capabilities.ToolProtocol,
+				PromptVariant: model.Capabilities.PromptVariant,
+				ToolSpecs:     reg.Specs(),
+				WorkspaceRoot: ws.Root(),
+				Trusted:       cfg.Trusted,
+				Phase:         phase,
+				ContextWindow: model.Capabilities.ContextWindow,
+				Estimator:     estimator,
+				Policy:        pol,
+				Ignore:        ign,
 			})
 			req := provider.Request{
 				ModelID:  model.Model,
