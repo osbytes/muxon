@@ -8,7 +8,7 @@ Monorepo for **thee**: an open-source, CLI-first coding agent harness (small mod
 | [`api/`](api/) | Placeholder for the closed inference API module (not implemented here) |
 | [`docs/`](docs/) | Architecture specs, research, benchmarks |
 
-**Status:** Part 1 (walking skeleton / **M0**) is implemented — scripted `thee run` can fix the [`go-failing-test`](harness/testdata/fixtures/go-failing-test) fixture. Live models, TUI, and full tool surface come in later parts; see [implementation plan](docs/harness-architecture/implementation-plan.md).
+**Status:** **M0** and **milestone A** (headless CLI) are implemented — scripted `thee run` fixes the [`go-failing-test`](harness/testdata/fixtures/go-failing-test) fixture; BYOK worker binding, `doctor`, `cost`, `trust`, and `eval run` are wired. TUI and probe/eval matrix are Part 8–9; see [implementation plan](docs/harness-architecture/implementation-plan.md).
 
 ---
 
@@ -61,34 +61,49 @@ go test ./...
 | Variable | Default | Purpose |
 |----------|---------|---------|
 | `THEE_HOME` | `~/.thee` | Config, catalog, trust store (tests should set this to a temp dir) |
-| `THEE_SCRIPTED_PROVIDER_FILE` | — | Path to a JSON file of canned model responses (see below) |
+| `THEE_SCRIPTED_PROVIDER_FILE` | — | Path to a JSON file of canned model responses (CI / demos; overrides BYOK when set) |
+| `THEE_TRUST` | — | Set to `1` to trust the workspace (same as `--trust`) |
+| `DEEPINFRA_API_KEY` (etc.) | — | Provider keys per embedded `models.yaml` / `~/.thee/catalog.json` |
 
 ---
 
-## Commands (today)
+## Commands (milestone A)
 
-Only a subset of the [full CLI spec](docs/harness-architecture/cli.md) exists so far.
+Headless commands from the [CLI spec](docs/harness-architecture/cli.md) (interactive `thee chat` is Part 8).
 
 | Command | Description |
 |---------|-------------|
 | `thee version` | Print build version (`dev` unless set at link time) |
-| `thee run` | Headless agent session (see flags below) |
+| `thee run` | Headless agent session |
+| `thee doctor` | Keys, providers, `rg` on PATH (never prints secrets) |
+| `thee cost` | Token and USD totals from the latest session trace |
+| `thee trust list\|add\|rm` | Workspace trust store under `THEE_HOME` |
+| `thee eval run <task.json>` | Self-graded eval task → `.thee/eval/results.jsonl` |
+
+Global flags: `-C` / `--directory`, `--json`, `-q` / `--quiet`, `-v` / `--verbose`.
 
 ### `thee run`
 
 ```text
-thee run -p "<goal>" [--trust] [--directory <path>]
+thee run -p "<goal>" [--trust] [--verify-cmd "..."] [--model <id>] [--max-tool-rounds N]
+         [--cost-budget-usd X] [--permission edit|full|read-only] [--yolo] [--no-plan]
+         [--eval <task.json>]
 ```
 
 | Flag | Description |
 |------|-------------|
 | `-p`, `--prompt` | Goal text (required) |
-| `--trust` | Allow the harness to run the verify command (`go test ./...`) in the workspace |
-| `--directory` | Workspace root (default: current directory) |
+| `--trust` | Honor project verify command in the workspace |
+| `--verify-cmd` | Override verify argv (whitespace-separated) |
+| `--model` | Force worker model id from manifest |
+| `--max-tool-rounds`, `--cost-budget-usd` | Per-run caps |
+| `--permission`, `--yolo` | Tier / auto-approve within user `max_permission` |
+| `--no-plan` | Skip planning (v1 records only; no planning state) |
+| `--eval` | Append a row to `.thee/eval/results.jsonl` after the run |
 
-**Exit codes** (headless): `0` done · `1` failed · `3` setup (missing prompt, no provider, untrusted workspace, etc.) · `130` cancelled (when implemented).
+**Exit codes:** `0` done · `1` failed (verify/budget/caps) · `2` approval required · `3` setup · `130` cancelled (SIGINT).
 
-**Provider:** Production BYOK wiring lands in later milestones. For now, `thee run` requires a **scripted** provider via `THEE_SCRIPTED_PROVIDER_FILE` (used in CI and local M0 demos).
+**Provider:** Without `THEE_SCRIPTED_PROVIDER_FILE`, `thee run` uses the **worker** role from merged `models.yaml` + `~/.thee/catalog.json` (BYOK). Set the provider’s `api_key_env` in your environment.
 
 ### Scripted M0 demo (fix the sample fixture)
 
@@ -109,10 +124,10 @@ thee run -p "<goal>" [--trust] [--directory <path>]
    go run ./cmd/thee run -p "fix the failing test" --trust --directory /tmp/go-failing-test
    ```
 
-4. Inspect the trace:
+4. Inspect the trace (session id is timestamped; `thee cost` reads the latest):
 
    ```text
-   /tmp/go-failing-test/.thee/sessions/test-session/trace.jsonl
+   /tmp/go-failing-test/.thee/sessions/<session-id>/trace.jsonl
    ```
 
    Expect `verify.run` (passed) and `session.end` with `outcome` `done`.

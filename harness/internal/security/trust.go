@@ -1,6 +1,8 @@
 package security
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -11,7 +13,8 @@ import (
 
 // TrustStore lists trusted workspace roots.
 type TrustStore struct {
-	Roots []string `json:"roots"`
+	Roots        []string          `json:"roots"`
+	ConfigHashes map[string]string `json:"config_hashes,omitempty"`
 }
 
 // LoadTrust reads ~/.thee/trust.json.
@@ -60,6 +63,29 @@ func (s *TrustStore) AddRoot(root string) {
 		}
 	}
 	s.Roots = append(s.Roots, root)
+}
+
+// AddRootWithConfigHash records trust and optional thee.toml hash.
+func (s *TrustStore) AddRootWithConfigHash(root, hash string) {
+	s.AddRoot(root)
+	if hash == "" {
+		return
+	}
+	if s.ConfigHashes == nil {
+		s.ConfigHashes = map[string]string{}
+	}
+	s.ConfigHashes[filepath.Clean(root)] = hash
+}
+
+// HashTheeToml returns sha256 of project thee.toml when present.
+func HashTheeToml(workspaceRoot string) string {
+	path := filepath.Join(workspaceRoot, "thee.toml")
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return ""
+	}
+	sum := sha256.Sum256(b)
+	return hex.EncodeToString(sum[:])
 }
 
 // RemoveRoot removes a workspace root.

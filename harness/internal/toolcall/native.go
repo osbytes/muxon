@@ -16,4 +16,3 @@ func ParseNative(resp provider.Response) (Outcome, error) {
 	}
 	return Outcome{Calls: resp.ToolCalls, Text: resp.Text}, nil
 }
-

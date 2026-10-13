@@ -33,11 +33,15 @@ var trustAddCmd = &cobra.Command{
 	Short: "Trust a workspace root",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		root, err := absPath(args[0])
+		if err != nil {
+			return err
+		}
 		s, err := security.LoadTrust()
 		if err != nil {
 			return err
 		}
-		s.AddRoot(args[0])
+		s.AddRootWithConfigHash(root, security.HashTheeToml(root))
 		return security.SaveTrust(s)
 	},
 }
@@ -47,11 +51,15 @@ var trustRmCmd = &cobra.Command{
 	Short: "Remove a trusted workspace root",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		root, err := absPath(args[0])
+		if err != nil {
+			return err
+		}
 		s, err := security.LoadTrust()
 		if err != nil {
 			return err
 		}
-		s.RemoveRoot(args[0])
+		s.RemoveRoot(root)
 		return security.SaveTrust(s)
 	},
 }

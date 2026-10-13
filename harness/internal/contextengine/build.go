@@ -13,18 +13,18 @@ import (
 
 // TurnInput builds one model turn.
 type TurnInput struct {
-	Goal           string
-	History        []provider.Message
-	ToolProtocol   string
-	PromptVariant  string
-	ToolSpecs      []tools.Spec
-	WorkspaceRoot  string
-	Trusted        bool
-	Phase          string
-	ContextWindow  int
-	Estimator      *Estimator
-	Policy         *security.Policy
-	Ignore         *security.IgnoreRules
+	Goal          string
+	History       []provider.Message
+	ToolProtocol  string
+	PromptVariant string
+	ToolSpecs     []tools.Spec
+	WorkspaceRoot string
+	Trusted       bool
+	Phase         string
+	ContextWindow int
+	Estimator     *Estimator
+	Policy        *security.Policy
+	Ignore        *security.IgnoreRules
 }
 
 // TurnOutput is assembled messages and optional native tools.

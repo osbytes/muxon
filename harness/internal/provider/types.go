@@ -69,8 +69,12 @@ type Response struct {
 
 // Usage is normalized token usage.
 type Usage struct {
-	InputTokens  int
-	OutputTokens int
+	InputTokens      int
+	OutputTokens     int
+	CachedTokens     int
+	CacheWriteTokens int
+	ReasoningTokens  int
+	ProviderCostUSD  float64
 }
 
 // Stream delivers completion chunks.

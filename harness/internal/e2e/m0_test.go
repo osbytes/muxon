@@ -34,7 +34,10 @@ func TestM0RunE2E(t *testing.T) {
 	if err != nil {
 		t.Fatalf("run failed: %v\n%s", err, out)
 	}
-	tracePath := filepath.Join(fixtureDir, ".thee", "sessions", "test-session", "trace.jsonl")
+	tracePath, err := latestTrace(fixtureDir)
+	if err != nil {
+		t.Fatal(err)
+	}
 	data, err := os.ReadFile(tracePath)
 	if err != nil {
 		t.Fatal(err)
@@ -43,6 +46,24 @@ func TestM0RunE2E(t *testing.T) {
 	if !strings.Contains(s, "verify.run") || !strings.Contains(s, "session.end") || !strings.Contains(s, `"outcome":"done"`) {
 		t.Fatalf("trace: %s", s)
 	}
+}
+
+func latestTrace(fixtureDir string) (string, error) {
+	sessionsDir := filepath.Join(fixtureDir, ".thee", "sessions")
+	entries, err := os.ReadDir(sessionsDir)
+	if err != nil {
+		return "", err
+	}
+	var latest string
+	for _, e := range entries {
+		if e.IsDir() {
+			latest = e.Name()
+		}
+	}
+	if latest == "" {
+		return "", os.ErrNotExist
+	}
+	return filepath.Join(sessionsDir, latest, "trace.jsonl"), nil
 }
 
 func buildThee(t *testing.T) string {

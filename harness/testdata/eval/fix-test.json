@@ -1,0 +1,5 @@
+{
+  "id": "fix-test-001",
+  "prompt": "fix the failing test",
+  "fixture": "go-failing-test"
+}

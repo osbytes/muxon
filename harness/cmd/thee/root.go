@@ -17,6 +17,7 @@ func execute() error {
 }
 
 func init() {
+	bindGlobalFlags(rootCmd)
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(runCmd)
 }
