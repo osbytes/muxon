@@ -32,10 +32,21 @@ func NewClient(baseURL, apiKey string) *Client {
 }
 
 type chatRequest struct {
-	Model    string        `json:"model"`
-	Messages []chatMessage `json:"messages"`
-	Stream   bool          `json:"stream"`
-	Tools    []toolWire    `json:"tools,omitempty"`
+	Model          string                 `json:"model"`
+	Messages       []chatMessage          `json:"messages"`
+	Stream         bool                   `json:"stream"`
+	Tools          []toolWire             `json:"tools,omitempty"`
+	ResponseFormat *responseFormatWire    `json:"response_format,omitempty"`
+}
+
+type responseFormatWire struct {
+	Type       string          `json:"type"`
+	JSONSchema *jsonSchemaWire `json:"json_schema,omitempty"`
+}
+
+type jsonSchemaWire struct {
+	Name   string          `json:"name"`
+	Schema json.RawMessage `json:"schema"`
 }
 
 type chatMessage struct {
@@ -84,6 +95,19 @@ type chatResponse struct {
 
 // Complete implements provider.Provider.
 func (c *Client) Complete(ctx context.Context, req provider.Request) (provider.Response, error) {
+	out, err := c.completeOnce(ctx, req)
+	if err != nil {
+		if api, ok := err.(*provider.APIError); ok && api.Kind == provider.APIErrorConstraintRejected {
+			if req.ResponseFormat.Kind == provider.FormatJSONSchema {
+				req.ResponseFormat = provider.ResponseFormat{Kind: provider.FormatJSONObject}
+				return c.completeOnce(ctx, req)
+			}
+		}
+	}
+	return out, err
+}
+
+func (c *Client) completeOnce(ctx context.Context, req provider.Request) (provider.Response, error) {
 	body, err := c.encodeRequest(req, false)
 	if err != nil {
 		return provider.Response{}, err
@@ -103,7 +127,7 @@ func (c *Client) Complete(ctx context.Context, req provider.Request) (provider.R
 		defer resp.Body.Close()
 		if resp.StatusCode >= 400 {
 			b, _ := io.ReadAll(resp.Body)
-			return fmt.Errorf("openai chat: %s: %s", resp.Status, string(b))
+			return classifyHTTPError(resp.StatusCode, string(b))
 		}
 		var cr chatResponse
 		if err := json.NewDecoder(resp.Body).Decode(&cr); err != nil {
@@ -173,7 +197,34 @@ func (c *Client) encodeRequest(req provider.Request, stream bool) ([]byte, error
 		Stream:   stream,
 		Tools:    tools,
 	}
+	if req.ResponseFormat.Kind == provider.FormatJSONObject {
+		wire.ResponseFormat = &responseFormatWire{Type: "json_object"}
+	}
+	if req.ResponseFormat.Kind == provider.FormatJSONSchema && req.ResponseFormat.Schema != nil {
+		sb, _ := json.Marshal(req.ResponseFormat.Schema)
+		wire.ResponseFormat = &responseFormatWire{
+			Type: "json_schema",
+			JSONSchema: &jsonSchemaWire{
+				Name:   req.ResponseFormat.Name,
+				Schema: sb,
+			},
+		}
+	}
 	return json.Marshal(wire)
+}
+
+func classifyHTTPError(code int, body string) error {
+	low := strings.ToLower(body)
+	kind := provider.APIErrorKind("")
+	if code == 400 {
+		if strings.Contains(low, "response_format") || strings.Contains(low, "json_schema") {
+			kind = provider.APIErrorConstraintRejected
+		}
+	}
+	if kind != "" {
+		return &provider.APIError{Kind: kind, StatusCode: code, Message: body}
+	}
+	return fmt.Errorf("openai chat: %d: %s", code, body)
 }
 
 func decodeResponse(cr chatResponse) provider.Response {

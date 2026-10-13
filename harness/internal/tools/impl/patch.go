@@ -6,6 +6,7 @@ import (
 
 	"github.com/PLACEHOLDER/thee/harness/internal/security"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/thee/harness/internal/verifier"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools/patch"
 )
 
@@ -62,5 +63,6 @@ func (patchTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) 
 	if err := env.Workspace.WriteFile(a.Path, newContent); err != nil {
 		return tools.Fail(env, "patch", err.Error()), nil
 	}
+	verifier.NoteTestEdit(env.Session, a.Path)
 	return tools.OK(env, "patch", "patched "+a.Path+" ("+strategy+")", 0, 0), nil
 }

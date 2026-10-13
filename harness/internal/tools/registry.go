@@ -52,8 +52,22 @@ func (e *Env) EnsureSecurity() error {
 
 // SessionState holds cross-tool session flags.
 type SessionState struct {
-	PendingVerify bool
-	FinishSummary string
+	PendingVerify     bool
+	FinishSummary     string
+	OpenTodos         []string
+	AskUserUsed       int
+	ProtectedTestEdit bool
+	VerifyAttempts    int
+	ToolRounds        int
+	EscalationsUsed   int
+	Checkpoints       []string
+}
+
+// SetProtectedTestEdit marks that a protected test file was edited.
+func (s *SessionState) SetProtectedTestEdit() {
+	if s != nil {
+		s.ProtectedTestEdit = true
+	}
 }
 
 // Tool implements one harness tool.
