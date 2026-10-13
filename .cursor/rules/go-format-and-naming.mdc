@@ -1,0 +1,36 @@
+---
+description: Idiomatic Go formatting, naming, and declarations
+globs: "harness/**/*.go"
+alwaysApply: false
+---
+
+# Format and naming
+
+Run **gofmt** and **goimports** on all Go. Group imports: stdlib, blank line, third party, blank line, module.
+
+## Packages and files
+
+- Package names: lowercase, one word, no `util`/`common`/`api`/`types`.
+- Don't repeat the package name in exported identifiers (`http.Server`, not `HTTPServer`).
+- File names: lowercase `snake_case.go`; one primary concern per file; tests in `*_test.go`.
+
+## Identifiers
+
+- Exported: `MixedCaps`; unexported: `mixedCaps`. Constants too — never `ALL_CAPS`.
+- Initialisms consistent: `URL`, `HTTP`, `ID`, `JSON` (not `Url`, `Http`, `Id`).
+- Avoid `Get` prefixes; name getters after the field (`Owner()`, not `GetOwner()`).
+- Constructors: `New` or `NewType` when the package has multiple exported types.
+- Single-method interfaces: `-er` suffix (`Reader`, `Writer`) when it reads naturally.
+
+## Variables and receivers
+
+- Short names in **small scope** (`i`, `n`, `err`, `ctx`); longer names when the variable lives many lines.
+- **No single-letter names** except idiomatic locals: loop indices, `err`, `ctx`, and receivers.
+- Receivers: 1–2 letters from the type (`c` for `Client`); same letter for all methods on that type.
+- Omit redundant type words in names when context is clear (`users []User`, not `userSlice`).
+
+## API shape
+
+- Functions that do work: verb names (`Parse`, `WriteTo`). Functions that return data: noun-like (`JobName`).
+- Prefer concrete return types from producers; define small interfaces at the **consumer** when needed.
+- Don't use `import .` except rare `foo_test` circularity cases.

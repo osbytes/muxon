@@ -1,0 +1,6 @@
+data: {"id":"1","choices":[{"index":0,"delta":{"content":"hello"},"finish_reason":null}]}
+
+data: {"id":"1","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":3,"completion_tokens":1}}
+
+data: [DONE]
+

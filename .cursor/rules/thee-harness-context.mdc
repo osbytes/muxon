@@ -1,0 +1,26 @@
+---
+description: thee-harness project context for agents (Go CLI, layout, specs)
+alwaysApply: true
+---
+
+# thee-harness
+
+Open-source **Go** CLI (`thee`) and libraries. Specs live in `docs/harness-architecture/`; build order in `docs/harness-architecture/implementation-plan.md`.
+
+## Layout (do not invent alternatives)
+
+Monorepo: harness code lives under **`harness/`** (Go module). API is sibling `api/` (separate module).
+
+- `harness/cmd/thee/` — Cobra wiring only: flags, args, exit codes, stdout/stderr/`--json`.
+- `harness/internal/` — all behavior; packages mirror architecture (`director`, `contextengine`, `router`, `provider`, `tools`, …).
+- **Rule:** `cmd/thee` calls `internal/director` (and siblings); no HTTP, tools, or session loop in `cmd/`.
+- `harness/testdata/` — fixtures, trace replay, `httptest` recordings.
+- Go **1.24+**, `gofmt`/`goimports`, `golangci-lint` in CI.
+
+## Dependencies
+
+Stdlib first (`context`, `net/http`, `encoding/json`, `log/slog`, `embed`, `os/exec`). Add deps deliberately (cobra, yaml, bubbletea, …). No ORMs, agent frameworks, or heavy DI.
+
+## When implementing
+
+Read the relevant architecture doc before coding behavior. ADRs in `docs/harness-architecture/adrs.md` are binding. Follow sibling `.cursor/rules/go-*.mdc` for idiomatic Go.

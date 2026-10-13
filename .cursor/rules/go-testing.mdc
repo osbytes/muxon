@@ -1,0 +1,32 @@
+---
+description: Go tests, testdata, and replay fixtures for thee-harness
+globs: "harness/**/*_test.go"
+alwaysApply: false
+---
+
+# Testing
+
+Align with `docs/harness-architecture/implementation-plan.md` § Testing strategy and `tech-stack.md`.
+
+## Layout
+
+- Unit tests: same package or `package foo_test` for black-box tests.
+- Fixtures: `testdata/fixtures/` (mini repos), `testdata/traces/`, `testdata/provider/` (httptest SSE).
+- Integration: build tag `integration`; optional live API in CI with secrets.
+
+## Style
+
+- Table-driven tests when cases multiply; subtests with `t.Run`.
+- Compare golden JSONL/traces with `cmp.Diff` or byte equality; update goldens deliberately.
+- Failures: include inputs and got/want (`t.Errorf("Parse(%q): got %v, want %v", ...)`).
+- Use `t.Parallel()` only when tests don't share mutable global state or temp dirs.
+
+## Fakes
+
+- `internal/provider/replay` for director loop regression.
+- `net/http/httptest` for provider adapters — no real network in default `go test`.
+- Fake provider for canned tool calls in director/tool runtime unit tests.
+
+## Comments in tests
+
+Same rule as production: no narrating comments. Test names and helpers should explain intent.

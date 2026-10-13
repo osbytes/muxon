@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: harness
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24.x"
+          cache-dependency-path: harness/go.sum
+      - name: Install ripgrep
+        run: |
+          if command -v apt-get >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get install -y ripgrep
+          elif command -v brew >/dev/null 2>&1; then
+            brew install ripgrep
+          fi
+      - run: go mod download
+      - run: gofmt -s -l . | tee /tmp/gofmt.out && test ! -s /tmp/gofmt.out
+      - run: go vet ./...
+      - run: go test ./...
+      - run: go build ./...
+      - uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.1.6
+          working-directory: harness

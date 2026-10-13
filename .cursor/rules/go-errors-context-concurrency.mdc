@@ -1,0 +1,33 @@
+---
+description: Go errors, context, and concurrency conventions
+globs: "harness/**/*.go"
+alwaysApply: false
+---
+
+# Errors
+
+- Return `(T, error)` or `(T, bool)`; never use sentinel in-band failures when `ok`/`error` is clearer.
+- Check every error; never `_ = fn()` without a one-line justification comment (rare).
+- Error strings: lowercase, no trailing period (`fmt.Errorf("read config: %w", err)`).
+- Wrap with `%w` when callers may use `errors.Is`/`As`; use `%v` only to hide internals deliberately.
+- Indent the **error path**: handle `err != nil` and return; keep the happy path unindented.
+- Libraries: return errors; `cmd/` maps them to exit codes and user-facing messages. Don't panic for normal control flow.
+
+# context.Context
+
+- First parameter: `func F(ctx context.Context, ...)`.
+- Pass `ctx` down the call chain; don't store `Context` on structs (except matching stdlib interfaces).
+- Use `context.Background()` only at true roots (e.g. `main`); prefer propagating parent `ctx`.
+- Cancellation: respect `ctx.Done()` in HTTP, subprocess, and streaming loops.
+
+# Concurrency
+
+- Prefer synchronous functions; goroutines only when overlap helps (streaming, parallel I/O).
+- Every goroutine must have a clear exit (return, `ctx` cancel, or documented lifecycle).
+- Don't leak goroutines blocked on channels; tie lifetimes to `ctx` or explicit `done` signaling.
+- Protect shared state with channels or mutexes; document which goroutine owns mutation.
+
+# Logging
+
+- App/diagnostic logging: **`log/slog`** to stderr (see `docs/harness-architecture/observability.md`).
+- Session/agent events: JSONL trace, not unstructured printf in the hot loop.

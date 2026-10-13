@@ -1,0 +1,57 @@
+package e2e
+
+import (
+	"encoding/json"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/PLACEHOLDER/thee/harness/internal/director"
+	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+)
+
+func TestM0RunE2E(t *testing.T) {
+	home := t.TempDir()
+	t.Setenv("THEE_HOME", home)
+	fixtureDir := testutil.CopyFixture(t, "go-failing-test")
+	scriptPath := filepath.Join(home, "script.json")
+	b, err := json.Marshal(director.M0ScriptedResponses())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(scriptPath, b, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	bin := buildThee(t)
+	cmd := exec.Command(bin, "run", "-p", "fix the failing test", "--trust", "--directory", fixtureDir)
+	cmd.Env = append(os.Environ(),
+		"THEE_HOME="+home,
+		"THEE_SCRIPTED_PROVIDER_FILE="+scriptPath,
+	)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("run failed: %v\n%s", err, out)
+	}
+	tracePath := filepath.Join(fixtureDir, ".thee", "sessions", "test-session", "trace.jsonl")
+	data, err := os.ReadFile(tracePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := string(data)
+	if !strings.Contains(s, "verify.run") || !strings.Contains(s, "session.end") || !strings.Contains(s, `"outcome":"done"`) {
+		t.Fatalf("trace: %s", s)
+	}
+}
+
+func buildThee(t *testing.T) string {
+	dir := t.TempDir()
+	out := filepath.Join(dir, "thee")
+	cmd := exec.Command("go", "build", "-o", out, ".")
+	cmd.Dir = filepath.Join("..", "..", "cmd", "thee")
+	if outCombined, err := cmd.CombinedOutput(); err != nil {
+		t.Fatalf("build thee: %v\n%s", err, outCombined)
+	}
+	return out
+}

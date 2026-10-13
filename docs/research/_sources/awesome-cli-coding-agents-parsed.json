@@ -1,0 +1,3544 @@
+{
+  "entries": [
+    {
+      "name": "Hermes Agent",
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "stars": "253k",
+      "org": "",
+      "desc": "Nous Research's self-improving CLI agent with persistent memory, automated skill creation, sandboxed code execution via ",
+      "tags": [
+        "context",
+        "sandbox"
+      ]
+    },
+    {
+      "name": "OpenCode",
+      "url": "https://github.com/anomalyco/opencode",
+      "stars": "213k",
+      "org": "",
+      "desc": "Terminal-native coding agent with 75+ provider support, LSP integration, and privacy-first design (formerly opencode-ai;",
+      "tags": []
+    },
+    {
+      "name": "Claw Code",
+      "url": "https://github.com/ultraworkers/claw-code",
+      "stars": "195k",
+      "org": "",
+      "desc": "Clean-room Python/Rust rewrite of Claude Code architecture using oh-my-codex; fastest repo in GitHub history to 100K sta",
+      "tags": [
+        "diff",
+        "plan"
+      ]
+    },
+    {
+      "name": "Codex CLI",
+      "url": "https://github.com/openai/codex",
+      "stars": "129k",
+      "org": "OpenAI",
+      "desc": "OpenAI's local coding agent for reading/editing/running code, with an interactive TUI and tool execution. Apache-2.0.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Pi",
+      "url": "https://github.com/badlogic/pi-mono",
+      "stars": "115k",
+      "org": "",
+      "desc": "Minimal, adaptable terminal coding harness from the pi-mono toolkit; unified LLM API, TUI, skills, and MCP support.",
+      "tags": []
+    },
+    {
+      "name": "Gemini CLI",
+      "url": "https://github.com/google-gemini/gemini-cli",
+      "stars": "107k",
+      "org": "Google",
+      "desc": "Google's terminal agent powered by Gemini, with tools for repo work and research. Apache-2.0.",
+      "tags": []
+    },
+    {
+      "name": "OpenHands",
+      "url": "https://github.com/All-Hands-AI/OpenHands",
+      "stars": "90.7k",
+      "org": "",
+      "desc": "Open-source agentic developer environment (formerly OpenDevin) with CLI and web entrypoints; also has a lightweight [CLI",
+      "tags": []
+    },
+    {
+      "name": "Cline CLI",
+      "url": "https://github.com/cline/cline",
+      "stars": "70.2k",
+      "org": "",
+      "desc": "Model-agnostic autonomous agent for planning, file edits, command execution, and browser use.",
+      "tags": []
+    },
+    {
+      "name": "Oh My OpenAgent",
+      "url": "https://github.com/code-yeongyu/oh-my-openagent",
+      "stars": "70k",
+      "org": "",
+      "desc": "Multi-harness agent OS layered over OpenCode, Codex, and Pi; Team Mode runs several models on one job, with a hash-ancho",
+      "tags": []
+    },
+    {
+      "name": "Open Interpreter",
+      "url": "https://github.com/OpenInterpreter/open-interpreter",
+      "stars": "68.6k",
+      "org": "",
+      "desc": "Terminal tool that can execute code and actions; often used as a \"do things on my machine\" agent.",
+      "tags": []
+    },
+    {
+      "name": "Goose",
+      "url": "https://github.com/aaif-goose/goose",
+      "stars": "55.2k",
+      "org": "",
+      "desc": "Local, extensible agent that can execute, edit, and test; designed to run on-device and integrate with MCP.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Aider",
+      "url": "https://github.com/Aider-AI/aider",
+      "stars": "49.5k",
+      "org": "",
+      "desc": "Pair-programming agent for editing files via diffs/patches, with strong git and multi-file workflows.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Codewhale",
+      "url": "https://github.com/Hmbown/CodeWhale",
+      "stars": "41.1k",
+      "org": "",
+      "desc": "Rust terminal coding agent (formerly `deepseek-tui`), bring-your-own-model across 30+ providers plus local vLLM/SGLang/O",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Continue CLI",
+      "url": "https://github.com/continuedev/continue",
+      "stars": "36.2k",
+      "org": "",
+      "desc": "Open-source terminal extension for multi-model coding with local/privacy focus.",
+      "tags": [
+        "routing",
+        "local"
+      ]
+    },
+    {
+      "name": "Reasonix",
+      "url": "https://github.com/esengine/DeepSeek-Reasonix",
+      "stars": "35.8k",
+      "org": "",
+      "desc": "Single Go binary coding agent built for long unattended runs; one local engine with four ways in (terminal, desktop app,",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "OH-MY-PI",
+      "url": "https://github.com/can1357/oh-my-pi",
+      "stars": "35.2k",
+      "org": "",
+      "desc": "Terminal coding agent (\"Pi\") with a TypeScript/Rust monorepo and local-first ergonomics.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Deep Agents Code",
+      "url": "https://github.com/langchain-ai/deepagents",
+      "stars": "30.2k",
+      "org": "LangChain",
+      "desc": "LangChain's official terminal coding agent built on the Deep Agents SDK; interactive TUI, file ops, shell access, subage",
+      "tags": []
+    },
+    {
+      "name": "Crush",
+      "url": "https://github.com/charmbracelet/crush",
+      "stars": "28.6k",
+      "org": "",
+      "desc": "Charmbracelet's glamorous agentic coding TUI in Go; multi-provider, LSP-aware, with rich terminal UI.",
+      "tags": []
+    },
+    {
+      "name": "Qwen Code",
+      "url": "https://github.com/QwenLM/qwen-code",
+      "stars": "28.5k",
+      "org": "Alibaba",
+      "desc": "Alibaba Qwen's official CLI agent for Qwen coder models (workflow tool + repo operations). Apache-2.0.",
+      "tags": []
+    },
+    {
+      "name": "Kilo Code CLI",
+      "url": "https://github.com/Kilo-Org/kilocode",
+      "stars": "27.6k",
+      "org": "",
+      "desc": "Agentic engineering platform with CLI; orchestrator mode, 100s of LLMs, skills, and checkpointing.",
+      "tags": []
+    },
+    {
+      "name": "Grok Build",
+      "url": "https://github.com/xai-org/grok-build",
+      "stars": "27.3k",
+      "org": "xAI",
+      "desc": "xAI's official coding agent harness and TUI; fullscreen, mouse-interactive, and extensible. Apache-2.0.",
+      "tags": []
+    },
+    {
+      "name": "Roo Code CLI",
+      "url": "https://github.com/RooCodeInc/Roo-Code",
+      "stars": "24.3k",
+      "org": "",
+      "desc": "Multi-mode CLI agent (architect/code/debug/orchestrator modes); Claude-like terminal interface with skills and checkpoin",
+      "tags": [
+        "plan"
+      ]
+    },
+    {
+      "name": "Prime Agent",
+      "url": "https://github.com/PrimeIntellect-ai/prime-agent",
+      "stars": "21.9k",
+      "org": "Prime Intellect",
+      "desc": "Self-improving RLM coding agent where a persistent IPython kernel is the model's only tool, so file edits, shell command",
+      "tags": []
+    },
+    {
+      "name": "jcode",
+      "url": "https://github.com/1jehuang/jcode",
+      "stars": "20.6k",
+      "org": "",
+      "desc": "Rust TUI agent optimized for RAM and startup latency (~28 MB PSS per session with local embeddings off), built for scali",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "SWE-agent",
+      "url": "https://github.com/SWE-agent/SWE-agent",
+      "stars": "20.5k",
+      "org": "",
+      "desc": "Agent for resolving real repo issues/PR tasks; frequently used in SWE-bench-style workflows.",
+      "tags": [
+        "eval"
+      ]
+    },
+    {
+      "name": "Plandex",
+      "url": "https://github.com/plandex-ai/plandex",
+      "stars": "15.7k",
+      "org": "",
+      "desc": "\"Plan-first\" CLI agent for building features across multiple files with structured steps and 2M token context.",
+      "tags": [
+        "context",
+        "plan"
+      ]
+    },
+    {
+      "name": "MiMo Code",
+      "url": "https://github.com/XiaomiMiMo/MiMo-Code",
+      "stars": "13.6k",
+      "org": "Xiaomi",
+      "desc": "Xiaomi's official terminal coding agent; TUI + non-interactive modes, MCP, skills, hooks, git worktrees, and resumable s",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Codebuff",
+      "url": "https://github.com/CodebuffAI/codebuff",
+      "stars": "13.5k",
+      "org": "",
+      "desc": "Multi-agent AI coding assistant with CLI support for collaborative coding workflows.",
+      "tags": []
+    },
+    {
+      "name": "Smol Developer",
+      "url": "https://github.com/smol-ai/developer",
+      "stars": "12.2k",
+      "org": "",
+      "desc": "Embeddable developer agent that generates entire codebases from a prompt; designed to be embedded in apps.",
+      "tags": []
+    },
+    {
+      "name": "Trae Agent",
+      "url": "https://github.com/bytedance/trae-agent",
+      "stars": "12.1k",
+      "org": "ByteDance",
+      "desc": "ByteDance's research-friendly CLI agent for software engineering tasks, with modular architecture and multi-LLM support.",
+      "tags": [
+        "plan"
+      ]
+    },
+    {
+      "name": "Kimi CLI",
+      "url": "https://github.com/MoonshotAI/kimi-cli",
+      "stars": "11.4k",
+      "org": "Moonshot AI",
+      "desc": "Moonshot AI's CLI coding agent with skills, MCP support, and ACP IDE integration; being wound down in favor of Kimi Code",
+      "tags": []
+    },
+    {
+      "name": "Claude Engineer",
+      "url": "https://github.com/Doriandarko/claude-engineer",
+      "stars": "11.2k",
+      "org": "",
+      "desc": "Community-driven CLI for agentic Claude workflows with file management and iterative development.",
+      "tags": []
+    },
+    {
+      "name": "Claurst",
+      "url": "https://github.com/Kuberwastaken/claurst",
+      "stars": "10.3k",
+      "org": "",
+      "desc": "Claude Code rewritten in idiomatic Rust with architectural breakdown; includes discoveries from the source leak (KAIROS ",
+      "tags": [
+        "plan"
+      ]
+    },
+    {
+      "name": "Free Code",
+      "url": "https://github.com/paoloanzn/free-code",
+      "stars": "8.8k",
+      "org": "",
+      "desc": "Fork of Claude Code with all telemetry removed, guardrails stripped, and all experimental features enabled (KAIROS, drea",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Kimi Code",
+      "url": "https://github.com/MoonshotAI/kimi-code",
+      "stars": "7.8k",
+      "org": "Moonshot AI",
+      "desc": "Moonshot AI's next-gen TypeScript coding agent \u2014 a separate project from Kimi CLI. Event-sourced agent runtime with repl",
+      "tags": []
+    },
+    {
+      "name": "ForgeCode",
+      "url": "https://github.com/antinomyhq/forge",
+      "stars": "7.6k",
+      "org": "",
+      "desc": "AI pair programmer supporting 300+ models, with task management, custom agents, and large-scale refactor tooling.",
+      "tags": []
+    },
+    {
+      "name": "OpenSquilla",
+      "url": "https://github.com/opensquilla/opensquilla",
+      "stars": "7.1k",
+      "org": "",
+      "desc": "Self-hostable microkernel agent runtime with a full CLI (`opensquilla chat` REPL, one-shot agent mode, gateway); autonom",
+      "tags": []
+    },
+    {
+      "name": "Kode CLI",
+      "url": "https://github.com/shareAI-lab/Kode-cli",
+      "stars": "5.2k",
+      "org": "",
+      "desc": "ShareAI's open-source CLI agent for terminal-native coding with multi-provider support.",
+      "tags": []
+    },
+    {
+      "name": "Mistral Vibe",
+      "url": "https://github.com/mistralai/mistral-vibe",
+      "stars": "5.1k",
+      "org": "Mistral",
+      "desc": "Mistral's CLI coding assistant for conversational repo interaction and edits. Apache-2.0.",
+      "tags": []
+    },
+    {
+      "name": "gptme",
+      "url": "https://github.com/gptme/gptme",
+      "stars": "4.4k",
+      "org": "",
+      "desc": "AI agent in your terminal with support for persistent autonomous agents. Runs code, edits files, browses the web. Build ",
+      "tags": []
+    },
+    {
+      "name": "Every Code",
+      "url": "https://github.com/just-every/code",
+      "stars": "4k",
+      "org": "",
+      "desc": "Fork of Codex CLI with validation, automation, browser integration, multi-agents, theming, and multi-provider orchestrat",
+      "tags": []
+    },
+    {
+      "name": "Letta Code",
+      "url": "https://github.com/letta-ai/letta-code",
+      "stars": "3.6k",
+      "org": "",
+      "desc": "Memory-first CLI coding agent built on the Letta platform (formerly MemGPT); persistent memory across sessions, model-ag",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Grok CLI",
+      "url": "https://github.com/superagent-ai/grok-cli",
+      "stars": "3.5k",
+      "org": "",
+      "desc": "Community CLI agent built on xAI's Grok models for terminal-based coding tasks.",
+      "tags": []
+    },
+    {
+      "name": "Devon",
+      "url": "https://github.com/entropy-research/Devon",
+      "stars": "3.5k",
+      "org": "",
+      "desc": "Open-source pair programmer with a TUI; autonomous planning, execution, and debugging in Git workflows.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Atomic Agent",
+      "url": "https://github.com/AtomicBot-ai/atomic-agent",
+      "stars": "3.3k",
+      "org": "",
+      "desc": "Local-first agent that runs the control loop on your machine: edits files, runs approved shell commands, drives your bro",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "AutoCodeRover",
+      "url": "https://github.com/AutoCodeRoverSG/auto-code-rover",
+      "stars": "3.1k",
+      "org": "",
+      "desc": "Autonomous program improvement agent; patches real GitHub issues using code search and analysis.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Tau",
+      "url": "https://github.com/huggingface/tau",
+      "stars": "3k",
+      "org": "Hugging Face",
+      "desc": "Small, readable Python coding agent in the terminal, inspired by Pi; CLI and Textual TUI over a provider-neutral core (A",
+      "tags": []
+    },
+    {
+      "name": "CodeMachine-CLI",
+      "url": "https://github.com/moazbuilds/CodeMachine-CLI",
+      "stars": "2.5k",
+      "org": "",
+      "desc": "Community multi-agent CLI aimed at running coding workflows locally (vibe-coding oriented).",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Nanocoder",
+      "url": "https://github.com/Nano-Collective/nanocoder",
+      "stars": "2.5k",
+      "org": "",
+      "desc": "Local-first CLI coding agent built by a community collective; bring your own model (Ollama, OpenRouter, or any OpenAI-co",
+      "tags": [
+        "routing",
+        "local"
+      ]
+    },
+    {
+      "name": "Codel",
+      "url": "https://github.com/semanser/codel",
+      "stars": "2.5k",
+      "org": "",
+      "desc": "Autonomous agent for performing complex tasks via terminal; runs in Docker with a web UI.",
+      "tags": []
+    },
+    {
+      "name": "BitFun",
+      "url": "https://github.com/GCWing/BitFun",
+      "stars": "2.4k",
+      "org": "",
+      "desc": "Rust coding agent with an interactive TUI and non-interactive `bitfun exec` runs; session fork/undo/redo/compact with a ",
+      "tags": [
+        "context",
+        "daemon"
+      ]
+    },
+    {
+      "name": "open-codex",
+      "url": "https://github.com/ymichael/open-codex",
+      "stars": "2.4k",
+      "org": "",
+      "desc": "Lightweight fork of Codex CLI with multi-provider support (OpenAI, Gemini, OpenRouter, Ollama).",
+      "tags": [
+        "routing",
+        "local"
+      ]
+    },
+    {
+      "name": "RA.Aid",
+      "url": "https://github.com/ai-christianson/RA.Aid",
+      "stars": "2.2k",
+      "org": "",
+      "desc": "Autonomous coding agent built on LangGraph with research/plan/implement pipeline; optional aider integration for near-fu",
+      "tags": []
+    },
+    {
+      "name": "Agentless",
+      "url": "https://github.com/OpenAutoCoder/Agentless",
+      "stars": "2.1k",
+      "org": "",
+      "desc": "Lightweight approach to autonomous software engineering without persistent agent loops.",
+      "tags": []
+    },
+    {
+      "name": "Amazon Q Developer CLI",
+      "url": "https://github.com/aws/amazon-q-developer-cli",
+      "stars": "2k",
+      "org": "AWS",
+      "desc": "AWS's agentic terminal chat for building apps, debugging, and DevOps with natural language. Apache-2.0.",
+      "tags": []
+    },
+    {
+      "name": "Neovate Code",
+      "url": "https://github.com/neovateai/neovate-code",
+      "stars": "1.6k",
+      "org": "Ant Group",
+      "desc": "Ant Group's CLI agent with plugin system, multi-model/multi-provider support, MCP integrations, and headless automation ",
+      "tags": [
+        "routing",
+        "daemon"
+      ]
+    },
+    {
+      "name": "Ouroboros",
+      "url": "https://github.com/razzant/ouroboros",
+      "stars": "1.4k",
+      "org": "",
+      "desc": "Self-evolving general agent with durable memory and identity across restarts; coordinates a subagent swarm and can rewri",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Maki",
+      "url": "https://github.com/tontinton/maki",
+      "stars": "1.2k",
+      "org": "",
+      "desc": "Rust TUI coding agent optimized for context-token efficiency: tree-sitter file indexing, a sandboxed `code_execution` to",
+      "tags": [
+        "context",
+        "sandbox"
+      ]
+    },
+    {
+      "name": "hax",
+      "url": "https://github.com/OleksandrChekhovskyi/hax",
+      "stars": "887",
+      "org": "",
+      "desc": "Minimalist terminal-native coding agent written in C; a single native binary that starts instantly and uses a few MB of ",
+      "tags": []
+    },
+    {
+      "name": "VT Code",
+      "url": "https://github.com/vinhnx/vtcode",
+      "stars": "878",
+      "org": "",
+      "desc": "Open-source coding agent with LLM-native code understanding and robust shell safety. Supports multiple LLM providers wit",
+      "tags": []
+    },
+    {
+      "name": "Groq Code CLI",
+      "url": "https://github.com/build-with-groq/groq-code-cli",
+      "stars": "745",
+      "org": "",
+      "desc": "Customizable, lightweight CLI powered by Groq's ultra-fast inference; extensible tools/commands with multi-model support",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "Tura",
+      "url": "https://github.com/Tura-AI/tura",
+      "stars": "654",
+      "org": "",
+      "desc": "Rust agent runtime that compiles a task into a single runtime-managed command graph instead of a model round trip per to",
+      "tags": []
+    },
+    {
+      "name": "Dexto",
+      "url": "https://github.com/truffle-ai/dexto",
+      "stars": "652",
+      "org": "",
+      "desc": "Coding agent and general agent harness with CLI/web/API modes; ships a production-ready coding agent with sub-agent spaw",
+      "tags": []
+    },
+    {
+      "name": "agentty",
+      "url": "https://github.com/1ay1/agentty",
+      "stars": "617",
+      "org": "",
+      "desc": "Native C++26 terminal coding agent and drop-in claude-code alternative; single ~13.6 MB static binary with sub-milliseco",
+      "tags": []
+    },
+    {
+      "name": "claw-code-agent",
+      "url": "https://github.com/HarnessLab/claw-code-agent",
+      "stars": "546",
+      "org": "",
+      "desc": "Python-only Claude Code rewrite with zero external dependencies; born from the March 2026 Claude Code source leak, posit",
+      "tags": []
+    },
+    {
+      "name": "g3",
+      "url": "https://github.com/dhanji/g3",
+      "stars": "519",
+      "org": "",
+      "desc": "\"Coding AI agent\" in Rust: tool-running, repo interaction, skills system, and provider abstraction.",
+      "tags": []
+    },
+    {
+      "name": "Orca",
+      "url": "https://github.com/echoVic/orca-agent",
+      "stars": "508",
+      "org": "",
+      "desc": "DeepSeek-native terminal coding agent in Rust with OS-level sandboxing (Seatbelt, bwrap, Landlock+seccomp, fail-closed),",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Coro Code",
+      "url": "https://github.com/Blushyes/coro-code",
+      "stars": "369",
+      "org": "",
+      "desc": "Open-source CLI coding agent, a free alternative to Claude Code; generate, debug, and manage code seamlessly.",
+      "tags": []
+    },
+    {
+      "name": "zot",
+      "url": "https://github.com/patriceckhart/zot",
+      "stars": "352",
+      "org": "",
+      "desc": "Zero-overhead and lightweight coding agent harness with TUI/JSON/RPC modes, structured tools, reviewable file diffs, ski",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "LettaBot",
+      "url": "https://github.com/letta-ai/lettabot",
+      "stars": "327",
+      "org": "",
+      "desc": "Personal AI assistant with persistent unified memory across Telegram, Slack, Discord, WhatsApp, and Signal; built on the",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Mini-Kode",
+      "url": "https://github.com/minmaxflow/mini-kode",
+      "stars": "307",
+      "org": "",
+      "desc": "An educational AI coding agent CLI, intended as a readable reference implementation.",
+      "tags": []
+    },
+    {
+      "name": "nori-cli",
+      "url": "https://github.com/tilework-tech/nori-cli",
+      "stars": "190",
+      "org": "",
+      "desc": "Multi-provider CLI built on Codex CLI; switch between Claude, Gemini, and Codex from the same native terminal.",
+      "tags": []
+    },
+    {
+      "name": "VibePod",
+      "url": "https://github.com/VibePod/vibepod-cli",
+      "stars": "179",
+      "org": "",
+      "desc": "Unified CLI for running AI coding agents in isolated Docker containers; zero-config setup, local metrics, HTTP traffic t",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Octomind",
+      "url": "https://github.com/Muvon/octomind",
+      "stars": "161",
+      "org": "",
+      "desc": "Open-source, model-agnostic AI agent runtime with community tap registry (`developer:rust`, `doctor:blood`, `legal:contr",
+      "tags": []
+    },
+    {
+      "name": "cursor-agent",
+      "url": "https://github.com/civai-technologies/cursor-agent",
+      "stars": "135",
+      "org": "",
+      "desc": "Python-based agent replicating Cursor's coding assistant capabilities; supports Claude, OpenAI, and local Ollama models.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Waveloom",
+      "url": "https://github.com/Menfre01/waveloom",
+      "stars": "134",
+      "org": "",
+      "desc": "Go terminal-native coding agent with Bubble Tea TUI; DeepSeek V4 prompt caching for long-context efficiency; Claude Code",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "DvalinCode",
+      "url": "https://github.com/arthurpanhku/dvalincode",
+      "stars": "117",
+      "org": "",
+      "desc": "Provider-neutral, local-first coding agent (Chat/Cowork/Code modes) built for governance: an org policy engine, enforced",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "3code",
+      "url": "https://github.com/capocasa/3code",
+      "stars": "103",
+      "org": "",
+      "desc": "Free and open source command-line coding agent built from the ground up to be efficient enough to use 3rd party token pr",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "openHarness",
+      "url": "https://github.com/zhijiewong/openharness",
+      "stars": "100",
+      "org": "",
+      "desc": "Open-source Claude Code alternative. 78 slash commands, 42 tools, MCP (stdio/HTTP/SSE + OAuth 2.1), hooks, subagents, pl",
+      "tags": []
+    },
+    {
+      "name": "Codex Infinity",
+      "url": "https://github.com/lee101/codex-infinity",
+      "stars": "100",
+      "org": "",
+      "desc": "Autonomous terminal coding agent (OpenAI Codex CLI fork) adding auto-continuation, parallel multi-agent runs, and CI rep",
+      "tags": []
+    },
+    {
+      "name": "San",
+      "url": "https://github.com/genai-io/san",
+      "stars": "85",
+      "org": "",
+      "desc": "Go terminal-native runtime for specialized AI agents; provider-agnostic (Anthropic, OpenAI, Google, DeepSeek, Moonshot, ",
+      "tags": []
+    },
+    {
+      "name": "San",
+      "url": "https://github.com/genai-io/san",
+      "stars": "85",
+      "org": "",
+      "desc": "Go terminal-native runtime for specialized AI agents; provider-agnostic (Anthropic, OpenAI, Google, DeepSeek, Moonshot, ",
+      "tags": []
+    },
+    {
+      "name": "Martty",
+      "url": "https://github.com/openma-ai/Martty",
+      "stars": "79",
+      "org": "",
+      "desc": "Rust/ratatui terminal ACP client that bundles its own ACP layer, so agents that speak the protocol run in a native TUI r",
+      "tags": []
+    },
+    {
+      "name": "Crab Code",
+      "url": "https://github.com/lingcoder/crab-code",
+      "stars": "75",
+      "org": "",
+      "desc": "Rust-native coding agent built from scratch, deliberately mirroring Claude Code's toolset, permission model, and interac",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Keen Code",
+      "url": "https://github.com/mochow13/keen-code",
+      "stars": "71",
+      "org": "",
+      "desc": "Go-based CLI coding agent focused on efficient context management \u2014 uses lean TurnMemory summaries instead of raw tool t",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "picocode",
+      "url": "https://github.com/jondot/picocode",
+      "stars": "62",
+      "org": "",
+      "desc": "Minimal Rust-based coding agent focused on CI workflows and small codemods; multi-LLM with personas.",
+      "tags": []
+    },
+    {
+      "name": "Jazz",
+      "url": "https://github.com/lvndry/jazz",
+      "stars": "54",
+      "org": "",
+      "desc": "Generalist agent harness that runs your agent anywhere: terminal, scripts, cron, a GitHub Action that reviews PRs, or a ",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Smelt",
+      "url": "https://github.com/leonardcser/smelt",
+      "stars": "54",
+      "org": "",
+      "desc": "Rust TUI coding agent; multi-provider (Anthropic, OpenAI, Ollama, GitHub Copilot, any OpenAI-compatible endpoint), four ",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "QQCode",
+      "url": "https://github.com/qnguyen3/qqcode",
+      "stars": "53",
+      "org": "",
+      "desc": "Lightweight CLI coding agent in Rust focused on speed, determinism, and developer control; supports skills.",
+      "tags": []
+    },
+    {
+      "name": "Zap",
+      "url": "https://github.com/zap-coding-agent/zap-coding-agent",
+      "stars": "36",
+      "org": "",
+      "desc": "Skill-first Rust TUI coding agent that injects only the context your task needs \u2014 no system prompt bloat. Single binary,",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Nausicaa",
+      "url": "https://github.com/jackispm/nausicaa-harness",
+      "stars": "33",
+      "org": "",
+      "desc": "TypeScript CLI/runtime for general-purpose agent tasks with addressable Lanes, an optional Teto observer lane, durable R",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Grinta",
+      "url": "https://github.com/josephsenior/Grinta-Coding-Agent",
+      "stars": "31",
+      "org": "",
+      "desc": "Local-first, provider-agnostic terminal coding agent built for long-horizon autonomous execution; durable state and reco",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Kolega Code",
+      "url": "https://github.com/kolega-ai/kolega-code",
+      "stars": "21",
+      "org": "",
+      "desc": "Python terminal coding agent where the model writes its own multi-agent workflows (Gigacode): the runtime enforces concu",
+      "tags": []
+    },
+    {
+      "name": "OB-1",
+      "url": "https://github.com/Overbrilliant/ob-1",
+      "stars": "20",
+      "org": "",
+      "desc": "Terminal coding agent that runs with no account, API key, or card against a free-model catalog. Persistent project memor",
+      "tags": []
+    },
+    {
+      "name": "Binharic",
+      "url": "https://github.com/CogitatorTech/binharic-cli",
+      "stars": "19",
+      "org": "",
+      "desc": "A multi-provider \"tech-priest persona\" coding agent CLI (stylized, tool-using).",
+      "tags": []
+    },
+    {
+      "name": "memcode",
+      "url": "https://github.com/memcode-ai/memcode",
+      "stars": "17",
+      "org": "",
+      "desc": "Go terminal coding agent that keeps persistent per-project memory in a local `.memcode` store \u2014 subsystems, prior work, ",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "Darce",
+      "url": "https://github.com/AmerSarhan/darce-cli",
+      "stars": "10",
+      "org": "",
+      "desc": "Ultralight (14 kB) multi-model CLI agent built with Ink; 7 tools, smart model routing across providers, streaming, sessi",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "Forge (Norvia Labs)",
+      "url": "https://github.com/NorviaLabs/forge",
+      "stars": "8",
+      "org": "",
+      "desc": "Rust TUI coding agent unifying an AI agent, a vim-style code editor, and a shell in one keyboard-driven workspace; appro",
+      "tags": []
+    },
+    {
+      "name": "CLAII",
+      "url": "https://github.com/agencyswarm/CLAII",
+      "stars": "6",
+      "org": "",
+      "desc": "CLI-first AI coding agent with multi-agent orchestration, MCP toolchains, and memory-persistent refactors.",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "ipsupport-code",
+      "url": "https://github.com/ipsupport-llc/ipsupport-code",
+      "stars": "4",
+      "org": "",
+      "desc": "Go terminal coding agent built for LM Studio and other OpenAI-compatible endpoints, single static binary; a small fat-to",
+      "tags": []
+    },
+    {
+      "name": "Ferrum",
+      "url": "https://github.com/ominiverdi/ferrum",
+      "stars": "4",
+      "org": "",
+      "desc": "Small Linux-only Rust-native coding agent with interactive and headless modes, ACP, safety-tiered native tools, durable ",
+      "tags": [
+        "routing",
+        "daemon"
+      ]
+    },
+    {
+      "name": "MoCode",
+      "url": "https://github.com/wanxunyang/mocode",
+      "stars": "3",
+      "org": "",
+      "desc": "Terminal coding agent (TypeScript) with durable lifecycle memory, hash-gated skill trust, and a built-in 61-task eval ha",
+      "tags": [
+        "context",
+        "eval"
+      ]
+    },
+    {
+      "name": "WorkGround2",
+      "url": "https://github.com/KiddPhenix/WorkGround2",
+      "stars": "2",
+      "org": "",
+      "desc": "Local-first AI engineering workbench: one Go agent kernel behind CLI/TUI, web `serve`, a Wails desktop app, and IM bots ",
+      "tags": [
+        "local",
+        "eval",
+        "daemon"
+      ]
+    },
+    {
+      "name": "Kolkrabbi",
+      "url": "https://github.com/onembyte/kolkrabbi",
+      "stars": "2",
+      "org": "",
+      "desc": "Go terminal coding agent (`kolk`) whose effort dial \u2014 low to max \u2014 picks which model runs each turn, not one model's thi",
+      "tags": []
+    },
+    {
+      "name": "Minicode",
+      "url": "https://github.com/startupmini/minicode",
+      "stars": "1",
+      "org": "",
+      "desc": "Coding agent CLI built for real terminal work with a transparency-first philosophy: 37 built-in tools, MCP and LSP suppo",
+      "tags": []
+    },
+    {
+      "name": "molt",
+      "url": "https://github.com/solvyxtech/molt",
+      "stars": "0",
+      "org": "",
+      "desc": "Coding agent that won't say done on a false claim. Checks pass on disk (`.molt/done.yml`) or it refuses; receipts for ac",
+      "tags": []
+    },
+    {
+      "name": "OpenClaw",
+      "url": "https://github.com/openclaw/openclaw",
+      "stars": "392k",
+      "org": "",
+      "desc": "The original personal AI assistant you run locally; CLI with onboarding wizard, skills, tools, and multi-channel support",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "nanobot",
+      "url": "https://github.com/HKUDS/nanobot",
+      "stars": "49k",
+      "org": "",
+      "desc": "Ultra-lightweight ~4,000-line Python rewrite of OpenClaw; tool use, persistent memory, scheduled tasks, and multi-channe",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "ZeroClaw",
+      "url": "https://github.com/zeroclaw-labs/zeroclaw",
+      "stars": "33k",
+      "org": "",
+      "desc": "Fully autonomous AI agent runtime in Rust; trait-driven pluggable architecture (providers, tools, memory, channels), run",
+      "tags": [
+        "context",
+        "plan"
+      ]
+    },
+    {
+      "name": "NanoClaw",
+      "url": "https://github.com/gavrielc/nanoclaw",
+      "stars": "30.9k",
+      "org": "",
+      "desc": "Security-first lightweight alternative to OpenClaw; runs agents in Apple containers/Docker with sandboxed execution, bui",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "PicoClaw",
+      "url": "https://github.com/sipeed/picoclaw",
+      "stars": "30k",
+      "org": "",
+      "desc": "Ultra-lightweight personal AI assistant in Go inspired by OpenClaw; runs on $10 hardware with less than 10MB RAM.",
+      "tags": []
+    },
+    {
+      "name": "IronClaw",
+      "url": "https://github.com/nearai/ironclaw",
+      "stars": "12.6k",
+      "org": "",
+      "desc": "OpenClaw rewritten in Rust by NEAR AI; WASM sandbox isolation, capability-based permissions, and prompt injection defens",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "NullClaw",
+      "url": "https://github.com/nullclaw/nullclaw",
+      "stars": "8.1k",
+      "org": "",
+      "desc": "Fastest, smallest OpenClaw-compatible agent in Zig; 678KB static binary, ~1MB RAM, <2ms startup, 23+ providers, 18 chann",
+      "tags": []
+    },
+    {
+      "name": "Clawith",
+      "url": "https://github.com/dataelement/Clawith",
+      "stars": "4.2k",
+      "org": "",
+      "desc": "\"OpenClaw for Teams\" \u2014 multi-agent collaboration platform that scales OpenClaw to organizations. Apache-2.0.",
+      "tags": []
+    },
+    {
+      "name": "claw0",
+      "url": "https://github.com/shareAI-lab/claw0",
+      "stars": "3.4k",
+      "org": "",
+      "desc": "0-to-1 tutorial companion for the OpenClaw ecosystem; walks through building an agent harness from scratch, covering pla",
+      "tags": []
+    },
+    {
+      "name": "Moltis",
+      "url": "https://github.com/moltis-org/moltis",
+      "stars": "2.9k",
+      "org": "",
+      "desc": "Secure, auditable Rust-native alternative to OpenClaw; zero unsafe code, 2,300+ tests, built-in voice I/O, MCP servers, ",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "GitClaw",
+      "url": "https://github.com/open-gitagent/gitclaw",
+      "stars": "714",
+      "org": "",
+      "desc": "Git-native AI agent framework where agent identity, rules, memory, tools, and skills are all version-controlled files. M",
+      "tags": [
+        "context",
+        "diff"
+      ]
+    },
+    {
+      "name": "LionClaw",
+      "url": "https://github.com/moshthepitt/lionclaw",
+      "stars": "19",
+      "org": "",
+      "desc": "Secure-first local AI CLI with a small auditable kernel, durable sessions, and installable skills. MIT.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Claude Code",
+      "url": "https://github.com/anthropics/claude-code",
+      "stars": "150k",
+      "org": "Anthropic",
+      "desc": "Anthropic's repo-aware terminal agent for code edits, refactors, and git workflows. Source-available, no OSS license.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Warp",
+      "url": "https://github.com/warpdotdev/Warp",
+      "stars": "65.4k",
+      "org": "Warp",
+      "desc": "Modern terminal with built-in AI agent mode; understands tasks, runs commands, edits files, and orchestrates multi-step ",
+      "tags": []
+    },
+    {
+      "name": "GitHub Copilot in the CLI",
+      "url": "https://github.com/github/copilot-cli",
+      "stars": "11.3k",
+      "org": "GitHub",
+      "desc": "GitHub's agentic CLI for repo/PR/issue workflows, command suggestions, and headless automation.",
+      "tags": [
+        "diff",
+        "daemon"
+      ]
+    },
+    {
+      "name": "Command Code",
+      "url": "https://github.com/CommandCodeAI/command-code",
+      "stars": "4.1k",
+      "org": "CommandCode",
+      "desc": "CLI coding agent that continuously learns your coding style via taste-1 neuro-symbolic AI; adapts to preferences over ti",
+      "tags": []
+    },
+    {
+      "name": "Ante",
+      "url": "https://github.com/AntigmaLabs/ante-preview",
+      "stars": "2k",
+      "org": "Antigma Labs",
+      "desc": "Single ~15 MB Rust binary terminal coding agent (research preview) with client\u2013daemon architecture, interactive TUI + he",
+      "tags": [
+        "plan",
+        "daemon"
+      ]
+    },
+    {
+      "name": "pool",
+      "url": "https://github.com/poolsideai/pool",
+      "stars": "438",
+      "org": "Poolside",
+      "desc": "Poolside's terminal coding agent backed by its Laguna models; interactive TUI, headless `pool exec`, ACP client/server f",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Auggie",
+      "url": "https://github.com/augmentcode/auggie",
+      "stars": "285",
+      "org": "Augment Code",
+      "desc": "Augment's agentic coding CLI; interactive terminal agent plus headless `--print` mode for CI, custom slash commands from",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Droid",
+      "url": "https://github.com/Factory-AI/factory",
+      "stars": "51",
+      "org": "Factory",
+      "desc": "Factory's multi-model CLI coding agent; #1 on Terminal-Bench, specialized droids for different tasks, headless CI mode, ",
+      "tags": [
+        "routing",
+        "eval",
+        "diff",
+        "daemon"
+      ]
+    },
+    {
+      "name": "TheGitAI",
+      "url": "https://github.com/thegitai/thegitai-cli",
+      "stars": "4",
+      "org": "",
+      "desc": "Terminal coding agent across multiple frontier models with no API keys or provider account of your own; server-side web ",
+      "tags": [
+        "routing",
+        "daemon"
+      ]
+    },
+    {
+      "name": "FetchCoder",
+      "url": "https://github.com/fetchai/fetchcoder-releases",
+      "stars": "2",
+      "org": "Fetch.ai",
+      "desc": "Terminal coding agent powered by ASI1, with interactive TUI, CLI, and API server modes plus MCP integration.",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Orca (Stably)",
+      "url": "https://github.com/stablyai/orca",
+      "stars": "90.5k",
+      "org": "",
+      "desc": "Agentic development environment for a fleet of parallel agents: Codex, Claude Code, OpenCode, and Pi run side by side, e",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "Multica",
+      "url": "https://github.com/multica-ai/multica",
+      "stars": "52.6k",
+      "org": "",
+      "desc": "Self-hostable workspace where you assign issues to coding agents like teammates: they pick up work, report progress, rai",
+      "tags": []
+    },
+    {
+      "name": "herdr",
+      "url": "https://github.com/herdrdev/herdr",
+      "stars": "43.6k",
+      "org": "",
+      "desc": "Agent multiplexer that lives in your terminal; run and coordinate multiple coding-agent sessions side by side, with a la",
+      "tags": []
+    },
+    {
+      "name": "AionUi",
+      "url": "https://github.com/iOfficeAI/AionUi",
+      "stars": "33.5k",
+      "org": "",
+      "desc": "Free desktop Cowork app that runs OpenClaw, Hermes, Claude Code, Codex, OpenCode, and 20+ other CLI agents around the cl",
+      "tags": []
+    },
+    {
+      "name": "vibe-kanban",
+      "url": "https://github.com/BloopAI/vibe-kanban",
+      "stars": "28.3k",
+      "org": "",
+      "desc": "Kanban interface for administering AI coding agents.",
+      "tags": []
+    },
+    {
+      "name": "cmux",
+      "url": "https://github.com/manaflow-ai/cmux",
+      "stars": "28.1k",
+      "org": "",
+      "desc": "Open-source platform for running multiple coding agents in parallel.",
+      "tags": []
+    },
+    {
+      "name": "Paseo",
+      "url": "https://github.com/getpaseo/paseo",
+      "stars": "20.6k",
+      "org": "",
+      "desc": "Self-hosted daemon that runs Claude Code, Codex, Copilot, OpenCode, and Pi agents in parallel on your own machines, driv",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Superset",
+      "url": "https://github.com/superset-sh/superset",
+      "stars": "15.1k",
+      "org": "",
+      "desc": "A terminal built for coding agents; orchestrates parallel agent sessions.",
+      "tags": []
+    },
+    {
+      "name": "Agent Orchestrator (AO)",
+      "url": "https://github.com/Untrivial-ai/agent-orchestrator",
+      "stars": "13.1k",
+      "org": "",
+      "desc": "Desktop app and `ao` CLI for supervising Claude Code, Codex, Cursor, OpenCode, and 20+ other agents in parallel; every G",
+      "tags": []
+    },
+    {
+      "name": "Claude Squad",
+      "url": "https://github.com/smtg-ai/claude-squad",
+      "stars": "8.6k",
+      "org": "",
+      "desc": "tmux-based harness to run and manage multiple Claude Code sessions side-by-side.",
+      "tags": []
+    },
+    {
+      "name": "Emdash",
+      "url": "https://github.com/generalaction/emdash",
+      "stars": "6k",
+      "org": "",
+      "desc": "Run multiple coding agents concurrently with coordinated workflows.",
+      "tags": []
+    },
+    {
+      "name": "CodexMonitor",
+      "url": "https://github.com/Dimillian/CodexMonitor",
+      "stars": "4.3k",
+      "org": "",
+      "desc": "Coordinate multiple Codex agents across local workspaces.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Toad",
+      "url": "https://github.com/batrachianai/toad",
+      "stars": "3.5k",
+      "org": "",
+      "desc": "Agent orchestrator for running and managing parallel CLI coding sessions.",
+      "tags": []
+    },
+    {
+      "name": "agent-of-empires",
+      "url": "https://github.com/njbrake/agent-of-empires",
+      "stars": "3.3k",
+      "org": "",
+      "desc": "Manage multiple Claude Code, OpenCode, Codex CLI, Gemini CLI, Pi, Copilot CLI, Mistral Vibe, and Factory Droid agents fr",
+      "tags": []
+    },
+    {
+      "name": "Crystal",
+      "url": "https://github.com/stravu/crystal",
+      "stars": "3.1k",
+      "org": "",
+      "desc": "Execute multiple Codex and Claude Code sessions in parallel git worktrees.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "qwen-audio-agent",
+      "url": "https://github.com/QwenAudio/qwen-audio-agent",
+      "stars": "2.9k",
+      "org": "",
+      "desc": "Realtime voice frontend (TUI, web UI, desktop orb) that dispatches work to a backend coding-agent CLI of your choice ove",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "supacode",
+      "url": "https://github.com/supabitapp/supacode",
+      "stars": "2.4k",
+      "org": "",
+      "desc": "Native macOS coding agent orchestrator.",
+      "tags": []
+    },
+    {
+      "name": "Agent Teams AI",
+      "url": "https://github.com/777genius/agent-teams-ai",
+      "stars": "2.3k",
+      "org": "",
+      "desc": "Cross-platform desktop control plane with integrated terminals and a Kanban board for autonomous coding-agent teams; age",
+      "tags": []
+    },
+    {
+      "name": "Cate",
+      "url": "https://github.com/0-AI-UG/cate",
+      "stars": "2.2k",
+      "org": "",
+      "desc": "Desktop app that runs terminals, Claude Code agent panels, editors, and browsers on an infinite zoomable canvas; multipl",
+      "tags": []
+    },
+    {
+      "name": "Orkas",
+      "url": "https://github.com/Orkas-AI/Orkas",
+      "stars": "2.2k",
+      "org": "",
+      "desc": "Electron desktop app that spawns and drives real local coding-agent sessions over each tool's own protocol (Claude Code,",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "mux",
+      "url": "https://github.com/coder/mux",
+      "stars": "2.1k",
+      "org": "",
+      "desc": "Desktop application for isolated, parallel agentic development.",
+      "tags": []
+    },
+    {
+      "name": "Nimbalyst",
+      "url": "https://github.com/nimbalyst/nimbalyst",
+      "stars": "1.9k",
+      "org": "",
+      "desc": "Open-source visual workspace for building with Codex, Claude Code, and more; manage your agents, edit the work visually,",
+      "tags": []
+    },
+    {
+      "name": "CLI Agent Orchestrator (CAO)",
+      "url": "https://github.com/awslabs/cli-agent-orchestrator",
+      "stars": "1.4k",
+      "org": "",
+      "desc": "AWS's hierarchical multi-agent orchestration via tmux with intelligent task delegation patterns.",
+      "tags": []
+    },
+    {
+      "name": "jean",
+      "url": "https://github.com/coollabsio/jean",
+      "stars": "1.3k",
+      "org": "",
+      "desc": "Administer multiple projects, worktrees, and sessions with Claude CLI.",
+      "tags": []
+    },
+    {
+      "name": "agent-deck",
+      "url": "https://github.com/asheshgoplani/agent-deck",
+      "stars": "1.1k",
+      "org": "",
+      "desc": "Terminal session manager for AI coding agents \u2014 one TUI for Claude, Gemini, OpenCode, Codex, and more. Worktree-aware, M",
+      "tags": []
+    },
+    {
+      "name": "Parallel Code",
+      "url": "https://github.com/johannesjo/parallel-code",
+      "stars": "1k",
+      "org": "",
+      "desc": "Desktop app for running multiple AI coding agents (Claude Code, Codex CLI, Gemini CLI) simultaneously in isolated git wo",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Agent Sessions",
+      "url": "https://github.com/jazzyalex/agent-sessions",
+      "stars": "898",
+      "org": "",
+      "desc": "Local-first macOS session-history browser for AI coding agents, with transcript search across Codex, Claude Code, OpenCo",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "agent-manager",
+      "url": "https://github.com/YoanWai/agent-manager",
+      "stars": "588",
+      "org": "",
+      "desc": "Go tmux TUI for running Claude Code, Codex, OpenCode, Grok, Gemini CLI, Pi, and Hermes side by side: live per-pane statu",
+      "tags": []
+    },
+    {
+      "name": "hcom",
+      "url": "https://github.com/aannoo/hcom",
+      "stars": "567",
+      "org": "",
+      "desc": "Hooks Claude Code, Antigravity, Codex, OpenCode, Kilo, and Cursor into a shared messaging and event bus; agents message,",
+      "tags": []
+    },
+    {
+      "name": "AgentBox",
+      "url": "https://github.com/madarco/agentbox",
+      "stars": "529",
+      "org": "",
+      "desc": "Run multiple coding agents in parallel, each teleported into its own sandboxed VM (local Docker, self-hosted, or cloud: ",
+      "tags": [
+        "local",
+        "sandbox"
+      ]
+    },
+    {
+      "name": "amux",
+      "url": "https://github.com/mixpeek/amux",
+      "stars": "528",
+      "org": "",
+      "desc": "Agent multiplexer for running dozens of parallel Claude Code sessions with web dashboard, self-healing watchdog, kanban ",
+      "tags": []
+    },
+    {
+      "name": "Proliferate",
+      "url": "https://github.com/proliferate-ai/proliferate",
+      "stars": "516",
+      "org": "",
+      "desc": "Open-source local and cloud agent IDE for Claude Code, Codex, Gemini CLI, OpenCode, and similar coding agents; parallel ",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Vicoa",
+      "url": "https://github.com/vicoa-ai/vicoa",
+      "stars": "511",
+      "org": "",
+      "desc": "Agentic IDE and AI orchestrator for running a team of coding agents (Claude Code, Codex, OpenCode, Gemini, Cursor, GitHu",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Catnip",
+      "url": "https://github.com/wandb/catnip",
+      "stars": "491",
+      "org": "",
+      "desc": "Containerized environment + worktree automation for running multiple coding agents in parallel (optimized for Claude Cod",
+      "tags": []
+    },
+    {
+      "name": "ntm",
+      "url": "https://github.com/Dicklesworthstone/ntm",
+      "stars": "456",
+      "org": "",
+      "desc": "Named Tmux Manager \u2014 spawn, tile, and coordinate multiple AI coding agents (Claude, Codex, Gemini) across tmux panes wit",
+      "tags": []
+    },
+    {
+      "name": "Calyx",
+      "url": "https://github.com/yuuichieguchi/Calyx",
+      "stars": "346",
+      "org": "",
+      "desc": "Native macOS terminal built on libghostty for supervising coding agents in parallel: one approval inbox for Claude Code ",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "vibe-tree",
+      "url": "https://github.com/sahithvibudhi/vibe-tree",
+      "stars": "269",
+      "org": "",
+      "desc": "Execute Claude Code tasks in parallel git worktrees.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "MulmoTerminal",
+      "url": "https://github.com/receptron/mulmoterminal",
+      "stars": "238",
+      "org": "",
+      "desc": "Browser grid of live Claude Code / Codex / Grok sessions started with one `npx` command, no Electron; each cell is a rea",
+      "tags": []
+    },
+    {
+      "name": "Ivy Tendril",
+      "url": "https://github.com/Ivy-Interactive/Ivy-Tendril",
+      "stars": "202",
+      "org": "",
+      "desc": "Desktop and web app for running CLI coding agents (Claude Code, Codex, Copilot, Gemini, OpenCode) in parallel isolated g",
+      "tags": []
+    },
+    {
+      "name": "Tempest",
+      "url": "https://github.com/tempestai-dev/tempest",
+      "stars": "189",
+      "org": "",
+      "desc": "Tauri agentic development environment running Claude Code, Codex, Gemini, and other CLI agents in parallel; embedded xte",
+      "tags": []
+    },
+    {
+      "name": "amux",
+      "url": "https://github.com/andyrewlee/amux",
+      "stars": "162",
+      "org": "",
+      "desc": "Terminal UI designed for running multiple coding agents in parallel.",
+      "tags": []
+    },
+    {
+      "name": "CliDeck",
+      "url": "https://github.com/rustykuntz/clideck",
+      "stars": "159",
+      "org": "",
+      "desc": "WhatsApp-like browser dashboard for managing multiple CLI coding agents (Claude Code, Codex, Gemini CLI, OpenCode) with ",
+      "tags": []
+    },
+    {
+      "name": "CliDeck",
+      "url": "https://github.com/rustykuntz/clideck",
+      "stars": "159",
+      "org": "",
+      "desc": "WhatsApp-like browser dashboard for managing multiple CLI coding agents (Claude Code, Codex, Gemini CLI, OpenCode) with ",
+      "tags": []
+    },
+    {
+      "name": "GridBash",
+      "url": "https://github.com/jasonsuhari/gridbash",
+      "stars": "134",
+      "org": "",
+      "desc": "Cross-platform Rust terminal grid running Codex, Claude Code, Gemini CLI, and other real PTY-backed agents side by side;",
+      "tags": []
+    },
+    {
+      "name": "tlbx",
+      "url": "https://github.com/tlbx-ai/tlbx",
+      "stars": "115",
+      "org": "",
+      "desc": "Self-hosted browser control station for remote coding agents (formerly MidTerm): runs Codex, Claude Code, Gemini CLI, Gr",
+      "tags": []
+    },
+    {
+      "name": "ADHDev",
+      "url": "https://github.com/vilmire/adhdev",
+      "stars": "107",
+      "org": "",
+      "desc": "Self-hosted daemon plus web dashboard for driving local CLI coding agents (Claude Code, Codex, Cursor CLI, Antigravity, ",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "Garcon",
+      "url": "https://github.com/cfal/garcon",
+      "stars": "93",
+      "org": "",
+      "desc": "Self-hosted browser and mobile workspace for running and steering parallel Claude Code, Codex, Cursor Agent, OpenCode, A",
+      "tags": []
+    },
+    {
+      "name": "intentic",
+      "url": "https://github.com/intentic/intentic",
+      "stars": "80",
+      "org": "",
+      "desc": "Self-hosted workspace that gives each coding agent a persistent sandbox on hardware you own: agents work in real checkou",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "run-kit",
+      "url": "https://github.com/sahil87/run-kit",
+      "stars": "62",
+      "org": "",
+      "desc": "Remote, phone-first web console for tmux: spawn and watch coding agents in parallel git worktrees, agent-agnostic and no",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Better Agent",
+      "url": "https://github.com/ofekron/better-agent",
+      "stars": "59",
+      "org": "",
+      "desc": "Local web workspace that launches and supervises native Claude, Codex, and Gemini CLI sessions with parallel delegation,",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Agent AFK",
+      "url": "https://github.com/griffinwork40/agent-afk",
+      "stars": "59",
+      "org": "",
+      "desc": "Coding-agent harness built for unattended, away-from-keyboard runs across four surfaces sharing one session manager: one",
+      "tags": []
+    },
+    {
+      "name": "vibepanel",
+      "url": "https://github.com/jiangmuran/vibepanel",
+      "stars": "54",
+      "org": "",
+      "desc": "Self-hosted web console for running many Claude Code and Codex sessions in parallel from a browser or a phone; each sess",
+      "tags": []
+    },
+    {
+      "name": "showagent",
+      "url": "https://github.com/aytzey/showagent",
+      "stars": "52",
+      "org": "",
+      "desc": "Bubble Tea TUI that unifies the local session stores of Claude Code, Codex, Gemini CLI, and OpenCode: fuzzy search group",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Clave",
+      "url": "https://github.com/codika-io/clave",
+      "stars": "51",
+      "org": "",
+      "desc": "Native macOS app for running multiple AI coding-agent CLIs (Claude Code, Gemini CLI, Codex) in parallel \u2014 split/grid ter",
+      "tags": []
+    },
+    {
+      "name": "Superagent",
+      "url": "https://github.com/pungme/superagent-desktop",
+      "stars": "29",
+      "org": "",
+      "desc": "macOS desktop client for Claude Code and Codex: gives the agent a real browser it can navigate and drive, an iOS Simulat",
+      "tags": []
+    },
+    {
+      "name": "agents-cli",
+      "url": "https://github.com/phnx-labs/agents-cli",
+      "stars": "25",
+      "org": "",
+      "desc": "CLI to install, version-pin, and run many coding-agent harnesses (Claude Code, Codex, Gemini CLI, Cursor, OpenCode, Grok",
+      "tags": []
+    },
+    {
+      "name": "repomon",
+      "url": "https://github.com/AliHamzaAzam/repomon",
+      "stars": "22",
+      "org": "",
+      "desc": "Run a fleet of AI coding agents (Claude Code, Codex, Aider) across many repos, branches, and git worktrees from one tmux",
+      "tags": [
+        "routing",
+        "diff"
+      ]
+    },
+    {
+      "name": "Claudescope",
+      "url": "https://github.com/vladar107/claudescope",
+      "stars": "20",
+      "org": "",
+      "desc": "Local, read-only CLI that serves a web UI to browse, search, and analyze AI coding-agent transcripts across Claude Code,",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "construct",
+      "url": "https://github.com/construct-worlds/construct",
+      "stars": "18",
+      "org": "",
+      "desc": "Terminal-native agentic development environment: fleet TUI for coding agent CLIs (Codex, Claude Code, Antigravity, Grok)",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "Polter",
+      "url": "https://github.com/Lugia123/polter",
+      "stars": "18",
+      "org": "",
+      "desc": "Ghostty fork in which one AI CLI leads a team of the others: the lead session reads the text on the other tabs, types in",
+      "tags": []
+    },
+    {
+      "name": "Podiom",
+      "url": "https://github.com/Podiom/Podiom",
+      "stars": "17",
+      "org": "",
+      "desc": "Self-hosted control plane for local Claude Code and Codex CLI agents: durable named agents whose chat sessions replay on",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "CLITrigger",
+      "url": "https://github.com/HyperAITeam/CLITrigger",
+      "stars": "14",
+      "org": "",
+      "desc": "Self-hosted web UI for orchestrating Claude Code, Codex, and Gemini CLIs in parallel git worktrees. Features multi-agent",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "pi-boss",
+      "url": "https://github.com/skyfallsin/pi-boss",
+      "stars": "12",
+      "org": "",
+      "desc": "Multi-agent orchestration for the Pi coding agent; spawns sub-agents in visible tmux panes with task delegation, monitor",
+      "tags": []
+    },
+    {
+      "name": "multi-agent-workflow-kit",
+      "url": "https://github.com/laris-co/multi-agent-workflow-kit",
+      "stars": "11",
+      "org": "",
+      "desc": "Orchestrate parallel AI agents in isolated git worktrees with shared tmux visibility.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "cliclaw",
+      "url": "https://github.com/choiyounggi/cliclaw",
+      "stars": "8",
+      "org": "",
+      "desc": "macOS daemon to drive Claude Code, Codex, Gemini, and Pi from Telegram \u2014 an independent session per chat, a confirm gate",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "tmuxlet",
+      "url": "https://github.com/CodefiLabs/tmuxlet",
+      "stars": "8",
+      "org": "",
+      "desc": "Rust CLI that runs interactive coding CLIs (Claude, Codex, Gemini, opencode, pi, Cursor) inside tmux and exposes a norma",
+      "tags": []
+    },
+    {
+      "name": "Agent Workbench",
+      "url": "https://github.com/cvelasquez/agent-workbench",
+      "stars": "7",
+      "org": "",
+      "desc": "Local web UI that runs the unmodified Claude Code, Codex, OpenCode and Antigravity CLIs in a pseudo-terminal, with tabs ",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "iris",
+      "url": "https://github.com/itzenata/iris-tui",
+      "stars": "6",
+      "org": "",
+      "desc": "Live TUI supervisor for every active Claude Code session: status, tokens, estimated cost, and one-pane approval of pendi",
+      "tags": [
+        "context",
+        "sandbox"
+      ]
+    },
+    {
+      "name": "mix2",
+      "url": "https://github.com/elleryfamilia/mix2",
+      "stars": "5",
+      "org": "",
+      "desc": "Terminal app that turns two coding agents into one team; one question, both investigate independently, reconcile or disc",
+      "tags": []
+    },
+    {
+      "name": "taskpods",
+      "url": "https://github.com/yanairon/taskpods",
+      "stars": "5",
+      "org": "",
+      "desc": "Lightweight, agent-agnostic CLI that runs Claude Code, Codex CLI, Gemini CLI, opencode, aider, or any command in isolate",
+      "tags": []
+    },
+    {
+      "name": "TaskHandoff",
+      "url": "https://github.com/edgestorage/task-handoff",
+      "stars": "5",
+      "org": "",
+      "desc": "Self-hosted control plane for running Docker-based Codex workspaces on local and remote machines: each task gets its own",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Claudette",
+      "url": "https://github.com/Olorin-ai-git/claudette",
+      "stars": "3",
+      "org": "",
+      "desc": "Native iOS/Android/Apple TV mobile control plane for local CLI coding-agent sessions: real PTY plus context/cost gauge, ",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "Agent CLI Menu",
+      "url": "https://github.com/roypadina/AgentCliMenu",
+      "stars": "2",
+      "org": "",
+      "desc": "macOS TUI and menu-bar app to start or resume Claude Code and Codex sessions; frecency project launcher plus full-transc",
+      "tags": []
+    },
+    {
+      "name": "tring",
+      "url": "https://github.com/matogen/tring.chat",
+      "stars": "2",
+      "org": "",
+      "desc": "Browser-based terminal deck that runs up to 16 Claude Code, other agent, or plain shell sessions per project from a loca",
+      "tags": []
+    },
+    {
+      "name": "postmortemthis",
+      "url": "https://github.com/Softeria/postmortemthis",
+      "stars": "1",
+      "org": "",
+      "desc": "Runs every coding-agent CLI you have (Claude Code, Codex, Gemini, Qwen, Vibe) in parallel and read-only over your diff, ",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "AgentX",
+      "url": "https://github.com/ArcheMind/agentx",
+      "stars": "0",
+      "org": "",
+      "desc": "Native-first runtime manager for Claude Code, Codex CLI, DeepSeek Harness, Gemini CLI, OpenCode, and Pi. Launch or resum",
+      "tags": []
+    },
+    {
+      "name": "clisweave",
+      "url": "https://github.com/uhuntu/clisweave",
+      "stars": "0",
+      "org": "",
+      "desc": "Tiny, dependency-free CLI wrapper unifying Claude Code, Codex CLI, and Kimi CLI: normalizes flags across the three tools",
+      "tags": []
+    },
+    {
+      "name": "DeerFlow",
+      "url": "https://github.com/bytedance/deer-flow",
+      "stars": "83.8k",
+      "org": "ByteDance",
+      "desc": "Long-horizon super-agent harness orchestrating sub-agents, skills, memory, and sandboxes; ships a `deerflow` terminal wo",
+      "tags": [
+        "context",
+        "sandbox"
+      ]
+    },
+    {
+      "name": "claude-flow",
+      "url": "https://github.com/ruvnet/claude-flow",
+      "stars": "74.4k",
+      "org": "",
+      "desc": "Deploy multi-agent swarms with coordinated workflows.",
+      "tags": []
+    },
+    {
+      "name": "Symphony",
+      "url": "https://github.com/openai/symphony",
+      "stars": "27.6k",
+      "org": "OpenAI",
+      "desc": "Turns tracker issues into isolated autonomous implementation runs: polls Linear, GitHub Issues, Jira, Asana, or GitLab, ",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "gastown",
+      "url": "https://github.com/steveyegge/gastown",
+      "stars": "18.3k",
+      "org": "",
+      "desc": "Multi-agent orchestration with persistent work tracking.",
+      "tags": []
+    },
+    {
+      "name": "Omnigent",
+      "url": "https://github.com/omnigent-ai/omnigent",
+      "stars": "10.8k",
+      "org": "Databricks",
+      "desc": "Meta-harness giving one orchestration layer over Claude Code, Codex, Cursor, OpenCode, Hermes, Kiro, and Pi: mix harness",
+      "tags": []
+    },
+    {
+      "name": "Kiro Crew",
+      "url": "https://github.com/kirodotdev/KiroCrew",
+      "stars": "4.4k",
+      "org": "AWS",
+      "desc": "Persistent local workspace that drives `kiro-cli` over ACP across concurrent agent sessions: a `kirocrew run TASK.md` ta",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "ralph-orchestrator",
+      "url": "https://github.com/mikeyobrien/ralph-orchestrator",
+      "stars": "3.2k",
+      "org": "",
+      "desc": "Hat-based system maintaining agents in a loop until task completion.",
+      "tags": []
+    },
+    {
+      "name": "ralph-tui",
+      "url": "https://github.com/subsy/ralph-tui",
+      "stars": "2.5k",
+      "org": "",
+      "desc": "Direct AI agents through task lists with autonomous execution.",
+      "tags": []
+    },
+    {
+      "name": "AgentsMesh",
+      "url": "https://github.com/AgentsMesh/AgentsMesh",
+      "stars": "2.4k",
+      "org": "",
+      "desc": "AI Agent Workforce Platform: remote AI workstations (AgentPods) with PTY sandbox + git worktree isolation, multi-agent c",
+      "tags": [
+        "sandbox",
+        "diff"
+      ]
+    },
+    {
+      "name": "zeroshot",
+      "url": "https://github.com/the-open-engine/zeroshot",
+      "stars": "2k",
+      "org": "",
+      "desc": "Runs a planner, an implementer, and independent validators in isolated local, git worktree, or Docker environments, loop",
+      "tags": [
+        "routing",
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "Traycer",
+      "url": "https://github.com/traycerai/traycer",
+      "stars": "1.6k",
+      "org": "",
+      "desc": "Desktop orchestration app that runs multiple CLI coding agents (Claude Code, Codex, Cursor, OpenCode, and custom CLI age",
+      "tags": []
+    },
+    {
+      "name": "Agentlas OS",
+      "url": "https://github.com/agentlas-ai/Agentlas-OS",
+      "stars": "1.6k",
+      "org": "",
+      "desc": "Agent OS for Claude Code, Codex, and Cursor (formerly Hephaestus) with a meta-agent builder, A2A Hub routing, local onto",
+      "tags": [
+        "routing",
+        "local"
+      ]
+    },
+    {
+      "name": "loom",
+      "url": "https://github.com/ghuntley/loom",
+      "stars": "1.4k",
+      "org": "",
+      "desc": "Infrastructure enabling autonomous loops to evolve products via multi-agent coordination.",
+      "tags": []
+    },
+    {
+      "name": "oh-my-agent",
+      "url": "https://github.com/first-fluke/oh-my-agent",
+      "stars": "1.3k",
+      "org": "",
+      "desc": "Multi-runtime harness with stop-hook gates, artifact verification, and independent judges; portable `.agents/` across Cl",
+      "tags": []
+    },
+    {
+      "name": "Bernstein",
+      "url": "https://github.com/chernistry/bernstein",
+      "stars": "1.2k",
+      "org": "",
+      "desc": "Deterministic Python orchestrator \u2014 spawns parallel AI coding agents (Claude Code, Codex CLI, Gemini CLI), verifies with",
+      "tags": []
+    },
+    {
+      "name": "Loki Mode",
+      "url": "https://github.com/asklokesh/loki-mode",
+      "stars": "1.1k",
+      "org": "",
+      "desc": "Spec-to-product autonomous loop with a built-in verification gate: a reason/act/reflect/verify closure plus a blind-revi",
+      "tags": []
+    },
+    {
+      "name": "fractal",
+      "url": "https://github.com/plasma-ai/fractal",
+      "stars": "782",
+      "org": "",
+      "desc": "CLI/TUI orchestrator for hierarchical agent loops, with nodes working in their own git worktrees and delegating separabl",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Aeon",
+      "url": "https://github.com/aeonfun/aeon",
+      "stars": "771",
+      "org": "",
+      "desc": "Autonomous agent framework that runs unattended on GitHub Actions; dispatches skills to six coding-agent harnesses behin",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "h5i",
+      "url": "https://github.com/h5i-dev/h5i",
+      "stars": "754",
+      "org": "",
+      "desc": "Runs several coding agents (Claude Code, Codex) on the same task in isolated sandboxes, has them peer-review each other,",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Claudexor",
+      "url": "https://github.com/razzant/claudexor",
+      "stars": "502",
+      "org": "",
+      "desc": "Local-first control plane that keeps one coding thread across Claude Code, Codex, Cursor, and OpenCode. It can connect m",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "MartinLoop",
+      "url": "https://github.com/Keesan12/martin-loop",
+      "stars": "410",
+      "org": "",
+      "desc": "Execution-control layer around Claude Code, Codex, and other coding agents: token and cost budgets, iteration caps, stop",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Orbi",
+      "url": "https://github.com/orbi-build/orbi",
+      "stars": "215",
+      "org": "",
+      "desc": "Unattended loop from a labeled GitHub Issue to a tagged release: claims the Issue, implements in an isolated worktree, t",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Ordewell",
+      "url": "https://github.com/ordewell/ordewell",
+      "stars": "202",
+      "org": "",
+      "desc": "Turns one goal into an ordered plan of coding-agent tasks, each with its own runner (Claude Code, Codex, OpenCode), mode",
+      "tags": []
+    },
+    {
+      "name": "ORCH",
+      "url": "https://github.com/oxgeneral/ORCH",
+      "stars": "172",
+      "org": "",
+      "desc": "CLI orchestrator that manages Claude Code, Codex, and Cursor as a typed task queue with state machine (todo\u2192in_progress\u2192",
+      "tags": []
+    },
+    {
+      "name": "outsourcerer",
+      "url": "https://github.com/alexgreensh/outsourcerer",
+      "stars": "172",
+      "org": "",
+      "desc": "Delegates coding grunt-work to the cheapest harness or model you already pay for while your main session stays the orche",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "LoopTroop",
+      "url": "https://github.com/looptroop-ai/LoopTroop",
+      "stars": "161",
+      "org": "",
+      "desc": "Local, open-source GUI orchestrator for AI coding agents. An LLM Council plans, atomic \"beads\" execute in isolated git w",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "OMK",
+      "url": "https://github.com/dmae97/open-multi-agent-kit",
+      "stars": "147",
+      "org": "",
+      "desc": "Provider-neutral CLI control plane for coding agents: routes runtimes, scopes MCP, runs DAG workers, and verifies eviden",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "kodo",
+      "url": "https://github.com/ikamensh/kodo",
+      "stars": "136",
+      "org": "",
+      "desc": "Autonomous multi-agent coding orchestrator that directs Claude Code, Codex, and Gemini CLI through work cycles with inde",
+      "tags": []
+    },
+    {
+      "name": "wreckit",
+      "url": "https://github.com/mikehostetler/wreckit",
+      "stars": "129",
+      "org": "",
+      "desc": "Apply the Ralph Wiggum Loop pattern across your roadmap for autonomous agent execution.",
+      "tags": []
+    },
+    {
+      "name": "great_cto",
+      "url": "https://github.com/avelikiy/great_cto",
+      "stars": "103",
+      "org": "",
+      "desc": "Engineering-management layer of 34 specialist AI agents covering the full SDLC (architect, PM, senior-dev, reviewer, QA,",
+      "tags": [
+        "plan"
+      ]
+    },
+    {
+      "name": "OpenCastle",
+      "url": "https://github.com/monkilabs/opencastle",
+      "stars": "79",
+      "org": "",
+      "desc": "Multi-agent orchestration framework that turns AI coding assistants (Copilot, Cursor, Claude Code, OpenCode, Windsurf, C",
+      "tags": []
+    },
+    {
+      "name": "The Factory",
+      "url": "https://github.com/akashgit/remote-factory",
+      "stars": "72",
+      "org": "",
+      "desc": "Self-evolving meta-harness for autonomous software dev and research; turns any codebase into an auto-research project, a",
+      "tags": []
+    },
+    {
+      "name": "5dive",
+      "url": "https://github.com/5dive-ai/5dive",
+      "stars": "69",
+      "org": "",
+      "desc": "Run a company of AI coding agents on a server you own: one-command spin-up of named agents (Claude Code, Codex, Grok, an",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Forge",
+      "url": "https://github.com/LucasDuys/forge",
+      "stars": "56",
+      "org": "",
+      "desc": "Autonomous spec-driven development loop for Claude Code; three-command pipeline (brainstorm specs, plan task DAGs, execu",
+      "tags": []
+    },
+    {
+      "name": "Agon",
+      "url": "https://github.com/AutoResearch-Factory/Agon",
+      "stars": "54",
+      "org": "",
+      "desc": "Claude Code plugin for autonomous research: runs a topic\u2192idea\u2192proposal\u2192experiment loop with separate scientist, coder, a",
+      "tags": []
+    },
+    {
+      "name": "Crewplane",
+      "url": "https://github.com/crewplaneai/crewplane",
+      "stars": "43",
+      "org": "",
+      "desc": "CLI-first control plane for human-designed coding-agent workflows via Markdown; runs sequential or parallel stages throu",
+      "tags": []
+    },
+    {
+      "name": "fab-kit",
+      "url": "https://github.com/sahil87/fab-kit",
+      "stars": "33",
+      "org": "",
+      "desc": "Spec-driven development workflow for AI coding agents: an intake \u2192 plan \u2192 apply \u2192 review \u2192 hydrate pipeline with confide",
+      "tags": []
+    },
+    {
+      "name": "agx",
+      "url": "https://github.com/ramarlina/agx",
+      "stars": "32",
+      "org": "",
+      "desc": "Checkpoint-based execution engine for AI coding agents; durable Wake\u2192Work\u2192Sleep loops that resume instantly across sessi",
+      "tags": []
+    },
+    {
+      "name": "NEEDLE",
+      "url": "https://github.com/jedarden/NEEDLE",
+      "stars": "28",
+      "org": "",
+      "desc": "Headless bead-queue orchestrator built on an explicit deterministic state machine: claims work items and dispatches each",
+      "tags": [
+        "diff",
+        "daemon"
+      ]
+    },
+    {
+      "name": "ralph-harness",
+      "url": "https://github.com/rxdt/py_ralph_frame",
+      "stars": "23",
+      "org": "",
+      "desc": "Minimal repo-local loop scaffold for Claude Code, Codex CLI, and Gemini CLI. Uses `PROMPT.md`, specs, fresh-context iter",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "Galley",
+      "url": "https://github.com/shinpr/galley",
+      "stars": "19",
+      "org": "",
+      "desc": "Local-first runtime for supervised AI coding tasks: isolated git worktrees, supervisor review against acceptance criteri",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "Dahrk",
+      "url": "https://github.com/dahrkai/dahrk-node",
+      "stars": "7",
+      "org": "",
+      "desc": "Runs a deterministic multi-stage workflow per Linear issue on a node you own; each stage gets its own runtime (Claude Co",
+      "tags": []
+    },
+    {
+      "name": "Ralph Workflow",
+      "url": "https://github.com/Ralph-Workflow/Ralph-Workflow",
+      "stars": "6",
+      "org": "",
+      "desc": "Local-first loop runner for Claude Code/Codex CLI: executes a spec in a real git repo with `progress.json` + `resume.md`",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "Relay",
+      "url": "https://github.com/jcast90/relay",
+      "stars": "5",
+      "org": "",
+      "desc": "Local-first orchestrator that runs inside your existing Claude or Codex CLI via MCP; classifies a request, decomposes it",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "sage",
+      "url": "https://github.com/youwangd/SageCLI",
+      "stars": "5",
+      "org": "",
+      "desc": "Pure bash agent orchestrator (zero frameworks) with runtime-agnostic support (Claude Code, Cline, Codex, Gemini CLI, ACP",
+      "tags": []
+    },
+    {
+      "name": "Vibestrate",
+      "url": "https://github.com/guyshonshon/vibestrate",
+      "stars": "5",
+      "org": "",
+      "desc": "Local-first orchestrator that runs one task through a YAML flow of seated phases (plan \u2192 architect \u2192 implement \u2192 validat",
+      "tags": [
+        "local",
+        "plan"
+      ]
+    },
+    {
+      "name": "baya-cli",
+      "url": "https://github.com/dephelion/baya-cli",
+      "stars": "5",
+      "org": "",
+      "desc": "One command turns a plain-text task list (Markdown, `TODO.txt`, YAML) into an LLM-planned DAG and runs it across the cod",
+      "tags": []
+    },
+    {
+      "name": "TeDDy",
+      "url": "https://github.com/atte500/TeDDy",
+      "stars": "5",
+      "org": "",
+      "desc": "An opinionated coding harness that prevents code slop by embedding TDD, Hexagonal Architecture, and vertical slicing int",
+      "tags": [
+        "plan"
+      ]
+    },
+    {
+      "name": "DevPilot",
+      "url": "https://github.com/geastham/devpilot",
+      "stars": "2",
+      "org": "",
+      "desc": "Fleet cockpit for Claude Code: a wave planner with critical-path and idle-runway warnings, plus a `session-runner` CLI t",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "Team1-Factory",
+      "url": "https://github.com/Team1-dev/Team1-Factory",
+      "stars": "2",
+      "org": "",
+      "desc": "Unattended GitHub issue-to-merged-PR loop: triage, implement, review, and merge stages run against real issues and pull ",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "the-perfect-orchestrator",
+      "url": "https://github.com/daman8271/the-perfect-orchestrator",
+      "stars": "1",
+      "org": "",
+      "desc": "One lead Claude Code session commands N autonomous workers in tmux panes \u2014 spawn, brief, monitor, then adversarially ver",
+      "tags": []
+    },
+    {
+      "name": "Headroom",
+      "url": "https://github.com/headroomlabs-ai/headroom",
+      "stars": "75.1k",
+      "org": "",
+      "desc": "Context-compression layer for coding agents: `headroom wrap <tool>` transparently shrinks tool output, logs, files, and ",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "OpenCodeReview",
+      "url": "https://github.com/alibaba/open-code-review",
+      "stars": "46.5k",
+      "org": "Alibaba",
+      "desc": "AI code review CLI (`ocr`) that runs on your local repo: reviews working-tree, branch, or commit diffs or scans whole fi",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "agent-browser",
+      "url": "https://github.com/vercel-labs/agent-browser",
+      "stars": "43.9k",
+      "org": "",
+      "desc": "Headless browser automation CLI for agents (useful as a tool plugin for coding agents).",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "OpenViking",
+      "url": "https://github.com/volcengine/OpenViking",
+      "stars": "39.8k",
+      "org": "ByteDance",
+      "desc": "Context database for AI agents: memories, resources, and skills stored as one virtual filesystem under a `viking://` pro",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "claude-code-router",
+      "url": "https://github.com/musistudio/claude-code-router",
+      "stars": "37.6k",
+      "org": "",
+      "desc": "Use Claude Code as a foundation while routing to alternative providers/endpoints.",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "Beads",
+      "url": "https://github.com/gastownhall/beads",
+      "stars": "27.8k",
+      "org": "",
+      "desc": "Distributed graph issue tracker and persistent memory for coding agents, powered by Dolt. Replaces markdown plans with a",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "OpenWork",
+      "url": "https://github.com/different-ai/openwork",
+      "stars": "24k",
+      "org": "",
+      "desc": "Open-source alternative to Claude Cowork for teams; local-first desktop app powered by OpenCode with one-click setup. MI",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "NemoClaw",
+      "url": "https://github.com/NVIDIA/NemoClaw",
+      "stars": "22.7k",
+      "org": "NVIDIA",
+      "desc": "CLI tool for securely provisioning and managing sandboxed OpenClaw agent environments; enforces network, filesystem, and",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "OpenCodex",
+      "url": "https://github.com/lidge-jun/opencodex",
+      "stars": "17.3k",
+      "org": "",
+      "desc": "Local provider proxy that translates Codex's Responses API in both directions (streaming, tool calls, reasoning tokens, ",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "OpenWiki",
+      "url": "https://github.com/langchain-ai/openwiki",
+      "stars": "17.1k",
+      "org": "LangChain",
+      "desc": "CLI that writes and maintains a Markdown wiki for your codebase using a Deep Agents documentation agent; agents read it ",
+      "tags": []
+    },
+    {
+      "name": "Agent Executor (AX)",
+      "url": "https://github.com/google/ax",
+      "stars": "13.5k",
+      "org": "Google",
+      "desc": "Distributed harness runtime that provisions isolated, suspendable and resumable environments to execute coding agents; t",
+      "tags": []
+    },
+    {
+      "name": "Camofox Browser",
+      "url": "https://github.com/jo-inc/camofox-browser",
+      "stars": "11.5k",
+      "org": "",
+      "desc": "Stealth headless browser for coding agents; Playwright-compatible with anti-detection, human-like fingerprinting, and a ",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Codex Security",
+      "url": "https://github.com/openai/codex-security",
+      "stars": "11.1k",
+      "org": "OpenAI",
+      "desc": "CLI and TypeScript SDK that runs Codex over a local repo to find, validate, and patch security vulnerabilities; deep mul",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "BrowserSkill",
+      "url": "https://github.com/Tencent/BrowserSkill",
+      "stars": "8.7k",
+      "org": "Tencent",
+      "desc": "Rust `bsk` CLI and local daemon plus a Chrome/Edge extension that lets any shell-capable agent (Claude Code, Codex, Curs",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "deepsec",
+      "url": "https://github.com/vercel-labs/deepsec",
+      "stars": "8.1k",
+      "org": "Vercel",
+      "desc": "Agent-powered vulnerability scanner that runs on your own infrastructure. A fast regex matcher pass finds candidate site",
+      "tags": []
+    },
+    {
+      "name": "GitHub Agentic Workflows",
+      "url": "https://github.com/github/gh-aw",
+      "stars": "5.4k",
+      "org": "GitHub",
+      "desc": "`gh` extension that compiles Markdown workflows into GitHub Actions running Copilot, Claude Code, Codex, Gemini, or Pi a",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Docker Agent",
+      "url": "https://github.com/docker/docker-agent",
+      "stars": "4.4k",
+      "org": "Docker",
+      "desc": "Docker CLI plugin (`docker agent`) and runtime for building multi-agent teams from declarative YAML; built-in filesystem",
+      "tags": []
+    },
+    {
+      "name": "open-claude-cowork",
+      "url": "https://github.com/ComposioHQ/open-claude-cowork",
+      "stars": "4.3k",
+      "org": "",
+      "desc": "Open-source version of Claude Cowork with 500+ SaaS app integrations.",
+      "tags": []
+    },
+    {
+      "name": "toprank",
+      "url": "https://github.com/nowork-studio/toprank",
+      "stars": "3.9k",
+      "org": "",
+      "desc": "Claude Code plugin with 9 SEO and Google Ads skills. Connects Google Search Console, PageSpeed Insights, and the Google ",
+      "tags": []
+    },
+    {
+      "name": "OneCLI",
+      "url": "https://github.com/onecli/onecli",
+      "stars": "3.6k",
+      "org": "",
+      "desc": "Open-source credential vault for AI agents; Rust HTTP gateway injects API keys transparently so agents never handle raw ",
+      "tags": []
+    },
+    {
+      "name": "Webcmd",
+      "url": "https://github.com/agentrhq/webcmd",
+      "stars": "2.7k",
+      "org": "",
+      "desc": "Self-learning browser automation CLI for coding agents: learns a site's navigation once, compiles it into deterministic ",
+      "tags": []
+    },
+    {
+      "name": "token-optimizer",
+      "url": "https://github.com/alexgreensh/token-optimizer",
+      "stars": "2.5k",
+      "org": "",
+      "desc": "Context and token-cost optimizer for coding agents: finds \"ghost tokens,\" survives compaction, and fights context-qualit",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Claude Code Tools",
+      "url": "https://github.com/pchalasani/claude-code-tools",
+      "stars": "2k",
+      "org": "",
+      "desc": "Utilities around Claude Code workflows (automation helpers, helpers for common tasks).",
+      "tags": []
+    },
+    {
+      "name": "numbat",
+      "url": "https://github.com/perplexityai/numbat",
+      "stars": "1.1k",
+      "org": "Perplexity",
+      "desc": "Endpoint visibility into AI coding agent activity. Local hooks, generated plugins, and OTLP logs feed a CEL rule engine ",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "agent-qa",
+      "url": "https://github.com/vostride/agent-qa",
+      "stars": "903",
+      "org": "",
+      "desc": "Self-improving QA harness for web and mobile workflows, with a CLI, dashboard, MCP and skills for coding agents, memory-",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "HOL Guard",
+      "url": "https://github.com/hashgraph-online/hol-guard",
+      "stars": "858",
+      "org": "",
+      "desc": "Local-first security harness that intercepts tool calls in AI coding agents before files change or network is contacted.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "AgentSight",
+      "url": "https://github.com/eunomia-bpf/AgentSight",
+      "stars": "739",
+      "org": "",
+      "desc": "Zero-instrumentation eBPF observability for LLM/coding agents; captures syscall-level traces (file, process, network) wi",
+      "tags": [
+        "eval"
+      ]
+    },
+    {
+      "name": "SandBase Harness",
+      "url": "https://github.com/sandbaseai/sandbase-harness",
+      "stars": "707",
+      "org": "",
+      "desc": "Local-first TypeScript agent runtime with persistent sessions, sandboxed tools, MCP integration, memory, credentials, au",
+      "tags": [
+        "context",
+        "local",
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Vestige",
+      "url": "https://github.com/samvallad33/vestige",
+      "stars": "649",
+      "org": "",
+      "desc": "Local-first cognitive memory MCP server for coding agents; SQLite store, FSRS-6 retention, prediction-error gating, acti",
+      "tags": [
+        "context",
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "Concord MCP",
+      "url": "https://github.com/Get-Concord-AI/concord-mcp",
+      "stars": "460",
+      "org": "",
+      "desc": "Local-first MCP server plus a `concord` CLI and TUI giving coding agents shared work state: cross-harness messaging, fil",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "Coasts",
+      "url": "https://github.com/coast-guard/coasts",
+      "stars": "433",
+      "org": "",
+      "desc": "Containerized host orchestration for git worktrees; isolates ports, networks, and services per environment using DinD/Sy",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "AgentBridge",
+      "url": "https://github.com/raysonmeng/agent-bridge",
+      "stars": "382",
+      "org": "",
+      "desc": "CLI that keeps Claude Code and Codex as live peers in one session, with mid-turn review, task splitting, and handoff at ",
+      "tags": []
+    },
+    {
+      "name": "subtask",
+      "url": "https://github.com/zippoxer/subtask",
+      "stars": "338",
+      "org": "",
+      "desc": "Claude Skill for delegating tasks with subagents in Git worktrees.",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "claude-cmd",
+      "url": "https://github.com/kiliczsh/claude-cmd",
+      "stars": "314",
+      "org": "",
+      "desc": "Terminal wrapper for interacting with Claude models; often used as a building block in harness scripts.",
+      "tags": []
+    },
+    {
+      "name": "OrcaReplay",
+      "url": "https://github.com/Continuum-AI-Corp/OrcaReplay",
+      "stars": "285",
+      "org": "",
+      "desc": "Records a coding-agent run and replays it offline with the network off, or forks it from any checkpoint onto a different",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "cc-router",
+      "url": "https://github.com/finch-xu/cc-router",
+      "stars": "276",
+      "org": "",
+      "desc": "Local Anthropic-Messages-API proxy that bundles multiple provider subscriptions and API quotas (DeepSeek, Qwen, Kimi, GL",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "kasetto",
+      "url": "https://github.com/pivoshenko/kasetto",
+      "stars": "209",
+      "org": "",
+      "desc": "A declarative AI agent environment manager, written in Rust.",
+      "tags": []
+    },
+    {
+      "name": "repo-forensics",
+      "url": "https://github.com/alexgreensh/repo-forensics",
+      "stars": "191",
+      "org": "",
+      "desc": "Offline security scanner for AI-agent repos, skills, plugins, and MCP servers; flags prompt injection, credential theft,",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "flameox",
+      "url": "https://github.com/morluto/flameox",
+      "stars": "183",
+      "org": "",
+      "desc": "Local profiling and runtime-evidence toolkit for coding agents: a CLI plus MCP server that runs named profiling workload",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "codex-profiles",
+      "url": "https://github.com/Ducksss/codex-profiles",
+      "stars": "181",
+      "org": "",
+      "desc": "Bash CLI helper for switching OpenAI Codex CLI/Desktop accounts via isolated `CODEX_HOME` profiles; Homebrew install wit",
+      "tags": []
+    },
+    {
+      "name": "agent-lsp",
+      "url": "https://github.com/blackwell-systems/agent-lsp",
+      "stars": "162",
+      "org": "",
+      "desc": "MCP server giving any CLI coding agent type-aware language intelligence: 50+ LSP tools, speculative execution (preview e",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "terminal-mcp",
+      "url": "https://github.com/elleryfamilia/terminal-mcp",
+      "stars": "145",
+      "org": "",
+      "desc": "MCP server that gives AI assistants a shared view of your terminal session; debug CLIs and TUI apps in real-time or let ",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "agenttrace",
+      "url": "https://github.com/luoyuctl/agenttrace",
+      "stars": "145",
+      "org": "",
+      "desc": "Local-first Bubble Tea TUI for inspecting Claude Code, Codex CLI, Gemini CLI, Aider, Cursor, Hermes, OpenCode, Kimi, and",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "KubeStellar kc-agent",
+      "url": "https://github.com/kubestellar/console/tree/main/cmd/kc-agent",
+      "stars": "127",
+      "org": "",
+      "desc": "Local Go daemon from the KubeStellar Console that auto-detects installed coding agents (Claude CLI, Codex, Copilot CLI, ",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "ax",
+      "url": "https://github.com/Necmttn/ax",
+      "stars": "116",
+      "org": "",
+      "desc": "Local-first agent telemetry and observability for Claude Code and Codex sessions.",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Harness Starter Kit",
+      "url": "https://github.com/harnessworks/harness-starter-kit",
+      "stars": "115",
+      "org": "",
+      "desc": "Prompt-first harness engineering starter kit for adding durable agent instructions, drift checks, failure memory, and ev",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "ActPlane",
+      "url": "https://github.com/eunomia-bpf/ActPlane",
+      "stars": "104",
+      "org": "",
+      "desc": "OS-level agent harness that compiles a policy DSL to an eBPF engine for labeled information-flow control at the syscall ",
+      "tags": []
+    },
+    {
+      "name": "authsome",
+      "url": "https://github.com/agentrhq/authsome",
+      "stars": "97",
+      "org": "",
+      "desc": "Local credential broker for AI agents; Python CLI with encrypted local vault and a local HTTPS proxy that injects OAuth2",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "handoff",
+      "url": "https://github.com/dazuiba/handoff",
+      "stars": "92",
+      "org": "",
+      "desc": "Let your coding agents work together: delegate tasks to DeepSeek right inside your Claude Code or Codex sessions. Python",
+      "tags": []
+    },
+    {
+      "name": "RoleCraft",
+      "url": "https://github.com/sametcelikbicak/rolecraft",
+      "stars": "92",
+      "org": "",
+      "desc": "Zero-dependency CLI to install AI agent skills as roles & behaviors from any source (local folder or GitHub repo). Works",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "Agent Island",
+      "url": "https://github.com/tristan666666/agent-island",
+      "stars": "87",
+      "org": "",
+      "desc": "Local status companion for Claude Code and Codex sessions on macOS and Windows; shows working, your-turn, stalled, and a",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "AgentPlane",
+      "url": "https://github.com/basilisk-labs/agentplane",
+      "stars": "85",
+      "org": "",
+      "desc": "Local CLI that wraps Claude Code, Codex, Cursor, and Aider work in an auditable Git-native workflow (task \u2192 plan \u2192 appro",
+      "tags": [
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "skill-optimizer",
+      "url": "https://github.com/fastxyz/skill-optimizer",
+      "stars": "81",
+      "org": "",
+      "desc": "CLI tool that benchmarks SDK, CLI, and MCP guidance docs (SKILL.md) across multiple LLMs using static action + argument ",
+      "tags": [
+        "eval"
+      ]
+    },
+    {
+      "name": "pond",
+      "url": "https://github.com/tenequm/pond",
+      "stars": "81",
+      "org": "",
+      "desc": "Lossless session archive for coding agents: ingests what twelve harnesses already write (Claude Code, Codex, opencode, p",
+      "tags": []
+    },
+    {
+      "name": "pi-mem",
+      "url": "https://github.com/jo-inc/pi-mem",
+      "stars": "79",
+      "org": "",
+      "desc": "Plain-Markdown persistent memory for coding agents; long-term, daily, scratchpad, and searchable notes with zero depende",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "brood-box",
+      "url": "https://github.com/stacklok/brood-box",
+      "stars": "77",
+      "org": "",
+      "desc": "Hardware-isolated microVM sandbox for AI coding agents (Claude Code, Codex, OpenCode) with COW snapshot isolation, egres",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Untether",
+      "url": "https://github.com/littlebearapps/untether",
+      "stars": "72",
+      "org": "",
+      "desc": "Telegram bridge for 6 CLI coding agents (Claude Code, Codex, OpenCode, Pi, Gemini CLI, Amp); remote task control via voi",
+      "tags": []
+    },
+    {
+      "name": "skillreaper",
+      "url": "https://github.com/thousandflowers/skillreaper",
+      "stars": "60",
+      "org": "",
+      "desc": "CLI that reads real session transcripts to find skills, MCP servers, and agents loaded but never fired, then safely quar",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "AgentLint",
+      "url": "https://github.com/0xmariowu/AgentLint",
+      "stars": "58",
+      "org": "",
+      "desc": "33 evidence-backed checks for AI-friendly repos. Scans file structure, instruction quality, build setup, session continu",
+      "tags": []
+    },
+    {
+      "name": "claudebox",
+      "url": "https://github.com/numtide/claudebox",
+      "stars": "58",
+      "org": "",
+      "desc": "Sandboxed environment for Claude Code (focused on isolation/safety).",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "AgentTier",
+      "url": "https://github.com/agenttier/agenttier",
+      "stars": "55",
+      "org": "",
+      "desc": "Kubernetes-native sandbox runtime for AI coding agents. A `Sandbox` CRD provisions a Pod + PVC + NetworkPolicy with opti",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Nex",
+      "url": "https://github.com/nex-crm/nex-as-a-skill",
+      "stars": "55",
+      "org": "",
+      "desc": "Organizational context and memory for AI agents; connects email, Slack, CRM, and 100+ tools into one knowledge graph wit",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "FireConnect",
+      "url": "https://github.com/fw-ai/fireconnect",
+      "stars": "55",
+      "org": "Fireworks AI",
+      "desc": "CLI that points existing coding agents at Fireworks models by rewriting each harness's own config; `on`/`off` per harnes",
+      "tags": []
+    },
+    {
+      "name": "pi-reflect",
+      "url": "https://github.com/jo-inc/pi-reflect",
+      "stars": "51",
+      "org": "",
+      "desc": "Self-improving behavioral files for coding agents; automated self-reviews that evolve AGENTS.md rules from actual mistak",
+      "tags": []
+    },
+    {
+      "name": "pi-reflect",
+      "url": "https://github.com/jo-inc/pi-reflect",
+      "stars": "51",
+      "org": "",
+      "desc": "Self-improving behavioral files for coding agents; automated self-reviews that evolve AGENTS.md rules from actual mistak",
+      "tags": []
+    },
+    {
+      "name": "AgentDiff",
+      "url": "https://github.com/codeprakhar25/agentdiff",
+      "stars": "46",
+      "org": "",
+      "desc": "Git-native provenance for AI-written code: hooks every CLI agent (Claude Code, Codex, Cursor, Gemini, OpenCode, Windsurf",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Wit",
+      "url": "https://github.com/amaar-mc/wit",
+      "stars": "46",
+      "org": "",
+      "desc": "Coordination protocol that prevents merge conflicts between parallel AI agents. Locks specific functions (not files) via",
+      "tags": []
+    },
+    {
+      "name": "Okto Nexus",
+      "url": "https://github.com/OktoLabsAI/okto-nexus",
+      "stars": "37",
+      "org": "",
+      "desc": "Local-first coordination hub for agents working in the same repository: durable identities, presence, messages and inbox",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "AgentManager",
+      "url": "https://github.com/kevinelliott/agentmanager",
+      "stars": "37",
+      "org": "",
+      "desc": "Lightweight CLI for managing multiple agent runs/sessions and workflows.",
+      "tags": []
+    },
+    {
+      "name": "Loadout",
+      "url": "https://github.com/elleryfamilia/loadout",
+      "stars": "32",
+      "org": "",
+      "desc": "Adaptive context engine for AI coding agents; detects your stack and equips the right context when you launch `load clau",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "EchoCoding",
+      "url": "https://github.com/launsion-boop/EchoCoding",
+      "stars": "29",
+      "org": "",
+      "desc": "Audio layer for CLI coding agents with hook-triggered SFX, ambient soundscape, and optional cloud TTS/ASR voice interact",
+      "tags": []
+    },
+    {
+      "name": "Data Olympus",
+      "url": "https://github.com/knaisoma/data-olympus",
+      "stars": "29",
+      "org": "",
+      "desc": "Governance-grade project knowledge MCP server and CLI for coding agents; accepted rules, proposals, validity windows, an",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Data Olympus",
+      "url": "https://github.com/knaisoma/data-olympus",
+      "stars": "29",
+      "org": "",
+      "desc": "Governance-grade project knowledge MCP server and CLI for coding agents; accepted rules, proposals, validity windows, an",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Mneme",
+      "url": "https://github.com/MnemeHQ/mneme",
+      "stars": "27",
+      "org": "",
+      "desc": "Turns architectural decisions and ADRs into deterministic guardrails for coding agents: records decisions in an auditabl",
+      "tags": [
+        "sandbox",
+        "plan"
+      ]
+    },
+    {
+      "name": "ContextZip",
+      "url": "https://github.com/jee599/contextzip",
+      "stars": "26",
+      "org": "",
+      "desc": "Rust filter that compresses coding-agent context by trimming live stdout before it reaches the model, targeting 60\u201390% r",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Mnemoverse",
+      "url": "https://github.com/mnemoverse/mcp-memory-server",
+      "stars": "26",
+      "org": "",
+      "desc": "Persistent memory for CLI coding agents over MCP: a hosted remote server with OAuth at `https://mcp.mnemoverse.com/mcp`,",
+      "tags": [
+        "context",
+        "daemon"
+      ]
+    },
+    {
+      "name": "AgentPack",
+      "url": "https://github.com/vishal2612200/agentpack",
+      "stars": "25",
+      "org": "",
+      "desc": "Local context engine for CLI coding agents: routes tasks to relevant files, tests, repo rules, skills, and commands, the",
+      "tags": [
+        "routing",
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "m1nd",
+      "url": "https://github.com/maxkle1nz/m1nd",
+      "stars": "21",
+      "org": "",
+      "desc": "Local-first MCP server that gives a CLI coding agent a neuro-symbolic code graph over the repo: `impact`/`why`/change-re",
+      "tags": [
+        "local",
+        "daemon"
+      ]
+    },
+    {
+      "name": "Unship",
+      "url": "https://github.com/mbenhard/unship",
+      "stars": "21",
+      "org": "",
+      "desc": "Local CLI and browser picker for comparing temporary UI variants created by coding agents, then keeping one and cleaning",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "grite",
+      "url": "https://github.com/neul-labs/grite",
+      "stars": "21",
+      "org": "",
+      "desc": "Git-backed issue tracker with CRDT merging for AI coding agents. Issues live as an append-only event log in `refs/grite/",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "grite",
+      "url": "https://github.com/neul-labs/grite",
+      "stars": "21",
+      "org": "",
+      "desc": "Git-backed issue tracker with CRDT merging for AI coding agents. Issues live as an append-only event log in `refs/grite/",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Tree Ring Memory",
+      "url": "https://github.com/TerminallyLazy/Tree-Ring-Memory",
+      "stars": "20",
+      "org": "",
+      "desc": "Local-first Rust CLI for the coding-agent memory lifecycle: project-scoped SQLite recall, evidence-backed lessons, and c",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "TraceFold",
+      "url": "https://github.com/TraceFold/tracefold",
+      "stars": "19",
+      "org": "",
+      "desc": "Constructs and checks an inverse for filesystem and git changes an AI coding agent makes before the change lands, signs ",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "GoodMemory",
+      "url": "https://github.com/hjqcan/GoodMemory",
+      "stars": "19",
+      "org": "",
+      "desc": "Local-first, auditable memory layer for Codex and Claude Code; its CLI installs scoped recall hooks and read-only MCP, w",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "Agent Toolkit",
+      "url": "https://github.com/ulises-jeremias/agent-toolkit",
+      "stars": "19",
+      "org": "",
+      "desc": "Portable Agent Skills catalog, personas, MCP templates, and loop/swarm orchestration for coding assistants, deployed via",
+      "tags": []
+    },
+    {
+      "name": "termagitchi",
+      "url": "https://github.com/TevvvB/termagitchi",
+      "stars": "18",
+      "org": "",
+      "desc": "Status-line companion for running several agents across git worktrees: each worktree gets its own creature so near-ident",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "Agentic Engineering Framework",
+      "url": "https://github.com/DimitriGeelen/agentic-engineering-framework",
+      "stars": "18",
+      "org": "",
+      "desc": "Provider-neutral governance framework for CLI coding agents. Structural enforcement of task-driven workflows, context bu",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "machine",
+      "url": "https://github.com/katspaugh/machine",
+      "stars": "17",
+      "org": "",
+      "desc": "Provisions one isolated Lima VM per GitHub project as a sandbox for Claude Code/Codex, with Docker, Node, and signed git",
+      "tags": [
+        "sandbox",
+        "diff"
+      ]
+    },
+    {
+      "name": "schliff",
+      "url": "https://github.com/Zandereins/schliff",
+      "stars": "16",
+      "org": "",
+      "desc": "Deterministic quality linter for agent instruction files (`AGENTS.md`, `SKILL.md`, `CLAUDE.md`, `.cursorrules`) with det",
+      "tags": []
+    },
+    {
+      "name": "cowork-to-code-bridge",
+      "url": "https://github.com/abhinaykrupa/cowork-to-code-bridge",
+      "stars": "15",
+      "org": "",
+      "desc": "Async file-based bridge that lets a sandboxed/cloud agent (Claude Cowork, CrewAI, AutoGen, LlamaIndex) delegate work to ",
+      "tags": [
+        "context",
+        "local",
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Agent Memory System",
+      "url": "https://github.com/RavByte-AI/agent-memory-system",
+      "stars": "14",
+      "org": "",
+      "desc": "Persistent memory infrastructure for AI coding agents and multi-agent workflows. MIT.",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "myc",
+      "url": "https://github.com/aistastudio/myc",
+      "stars": "14",
+      "org": "",
+      "desc": "Local task-and-memory layer shared by Claude Code, Codex, opencode and Kimi: a task queue with dependencies and atomic c",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "lifeos-cli",
+      "url": "https://github.com/liujuanjuan1984/lifeos-cli",
+      "stars": "14",
+      "org": "",
+      "desc": "Terminal-native LifeOS for managing intentions, habits, and timelogs; provides structured persistent context for agentic",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "agent-runbook",
+      "url": "https://github.com/KnoxOps/agent-runbook",
+      "stars": "13",
+      "org": "",
+      "desc": "Python CLI that compiles contract-based YAML runbooks into SKILL.md files for Claude Code and Codex agents. Define multi",
+      "tags": []
+    },
+    {
+      "name": "agent-terminal",
+      "url": "https://github.com/jasonkneen/agent-terminal",
+      "stars": "12",
+      "org": "",
+      "desc": "Headless terminal automation for AI agents using node-pty; capture output and send input programmatically.",
+      "tags": [
+        "daemon"
+      ]
+    },
+    {
+      "name": "Pi Agent IDE",
+      "url": "https://github.com/alexshpunt/pi-agent-ide",
+      "stars": "12",
+      "org": "",
+      "desc": "Agent-native IDE extension for Pi with guarded editing, AST/LSP navigation, persistent terminals, debugging, visual insp",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "Praman",
+      "url": "https://github.com/mrkanitkar/playwright-praman",
+      "stars": "10",
+      "org": "",
+      "desc": "Playwright plugin with CLI agents (planner, generator, healer) for SAP UI5/Fiori test automation; 199 typed control prox",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "agy-auto",
+      "url": "https://github.com/onkarbadve/agy-auto",
+      "stars": "10",
+      "org": "",
+      "desc": "PreToolUse policy gate and auto-permission mode for Google Antigravity CLI (`agy`); replaces `--dangerously-skip-permiss",
+      "tags": [
+        "sandbox"
+      ]
+    },
+    {
+      "name": "zosma-qa",
+      "url": "https://github.com/zosmaai/zosma-qa",
+      "stars": "9",
+      "org": "",
+      "desc": "Generates QA agent prompts (planner, generator, healer, analyzer) for CLI coding tools (OpenCode, Claude Code, VS Code C",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "gate4agent",
+      "url": "https://github.com/ZENG3LD/gate4agent",
+      "stars": "9",
+      "org": "ZENG3LD",
+      "desc": "Universal Rust transport library for CLI AI agents (Claude Code, Codex, Gemini, OpenCode). Pipe/NDJSON, PTY, and ACP (JS",
+      "tags": []
+    },
+    {
+      "name": "clu",
+      "url": "https://github.com/arjia-labs/clu",
+      "stars": "8",
+      "org": "",
+      "desc": "Codified Likeness Utility: a SQLite-backed issue tracker for coordinating fleets of AI coding agents. Atomic task claim,",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "shim-cli",
+      "url": "https://github.com/GetSHIM/shim-cli",
+      "stars": "8",
+      "org": "",
+      "desc": "Local hooks for Claude Code, Codex and Copilot CLI that detect secrets and personal data and mask them in Claude Code to",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Terminai",
+      "url": "https://github.com/emosenkis/terminai",
+      "stars": "7",
+      "org": "",
+      "desc": "Makes your terminal of choice AI-enabled using your favorite CLI coding agent. Completely transparent until you activate",
+      "tags": []
+    },
+    {
+      "name": "SpecWave",
+      "url": "https://github.com/Cyning12/SpecWave",
+      "stars": "6",
+      "org": "",
+      "desc": "Multi-host coding CLI that lands one declarative adapt table across 13 hosts (Cursor, Claude Code, Copilot, Codex, Winds",
+      "tags": []
+    },
+    {
+      "name": "PatchWarden",
+      "url": "https://github.com/jiezeng2004-design/PatchWarden",
+      "stars": "6",
+      "org": "",
+      "desc": "Local-first MCP safety and verification layer that hands an approved plan to Codex CLI, Claude Code, or OpenCode under w",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "OSOP",
+      "url": "https://github.com/Archie0125/osop-agent-rules",
+      "stars": "5",
+      "org": "",
+      "desc": "Universal workflow logging protocol for CLI coding agents; produces `.osop` workflow definitions and `.osoplog.yaml` exe",
+      "tags": []
+    },
+    {
+      "name": "context-bridge",
+      "url": "https://github.com/serdardb/context-bridge",
+      "stars": "5",
+      "org": "",
+      "desc": "Hands a live coding session from one CLI agent to another without losing the thread: each agent keeps its own native ses",
+      "tags": []
+    },
+    {
+      "name": "linear-cli",
+      "url": "https://github.com/phnx-labs/linear-cli",
+      "stars": "4",
+      "org": "",
+      "desc": "Single-file Python CLI for Linear (the issue tracker), zero dependencies. Designed for use as a subagent tool by Claude ",
+      "tags": []
+    },
+    {
+      "name": "tu",
+      "url": "https://github.com/sahil87/tu",
+      "stars": "4",
+      "org": "",
+      "desc": "Cost-tracking CLI for AI coding assistants: token usage and spend across Claude Code, Codex, and OpenCode sessions. Type",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Project Tiny Context Harness",
+      "url": "https://github.com/Seven128/project-tiny-context-harness",
+      "stars": "4",
+      "org": "",
+      "desc": "Minimal repo-native project memory for CLI coding agents. Installs `AGENTS.md`, `project_context/**`, role Skills, and a",
+      "tags": [
+        "context"
+      ]
+    },
+    {
+      "name": "Hivelore",
+      "url": "https://github.com/Doucs91/hivelore",
+      "stars": "4",
+      "org": "",
+      "desc": "Deterministic policy gate for agent-written code: a lesson captured via MCP (`mem_tried`) becomes a validated regex/AST/",
+      "tags": []
+    },
+    {
+      "name": "agent-trace",
+      "url": "https://github.com/ertygiq/agent-trace",
+      "stars": "3",
+      "org": "",
+      "desc": "Text-only CLI for extracting filtered transcripts from Claude Code, Codex, and Pi session files; useful for debugging, r",
+      "tags": []
+    },
+    {
+      "name": "Weaver",
+      "url": "https://github.com/sean35mm/weaver",
+      "stars": "3",
+      "org": "",
+      "desc": "Local coordination layer for multiple coding agents working in the same repo. Agents announce tasks, claim paths/globs, ",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "opencode-agent-memory",
+      "url": "https://github.com/Ghilteras/opencode-agent-memory",
+      "stars": "3",
+      "org": "",
+      "desc": "Persistent, self-editable memory blocks and an optional append-only journal with local semantic search for the OpenCode ",
+      "tags": [
+        "context",
+        "local"
+      ]
+    },
+    {
+      "name": "BlaBla",
+      "url": "https://github.com/Kiborgik/blabla",
+      "stars": "3",
+      "org": "",
+      "desc": "Rust CLI that keeps project intent as executable contracts a coding agent queries instead of re-reading chat history: be",
+      "tags": []
+    },
+    {
+      "name": "wt",
+      "url": "https://github.com/sahil87/wt",
+      "stars": "2",
+      "org": "",
+      "desc": "Small Go CLI wrapping `git worktree` with opinionated defaults for the parallel-agent workflow: worktrees as siblings of",
+      "tags": [
+        "diff"
+      ]
+    },
+    {
+      "name": "distro-rig-vps",
+      "url": "https://github.com/shafir-info/distro-rig-vps",
+      "stars": "2",
+      "org": "",
+      "desc": "Disposable real-boot Linux VMs for coding agents that need guest root, without host sudo/KVM/libvirt access. Deny-by-def",
+      "tags": []
+    },
+    {
+      "name": "stratless",
+      "url": "https://github.com/stratless-ai/stratless",
+      "stars": "2",
+      "org": "",
+      "desc": "Derives Claude Code and Codex skills from your own session history: clusters recurring moments locally, has your own ass",
+      "tags": [
+        "local"
+      ]
+    },
+    {
+      "name": "Squelette",
+      "url": "https://github.com/JyMinet/squelette",
+      "stars": "2",
+      "org": "",
+      "desc": "Governance layer for CLI coding agents (Claude Code, Codex): human decisions and allowed scope recorded before work, a p",
+      "tags": []
+    },
+    {
+      "name": "claude-northstar",
+      "url": "https://github.com/Nisarg38/claude-northstar",
+      "stars": "1",
+      "org": "",
+      "desc": "Transforms CLI agents from task executors into autonomous project partners.",
+      "tags": [
+        "routing"
+      ]
+    },
+    {
+      "name": "UACOS",
+      "url": "https://github.com/caotiensinh/uacos",
+      "stars": "1",
+      "org": "",
+      "desc": "Local-first code intelligence and orchestration toolkit: dependency-graph impact analysis, context compression, patch-sc",
+      "tags": [
+        "context",
+        "local",
+        "diff"
+      ]
+    },
+    {
+      "name": "llm-panel",
+      "url": "https://github.com/musharna/llm-panel",
+      "stars": "1",
+      "org": "",
+      "desc": "Put one question or diff to several LLM CLIs in parallel (codex, claude, opencode/OpenRouter, ollama); every answer show",
+      "tags": [
+        "routing",
+        "local",
+        "eval",
+        "diff"
+      ]
+    },
+    {
+      "name": "Mantyl",
+      "url": "https://github.com/jopli11/mantyl-cli",
+      "stars": "1",
+      "org": "",
+      "desc": "Handover layer for AI-built software: compiles a repo plus Claude Code, Codex, or Cursor session history into a verified",
+      "tags": []
+    },
+    {
+      "name": "CodeVetter",
+      "url": "https://github.com/Codevetter/codevetter",
+      "stars": "1",
+      "org": "",
+      "desc": "Execution-backed verification for AI-written changes: proves a change satisfies its requested task by running the eviden",
+      "tags": []
+    },
+    {
+      "name": "isitdone",
+      "url": "https://github.com/raimondasl/isitdone",
+      "stars": "1",
+      "org": "",
+      "desc": "Stop hook and CLI that blocks a coding agent's \"done\" until the repo's real test, typecheck and lint commands pass on th",
+      "tags": []
+    }
+  ],
+  "section_counts": {
+    "Open Source": 106,
+    "OpenClaw ecosystem": 12,
+    "Closed Source": 18,
+    "Session managers & parallel runners": 85,
+    "Orchestrators & autonomous loops": 51,
+    "Agent infrastructure": 126
+  }
+}

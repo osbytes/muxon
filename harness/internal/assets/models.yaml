@@ -1,0 +1,17 @@
+version: 1
+providers:
+  deepinfra:
+    base_url: https://api.deepinfra.com/v1/openai
+    api_key_env: DEEPINFRA_API_KEY
+roles:
+  worker:
+    model_id: m0-worker
+models:
+  - id: m0-worker
+    provider: deepinfra
+    model: test/model
+    capabilities:
+      context_window: 32768
+      tool_protocol: native
+      edit_format: search_replace
+      prompt_variant: compact

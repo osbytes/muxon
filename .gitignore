@@ -1,0 +1,22 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Harness runtime
+.thee/
+
+# Env / secrets
+.env
+.env.*

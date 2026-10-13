@@ -1,0 +1,30 @@
+---
+description: Package boundaries, interfaces, and thee internal layout
+globs: "harness/**/*.go"
+alwaysApply: false
+---
+
+# Package boundaries
+
+- All harness logic under **`internal/`** — not importable by other modules; refactor freely inside.
+- Mirror architecture docs: `internal/director`, `internal/context`, `internal/provider`, `internal/tools/impl`, etc.
+- One obvious owner per dependency (cobra in `cmd/`, HTTP adapters in `internal/provider/openai`, …).
+- **`internal/*` must not import `github.com/spf13/cobra`** — pass typed config and `context.Context` from `cmd/`.
+
+## Interfaces
+
+- Define interfaces where they are **used** (consumer package), not where types are implemented.
+- Return **concrete** types from constructors (`NewClient() *Client`); avoid `NewClient() ClientInterface` for mocking.
+- Don't create interfaces "for tests"; test via public surface or small fakes in `_test` packages.
+- Add interfaces only when you have a real second implementation or a clear seam (e.g. `provider` adapter).
+
+## Data and JSON
+
+- Tool schemas: generate JSON Schema from Go structs (single source of truth per implementation plan).
+- Prefer value semantics for small immutable config; pointers for large structs or mutating receivers.
+- Prefer `var s []T` for empty slices; use `[]T{}` only when JSON `[]` vs `null` matters.
+
+## Security
+
+- Never log secrets, API keys, or raw credentials (`docs/harness-architecture/security-and-policy.md`).
+- Resolve credentials in `internal/config` / provider layer; redact in traces.

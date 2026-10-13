@@ -1,0 +1,36 @@
+---
+description: Go doc comments only — no narrating the implementation
+globs: "harness/**/*.go"
+alwaysApply: false
+---
+
+# Documentation and comments
+
+**Default: no inline comments.** Code should read clearly without line-by-line narration. LLMs must not add comments on every block or restate what the code obviously does.
+
+## What to write
+
+- **Exported** types, funcs, consts, and vars: godoc comment immediately above the declaration.
+- **Non-trivial unexported** APIs: same godoc style when behavior isn't obvious from the name.
+- **Package** comment: full sentence adjacent to `package` (no blank line); `// Package foo ...` for libraries, `// Command thee ...` for `cmd/thee`.
+- Doc style: complete sentence, starts with the name being documented, ends with a period.
+
+```go
+// LoadModels reads the embedded default manifest and merges user overrides.
+func LoadModels(path string) (Models, error)
+```
+
+## Rare exceptions (use sparingly)
+
+- `//go:generate`, build tags, `nolint`, or "Code generated ... DO NOT EDIT."
+- One short comment for **non-obvious** security, trust, or invariant the code cannot express (e.g. why we never log a field).
+- Justification when intentionally ignoring an error (almost never).
+
+## Do not
+
+- Comment `// increment i` or `// call the API`.
+- Leave commented-out code; delete it.
+- Use block comments to describe implementation steps inside functions.
+- Duplicate godoc in inline comments below the declaration.
+
+If tempted to comment, prefer a better name or a small extracted function with a good name.
