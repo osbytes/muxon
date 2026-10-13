@@ -32,11 +32,11 @@ func NewClient(baseURL, apiKey string) *Client {
 }
 
 type chatRequest struct {
-	Model          string                 `json:"model"`
-	Messages       []chatMessage          `json:"messages"`
-	Stream         bool                   `json:"stream"`
-	Tools          []toolWire             `json:"tools,omitempty"`
-	ResponseFormat *responseFormatWire    `json:"response_format,omitempty"`
+	Model          string              `json:"model"`
+	Messages       []chatMessage       `json:"messages"`
+	Stream         bool                `json:"stream"`
+	Tools          []toolWire          `json:"tools,omitempty"`
+	ResponseFormat *responseFormatWire `json:"response_format,omitempty"`
 }
 
 type responseFormatWire struct {
@@ -87,10 +87,19 @@ type chatResponse struct {
 		} `json:"message"`
 		FinishReason string `json:"finish_reason"`
 	} `json:"choices"`
-	Usage struct {
-		PromptTokens     int `json:"prompt_tokens"`
-		CompletionTokens int `json:"completion_tokens"`
-	} `json:"usage"`
+	Usage usageWire `json:"usage"`
+}
+
+type usageWire struct {
+	PromptTokens     int     `json:"prompt_tokens"`
+	CompletionTokens int     `json:"completion_tokens"`
+	Cost             float64 `json:"cost"`
+	PromptDetails    struct {
+		CachedTokens int `json:"cached_tokens"`
+	} `json:"prompt_tokens_details"`
+	CompletionDetails struct {
+		ReasoningTokens int `json:"reasoning_tokens"`
+	} `json:"completion_tokens_details"`
 }
 
 // Complete implements provider.Provider.
@@ -241,9 +250,16 @@ func decodeResponse(cr chatResponse) provider.Response {
 			})
 		}
 	}
-	out.Usage = provider.Usage{
-		InputTokens:  cr.Usage.PromptTokens,
-		OutputTokens: cr.Usage.CompletionTokens,
-	}
+	out.Usage = normalizeUsage(cr.Usage)
 	return out
+}
+
+func normalizeUsage(u usageWire) provider.Usage {
+	return provider.Usage{
+		InputTokens:     u.PromptTokens,
+		OutputTokens:    u.CompletionTokens,
+		CachedTokens:    u.PromptDetails.CachedTokens,
+		ReasoningTokens: u.CompletionDetails.ReasoningTokens,
+		ProviderCostUSD: u.Cost,
+	}
 }

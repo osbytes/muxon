@@ -11,9 +11,12 @@ Part 2 (workspace tools and safety) is DONE.
 Part 3 (context engine and repo-map) is DONE.
 Part 4 (tool-calling stack) is DONE (M1 live smoke skipped — no API key).
 Part 5 (director, verifier, trust) is DONE.
+Part 6 (router, escalation, cost) is DONE.
+Part 7 (headless CLI milestone A) is DONE.
 
 Milestone M0: PASS
 Milestone M1: pending (4.10 skipped — no API key)
+Milestone A: PASS (go test ./... green; scripted thee run + doctor/cost/trust/eval)
 
 Monorepo layout: DONE
 Module path: github.com/PLACEHOLDER/thee/harness (replace PLACEHOLDER before publish)
@@ -21,57 +24,57 @@ Module path: github.com/PLACEHOLDER/thee/harness (replace PLACEHOLDER before pub
 
 Parts (plan order)
 ------------------
-[done]  Part 1  — Walking skeleton (M0)
+[done]  Part  1 — Walking skeleton (M0)
 [done]  Part  2 — Workspace tools and safety
 [done]  Part  3 — Context engine and repo-map
 [done]  Part  4 — Tool-calling stack (M1)
 [done]  Part  5 — Director, verifier, trust
-[todo]  Part  6 — Router, escalation, cost
-[todo]  Part  7 — Headless CLI milestone A
+[done]  Part  6 — Router, escalation, cost
+[done]  Part  7 — Headless CLI milestone A
 [todo]  Part  8 — TUI milestone B
 [todo]  Part  9 — Probe, eval, replay milestone C
 [todo]  Part 10 — Release milestone D
 
 
-Part 4 step checklist (harness/)
+Part 7 step checklist (harness/)
 --------------------------------
-4.1  reasoning strip before parse                           done
-4.2  JSON schema from structs                               done
-4.3  salvage before repair                                    done
-4.4  constraint builder + downgrade                         done
-4.5  two_step driver                                        done
-4.6  fenced driver                                          done
-4.7  repair once + director hook                            done
-4.8  wire toolcall dispatch into director                     done
-4.9  truncation / served_context trace event                done
-4.10 live small-model smoke                                 skipped (no API key)
+7.1  all run flags (verify-cmd, permission, yolo, model, budgets, eval)   done
+7.2  presenters (--json, -q)                                              done
+7.3  SIGINT → 130                                                         done
+7.4  doctor                                                               done
+7.5  cost                                                                 done
+7.6  trust subcommands (abs paths, thee.toml hash on add)                 done
+7.7  eval run + fix-test.json fixture                                     done
+
+
+Part 6 step checklist (harness/)
+--------------------------------
+6.1  catalog.json merge                                                   done
+6.2  role binding + provider factory                                      done
+6.3  cost accounting + trace model.response / session.end totals          done
+6.4  escalation triggers + director swap                                  done
+6.5  classification (heuristic + optional router) + goal.start            done
 
 
 Part 5 step checklist (harness/)
 --------------------------------
-5.1  full state machine + transitions                       done
-5.2  caps and token budget                                  done
-5.3  trust store + thee trust CLI                           done
-5.4  config.toml / thee.toml precedence                     done
-5.5  verify resolution order                                done
-5.6  Go test failure parser + signature                     done
-5.7  baseline parallel to first turn                        done
-5.8  verify gaming (test_edits flag)                        done
-5.9  session base shadow ref / snapshot dir                 done
-5.10 checkpoints + restore tool (minimal)                     done
-5.11 loop detection nudge / escalate                          done
-5.12 todo + ask_user tools                                  done
-5.13 director replay integration test                       done
+5.1–5.13  done (see prior entries)
+
+
+Part 4 step checklist (harness/)
+--------------------------------
+4.1–4.9   done
+4.10      skipped (no API key)
 
 
 Part 3 step checklist (harness/)
 --------------------------------
-3.1–3.8  done (see prior entries)
+3.1–3.8  done
 
 
 Part 2 step checklist (harness/)
 --------------------------------
-2.1–2.7  done (see prior entries)
+2.1–2.7  done
 
 
 Part 1 step checklist (harness/)
@@ -82,5 +85,5 @@ Part 1 step checklist (harness/)
 
 Notes
 -----
-- M0 scripted loop unchanged (read → patch → finish).
-- Next: Part 6 (router, escalation, cost).
+- Live BYOK `thee run` uses merged manifest + router worker binding; CI still uses THEE_SCRIPTED_PROVIDER_FILE.
+- Next: Part 8 (TUI milestone B).

@@ -52,15 +52,17 @@ func (e *Env) EnsureSecurity() error {
 
 // SessionState holds cross-tool session flags.
 type SessionState struct {
-	PendingVerify     bool
-	FinishSummary     string
-	OpenTodos         []string
-	AskUserUsed       int
-	ProtectedTestEdit bool
-	VerifyAttempts    int
-	ToolRounds        int
-	EscalationsUsed   int
-	Checkpoints       []string
+	PendingVerify          bool
+	FinishSummary          string
+	OpenTodos              []string
+	AskUserUsed            int
+	ProtectedTestEdit      bool
+	VerifyAttempts         int
+	ToolRounds             int
+	EscalationsUsed        int
+	ConsecutiveVerifyFails int
+	EverVerifyPassed       bool
+	Checkpoints            []string
 }
 
 // SetProtectedTestEdit marks that a protected test file was edited.

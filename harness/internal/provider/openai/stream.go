@@ -54,10 +54,7 @@ func (s *sseStream) Next() (provider.Response, error) {
 				} `json:"delta"`
 				FinishReason string `json:"finish_reason"`
 			} `json:"choices"`
-			Usage struct {
-				PromptTokens     int `json:"prompt_tokens"`
-				CompletionTokens int `json:"completion_tokens"`
-			} `json:"usage"`
+			Usage usageWire `json:"usage"`
 		}
 		if err := json.Unmarshal([]byte(data), &chunk); err != nil {
 			return provider.Response{}, err
@@ -77,10 +74,7 @@ func (s *sseStream) Next() (provider.Response, error) {
 			}
 		}
 		if chunk.Usage.PromptTokens > 0 || chunk.Usage.CompletionTokens > 0 {
-			s.acc.Usage = provider.Usage{
-				InputTokens:  chunk.Usage.PromptTokens,
-				OutputTokens: chunk.Usage.CompletionTokens,
-			}
+			s.acc.Usage = normalizeUsage(chunk.Usage)
 		}
 		if s.acc.FinishReason != "" {
 			s.done = true

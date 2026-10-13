@@ -13,7 +13,7 @@ func TestWriterRoundTrip(t *testing.T) {
 	if err := w.Append(SessionStartEvent("dev", "/tmp/ws")); err != nil {
 		t.Fatal(err)
 	}
-	if err := w.Append(SessionEndEvent("done", "verified")); err != nil {
+	if err := w.Append(SessionEndEvent("done", "verified", UsageTotals{}, 0, 0, 0)); err != nil {
 		t.Fatal(err)
 	}
 	lines := strings.Split(strings.TrimSpace(buf.String()), "\n")
