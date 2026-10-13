@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/PLACEHOLDER/thee/harness/internal/security"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
 )
 
@@ -32,21 +33,25 @@ type readArgs struct {
 }
 
 func (readTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) (tools.Result, error) {
+	_ = env.EnsureSecurity()
 	var a readArgs
 	if err := json.Unmarshal(args, &a); err != nil {
-		return tools.Result{OK: false, Text: "invalid read args"}, nil
+		return tools.Fail(env, "read", "invalid read args"), nil
+	}
+	if env.Policy.DenyRead(a.Path) {
+		return tools.Fail(env, "read", security.DenyReadMessage), nil
 	}
 	if a.EndLine < a.StartLine {
-		return tools.Result{OK: false, Text: "end_line before start_line"}, nil
+		return tools.Fail(env, "read", "end_line before start_line"), nil
 	}
 	if a.EndLine-a.StartLine+1 > maxReadLines {
-		return tools.Result{OK: false, Text: fmt.Sprintf("max %d lines per read", maxReadLines)}, nil
+		return tools.Fail(env, "read", fmt.Sprintf("max %d lines per read", maxReadLines)), nil
 	}
 	b, err := env.Workspace.ReadFile(a.Path)
 	if err != nil {
-		return tools.Result{OK: false, Text: err.Error()}, nil
+		return tools.Fail(env, "read", err.Error()), nil
 	}
-	env.Workspace.NoteRead(a.Path, b)
+	env.Workspace.NoteReadRange(a.Path, b, a.StartLine, a.EndLine)
 	lines := strings.Split(string(b), "\n")
 	start := a.StartLine - 1
 	if start < 0 {
@@ -57,8 +62,8 @@ func (readTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) (
 		end = len(lines)
 	}
 	if start >= len(lines) {
-		return tools.Result{OK: true, Text: ""}, nil
+		return tools.OK(env, "read", "", 0, maxReadLines), nil
 	}
 	out := strings.Join(lines[start:end], "\n")
-	return tools.Result{OK: true, Text: out}, nil
+	return tools.OK(env, "read", out, 0, maxReadLines), nil
 }

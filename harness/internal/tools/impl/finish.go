@@ -28,15 +28,15 @@ type finishArgs struct {
 func (finishTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) (tools.Result, error) {
 	var a finishArgs
 	if err := json.Unmarshal(args, &a); err != nil {
-		return tools.Result{OK: false, Text: "invalid finish args"}, nil
+		return tools.Fail(env, "finish", "invalid finish args"), nil
 	}
 	if env.Session == nil {
-		return tools.Result{OK: false, Text: "no session"}, nil
+		return tools.Fail(env, "finish", "no session"), nil
 	}
 	env.Session.FinishSummary = a.Summary
 	if env.Workspace.Changed() {
 		env.Session.PendingVerify = true
-		return tools.Result{OK: true, Text: "pending verify"}, nil
+		return tools.OK(env, "finish", "pending verify", 0, 0), nil
 	}
-	return tools.Result{OK: true, Text: "done"}, nil
+	return tools.OK(env, "finish", "done", 0, 0), nil
 }

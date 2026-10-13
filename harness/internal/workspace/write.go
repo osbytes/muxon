@@ -8,15 +8,23 @@ import (
 	"path/filepath"
 )
 
+type readMeta struct {
+	content   []byte
+	startLine int
+	endLine   int
+}
+
 type changeTracker struct {
 	original map[string][]byte
 	current  map[string][]byte
+	readMeta map[string]readMeta
 }
 
 func newChangeTracker() *changeTracker {
 	return &changeTracker{
 		original: make(map[string][]byte),
 		current:  make(map[string][]byte),
+		readMeta: make(map[string]readMeta),
 	}
 }
 
@@ -54,8 +62,14 @@ func (w *Workspace) ReadHash(abs string) (string, error) {
 
 // NoteRead records content at read time for stale detection.
 func (w *Workspace) NoteRead(rel string, content []byte) {
+	w.NoteReadRange(rel, content, 0, 0)
+}
+
+// NoteReadRange records content and the line range the model last read.
+func (w *Workspace) NoteReadRange(rel string, content []byte, startLine, endLine int) {
 	w.track.original[rel] = append([]byte(nil), content...)
 	w.track.current[rel] = append([]byte(nil), content...)
+	w.track.readMeta[rel] = readMeta{content: append([]byte(nil), content...), startLine: startLine, endLine: endLine}
 }
 
 // WriteFile atomically writes data to a workspace-relative path.
@@ -119,6 +133,10 @@ func (w *Workspace) CheckFresh(rel string) error {
 		return nil
 	}
 	if !bytesEqual(seen, cur) {
+		meta := w.track.readMeta[rel]
+		if meta.startLine > 0 && meta.endLine >= meta.startLine {
+			return fmt.Errorf("file changed since you read it; re-read lines %d–%d", meta.startLine, meta.endLine)
+		}
 		return fmt.Errorf("file changed since you read it; re-read %s", rel)
 	}
 	return nil
