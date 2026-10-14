@@ -237,25 +237,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	ign, _ := security.LoadIgnore(ws.Root(), pol)
 	cpStore := NewCheckpointStore(ws.Root(), sid)
 
-	caps := cfg.Caps
-	if caps.MaxToolRounds == 0 {
-		caps = DefaultCaps()
-	}
-	if uc.Session.MaxToolRounds > 0 && cfg.MaxRounds == 0 {
-		caps.MaxToolRounds = uc.Session.MaxToolRounds
-	}
-	if uc.Session.CostBudgetUSD > 0 && caps.CostBudgetUSD == 0 {
-		caps.CostBudgetUSD = uc.Session.CostBudgetUSD
-	}
-	if uc.Session.MaxEscalations > 0 && caps.MaxEscalations == 0 {
-		caps.MaxEscalations = uc.Session.MaxEscalations
-	}
-	if uc.Session.EscalateAfterVerifyFails > 0 && caps.EscalateAfterVerifyFails == 0 {
-		caps.EscalateAfterVerifyFails = uc.Session.EscalateAfterVerifyFails
-	}
-	if cfg.MaxRounds > 0 {
-		caps.MaxToolRounds = cfg.MaxRounds
-	}
+	caps := ResolveCaps(cfg.Interactive, cfg.Caps, cfg.MaxRounds, uc)
 	budget := NewBudget(caps)
 	repair := RepairState{}
 	loops := &loopDetector{}
@@ -325,6 +307,44 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		return next
 	}
 
+	pauseForRoundLimit := func() (Outcome, error) {
+		if err := ctx.Err(); err != nil && errors.Is(err, context.Canceled) {
+			return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}), nil
+		}
+		msgs := append(append([]provider.Message(nil), history...), provider.Message{Role: "user", Content: toolRoundLimitSummary})
+		if budget.FitsModelCall(estimator.EstimateMessages(msgs)) {
+			history = msgs
+			appendMsg(history[len(history)-1])
+			resp, err := activeProv.Complete(ctx, provider.Request{
+				ModelID:         model.Model,
+				Messages:        history,
+				MaxOutputTokens: caps.MaxOutputTokens,
+			})
+			if err != nil {
+				if errors.Is(err, context.Canceled) {
+					return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}), nil
+				}
+			} else {
+				rates := router.RatesFromModel(model)
+				callCost, _ := router.CostUSD(rates, resp.Usage)
+				budget.Charge(resp.Usage.InputTokens, resp.Usage.OutputTokens)
+				budget.ChargeCost(callCost)
+				totals.Add(resp.Usage, callCost)
+				emit(observability.ModelResponseEvent(callCost, resp.Usage))
+				if text := visibleAssistantText(resp.Text); text != "" {
+					if cfg.OnAssistant != nil {
+						cfg.OnAssistant(text)
+					}
+					msg := provider.Message{Role: "assistant", Content: text}
+					history = append(history, msg)
+					appendMsg(msg)
+				}
+			}
+		}
+		emit(observability.StateTransitionEvent(state, StatePaused, "tool_rounds_exhausted"))
+		return finish(Outcome{State: StatePaused, Reason: "tool_rounds_exhausted", ExitCode: 0}), nil
+	}
+
 	for round := 0; round < caps.MaxToolRounds && state != StateDone && state != StateFailed && state != StateCancelled; round++ {
 		if err := ctx.Err(); err != nil {
 			if errors.Is(err, context.Canceled) {
@@ -363,6 +383,8 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				Estimator:     estimator,
 				Policy:        pol,
 				Ignore:        ign,
+				ToolRounds:    session.ToolRounds,
+				MaxToolRounds: caps.MaxToolRounds,
 			})
 			if baselineNote != "" {
 				turn.Messages[len(turn.Messages)-1].Content = baselineNote + turn.Messages[len(turn.Messages)-1].Content
@@ -459,9 +481,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			if openai.TruncatedByServer(turn.EstimatedInputTokens, resp.Usage.InputTokens) {
 				emit(observability.TruncatedByServerEvent())
 			}
-			if nudge, fire := loops.CheckRepeated(ws.Changed()); fire {
+			if nudge, pattern, fire := loops.Check(); fire {
 				loopsDetected++
-				emit(observability.Event{Type: "loop.detected", Reason: "repeated_call"})
+				emit(observability.Event{Type: "loop.detected", Reason: pattern})
 				if loops.ShouldEscalate() {
 					if tryEscalate(router.EscalationInput{LoopSecondFire: true}) {
 						continue
@@ -487,6 +509,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			session.ToolRounds++
 
 			noteTool := func(call provider.ToolCall, res tools.Result) {
+				loops.RecordResult(call, res.OK)
 				emit(observability.ToolResultEvent(res.OK))
 				if cfg.OnTool != nil {
 					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments, Done: true, OK: res.OK, Output: res.Text})
@@ -522,7 +545,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				} else {
 					emit(observability.ToolCallEvent(call.Name))
 				}
-				loops.RecordToolCall(call.Name, call.Arguments)
+				loops.RecordToolCall(call.Name, call.Arguments, ws.Revision())
 				if err := reg.Check(call.Name, phase); err != nil {
 					rejectCall(call, err.Error())
 					continue
@@ -617,8 +640,13 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		}
 		return finish(Outcome{State: StateDone, Reason: reason, ExitCode: 0}), nil
 	}
-	return finish(Outcome{State: StateFailed, Reason: "tool_rounds_exhausted", ExitCode: 1}), nil
+	if !cfg.Interactive {
+		return finish(Outcome{State: StateFailed, Reason: "tool_rounds_exhausted", ExitCode: 1}), nil
+	}
+	return pauseForRoundLimit()
 }
+
+const toolRoundLimitSummary = "Tool round limit reached. Briefly summarize what you changed, what is left, and the next step."
 
 // M0ScriptedResponses builds the default fixture-fix script.
 func M0ScriptedResponses() []provider.Response {

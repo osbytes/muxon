@@ -161,6 +161,7 @@ Parsed only in the input line (not passed to the model). Unknown `/foo` is sent 
 | `/exit` | Quit thee. `/quit` is the same command. |
 | `/undo` | Revert last applied patch batch ([session-director](./session-director.md#checkpoints--resume)). |
 | `/escalate` | Force worker → escalated if budget allows ([model-router](./model-router.md#escalation-triggers)). |
+| `/continue` | After `paused` or `failed`, resume the same history with a fresh tool-round budget. |
 | `/cost` | Print session totals (same as status bar, more detail). |
 | `/compact` | Request context compaction now (director may still compact automatically). |
 | `/trust` | Open trust UI for this workspace. |

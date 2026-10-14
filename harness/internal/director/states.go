@@ -13,6 +13,7 @@ const (
 	StateEscalating = "escalating"
 	StateDone       = "done"
 	StateFailed     = "failed"
+	StatePaused     = "paused"
 	StateCancelled  = "cancelled"
 )
 

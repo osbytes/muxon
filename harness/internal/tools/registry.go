@@ -23,6 +23,7 @@ type WorkspaceOps interface {
 	CheckFresh(string) error
 	NoteRead(string, []byte)
 	NoteReadRange(string, []byte, int, int)
+	NoteMutation()
 	Changed() bool
 }
 
