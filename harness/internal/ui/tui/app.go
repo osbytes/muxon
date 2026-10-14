@@ -285,7 +285,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.out.State != "" {
 			m.state = msg.out.State
 		}
-		if msg.out.State == director.StateDone || msg.out.State == director.StateFailed || msg.out.State == director.StateCancelled {
+		if msg.out.State == director.StateDone || msg.out.State == director.StateFailed || msg.out.State == director.StatePaused || msg.out.State == director.StateCancelled {
 			m.appendLine(fmt.Sprintf("[%s] %s", msg.out.State, msg.out.Reason))
 		}
 		if msg.err != nil {
@@ -363,6 +363,8 @@ func (m *Model) applyModal() tea.Cmd {
 	return m.runGoal(goal)
 }
 
+const continueGoal = "Continue the previous task from where you left off."
+
 func (m *Model) runGoal(goal string) tea.Cmd {
 	m.state = director.StateActing
 	force := m.forceEscalate
@@ -407,6 +409,17 @@ func (m Model) submit(line string) (tea.Model, tea.Cmd) {
 		case "escalate":
 			m.forceEscalate = true
 			m.appendLine("escalate on next goal")
+		case "continue":
+			if m.lastOutcome.State != director.StatePaused && m.lastOutcome.State != director.StateFailed {
+				m.appendLine("nothing to continue")
+				break
+			}
+			if m.opt.Provider == nil {
+				m.appendLine("No provider connected · run /providers")
+				break
+			}
+			m.appendLine("> " + continueGoal)
+			return m, m.runGoal(continueGoal)
 		case "cost":
 			m.appendLine(m.statusText())
 		case "trust":

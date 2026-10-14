@@ -487,6 +487,63 @@ func TestAskUserShowsQuestionAndSendsAnswer(t *testing.T) {
 	}
 }
 
+func TestPausedOutcomeOffersContinue(t *testing.T) {
+	m := sessionModel(t.TempDir())
+	m.appendLine("[paused] tool_rounds_exhausted")
+	view := m.View()
+	for _, want := range []string{"paused", "tool round limit reached", "/continue to keep going"} {
+		if !strings.Contains(view, want) {
+			t.Errorf("View() missing %q:\n%s", want, view)
+		}
+	}
+	updated, _ := m.submit("/continue")
+	if !strings.Contains(updated.(Model).transcriptText(), "nothing to continue") {
+		t.Fatalf("transcript: %s", updated.(Model).transcriptText())
+	}
+}
+
+func TestContinueAfterPauseKeepsHistory(t *testing.T) {
+	t.Setenv("THEE_HOME", t.TempDir())
+	dir := testutil.CopyFixture(t, "go-failing-test")
+	manifest, err := config.LoadEmbeddedManifest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	readArgs, _ := json.Marshal(map[string]any{"path": "sum.go", "start_line": 1, "end_line": 3})
+	m := NewModel(Options{
+		Workspace: dir,
+		SessionID: "tui-continue",
+		Trusted:   true,
+		Provider: scripted.New([]provider.Response{
+			{ToolCalls: []provider.ToolCall{{ID: "1", Name: "read", Arguments: readArgs}}, FinishReason: "tool_calls"},
+			{Text: "Continuing the web search work."},
+		}),
+		Manifest:    manifest,
+		Version:     "test",
+		WorkerModel: "m0-worker",
+		Permission:  "edit",
+	})
+	m.history = []provider.Message{{Role: "user", Content: "add web search"}}
+	m.lastOutcome = director.Outcome{State: director.StatePaused, Reason: "tool_rounds_exhausted"}
+	updated, cmd := m.submit("/continue")
+	if cmd == nil {
+		t.Fatal("expected continue to start a goal")
+	}
+	model := drainGoal(t, updated.(Model), cmd)
+	joined := model.transcriptText()
+	if !strings.Contains(joined, continueGoal) || !strings.Contains(joined, "Continuing the web search work.") {
+		t.Fatalf("transcript: %s", joined)
+	}
+	var hist strings.Builder
+	for _, msg := range model.history {
+		hist.WriteString(msg.Content)
+		hist.WriteByte('\n')
+	}
+	if !strings.Contains(hist.String(), "add web search") || !strings.Contains(hist.String(), continueGoal) {
+		t.Fatalf("history: %s", hist.String())
+	}
+}
+
 func drainGoal(t *testing.T, model Model, cmd tea.Cmd) Model {
 	t.Helper()
 	sawTool := false

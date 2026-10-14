@@ -36,4 +36,11 @@ func TestAtomicWriteVisible(t *testing.T) {
 	if !ws.Changed() {
 		t.Fatal("expected changed")
 	}
+	if ws.Revision() != 1 {
+		t.Fatalf("Revision() = %d, want 1", ws.Revision())
+	}
+	ws.NoteMutation()
+	if ws.Revision() != 2 {
+		t.Fatalf("Revision() after NoteMutation = %d, want 2", ws.Revision())
+	}
 }

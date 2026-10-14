@@ -18,6 +18,7 @@ type changeTracker struct {
 	original map[string][]byte
 	current  map[string][]byte
 	readMeta map[string]readMeta
+	revision int
 }
 
 func newChangeTracker() *changeTracker {
@@ -106,7 +107,18 @@ func (w *Workspace) WriteFile(rel string, data []byte) error {
 		return err
 	}
 	w.track.current[rel] = append([]byte(nil), data...)
+	w.NoteMutation()
 	return nil
+}
+
+// Revision is how many times this workspace has been written or deleted.
+func (w *Workspace) Revision() int {
+	return w.track.revision
+}
+
+// NoteMutation records a successful write or delete.
+func (w *Workspace) NoteMutation() {
+	w.track.revision++
 }
 
 // ReadFile reads a workspace-relative file.

@@ -3,6 +3,7 @@ package contextengine
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
 	"strings"
 
 	"github.com/PLACEHOLDER/thee/harness/internal/index"
@@ -10,6 +11,8 @@ import (
 	"github.com/PLACEHOLDER/thee/harness/internal/security"
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
 )
+
+const wrapUpNudge = "You are near the tool round limit. Finish the current change, then call finish with a summary of what is done and what remains."
 
 // TurnInput builds one model turn.
 type TurnInput struct {
@@ -25,6 +28,8 @@ type TurnInput struct {
 	Estimator     *Estimator
 	Policy        *security.Policy
 	Ignore        *security.IgnoreRules
+	ToolRounds    int
+	MaxToolRounds int
 }
 
 // TurnOutput is assembled messages and optional native tools.
@@ -90,7 +95,13 @@ func BuildTurn(in TurnInput) TurnOutput {
 
 	history := CompactHistory(in.History, budget, in.ContextWindow, in.Estimator)
 
-	phaseLine := "Active: " + activeToolsForPhase(in.Phase) + "\n"
+	phaseLine := "Active: " + activeToolsForPhase(in.Phase, in.ToolSpecs) + "\n"
+	if in.MaxToolRounds > 0 {
+		phaseLine += fmt.Sprintf("Tool rounds: %d/%d\n", in.ToolRounds, in.MaxToolRounds)
+		if in.ToolRounds >= wrapUpAt(in.MaxToolRounds) {
+			phaseLine += wrapUpNudge + "\n"
+		}
+	}
 	var step2 string
 	if in.ToolProtocol == "two_step" {
 		step2 = "Step-2: emit flat JSON tool call for one tool.\n"
@@ -149,13 +160,34 @@ func historyEndsWithGoal(history []provider.Message, goal string) bool {
 	return last.Role == "user" && last.Content == goal
 }
 
-func activeToolsForPhase(phase string) string {
-	switch phase {
-	case tools.PhasePlanning:
-		return "search, list, read, repo-map"
-	default:
-		return "read, search, patch, write, delete, finish, repo-map"
+func activeToolsForPhase(phase string, specs []tools.Spec) string {
+	if phase == "" {
+		phase = tools.PhaseEditing
 	}
+	names := make([]string, 0, len(specs))
+	for _, s := range specs {
+		if tools.CheckPhase(phase, s.Name) == nil {
+			names = append(names, s.Name)
+		}
+	}
+	return strings.Join(names, ", ")
+}
+
+// wrapUpAt is the completed-round count where the model is told to finish.
+// That is the earlier of 80% of max and the last five rounds.
+func wrapUpAt(max int) int {
+	if max <= 0 {
+		return 0
+	}
+	atPct := max * 80 / 100
+	last := max - 5
+	if last < 0 {
+		last = 0
+	}
+	if last < atPct {
+		return last
+	}
+	return atPct
 }
 
 // PrefixHashForSession returns hash for unchanged prefix fields (tests).

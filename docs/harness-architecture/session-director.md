@@ -80,7 +80,7 @@ Configured in `thee.toml` under `[session]`. Defaults are tuned for small worker
 token_budget = 2_000_000        # input + output, all roles
 cost_budget_usd = 2.00          # optional; see "Dollar budget"
 wall_clock_minutes = 45
-max_tool_rounds = 40            # per goal
+max_tool_rounds = 40            # per goal; interactive default is 100 when this is unset
 max_verify_attempts = 6         # full verify runs per goal, across all models
 max_escalations = 1             # per goal
 escalate_after_verify_fails = 2 # consecutive, same model (router trigger N)
@@ -89,7 +89,7 @@ escalate_after_verify_fails = 2 # consecutive, same model (router trigger N)
 Order of operations when things go wrong:
 
 1. **Verify failure.** Return the failure bundle and go back to `acting`. After `escalate_after_verify_fails` consecutive failures on the same model, escalate if `max_escalations` allows. When `max_verify_attempts` is reached, or the escalated model also fails N times in a row with no escalations left, end as `failed` (`verify_exhausted`), attaching the last failure bundle.
-2. **Tool rounds.** At 60% of `max_tool_rounds` with no verify progress, the router treats it as an escalation trigger. At `max_tool_rounds`, end as `failed` (`tool_rounds_exhausted`).
+2. **Tool rounds.** Each turn's tail shows `Tool rounds: N/M`. From the earlier of 80% of `max_tool_rounds` and the last five rounds, the tail tells the model to finish the current change and call `finish`. At 60% of `max_tool_rounds` with no verify progress, the router treats it as an escalation trigger. At `max_tool_rounds`, a headless run ends as `failed` (`tool_rounds_exhausted`). An interactive run makes one tool-free summary call, then ends as `paused` (`tool_rounds_exhausted`). `/continue` starts another goal with the same history and a fresh round budget. Interactive sessions default to 100 rounds when neither `[session] max_tool_rounds` nor `--max-tool-rounds` is set. Headless runs keep 40.
 3. **Malformed tool calls.** Salvage first ([tools/README.md](./tools/README.md#salvage-before-repair)); a salvaged call is not a failure. Otherwise one repair turn. A second consecutive failure escalates. If the escalated model also produces two consecutive malformed calls, end as `failed` (`tool_parse_exhausted`).
 4. **Loops.** See [Loop detection](#loop-detection). Nudge once, then escalate, then end as `failed` (`loop_detected`).
 5. **Budgets.** The director checks before each model call: estimated input plus `max_tokens` (and its estimated $) must fit what remains. If not, it compacts once; if it still does not fit, end as `failed` (`budget_exhausted`, with which budget). An escalation that would not fit the remaining dollar budget is skipped, not attempted.
@@ -100,9 +100,9 @@ Small models get stuck in ways that look like work: the same call again, the sam
 
 | Pattern | Fires when (defaults) |
 |---------|-----------------------|
-| Repeated call | Same tool and `args_hash` 3 times in the last 8 rounds, with no file change between them |
-| Re-reading | Same file and overlapping line range read 3 times with no change to that file |
-| Patch thrash | A patch rejected at the same hunk twice, or a patch that reverts the previous one |
+| Repeated call | Same tool and `args_hash` 3 times in the last 8 calls, all at the same workspace revision (a write or delete between them resets the count) |
+| Re-reading | Same file and overlapping line range read 3 times at the same workspace revision |
+| Patch thrash | A patch rejected twice on the same path with the same old-text hash |
 | Verify stall | Two consecutive verify runs with the same failure signature (same failing tests, same first error line) and a non-empty diff between them |
 | Oscillation | Workspace tree hash returns to a value seen earlier in the goal |
 | No-op turns | 3 consecutive turns with no tool call and no `finish` |

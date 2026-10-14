@@ -50,6 +50,7 @@ var commandDocs = []commandDoc{
 	{"/trust", "trust this workspace so goals can run"},
 	{"/cost", "session cost and tokens"},
 	{"/escalate", "use the stronger model on the next goal"},
+	{"/continue", "resume after the tool round limit"},
 	{"/undo", "revert the last patch"},
 	{"/abort", "cancel the running goal"},
 	{"/exit", "quit thee"},
@@ -154,7 +155,7 @@ func lineKind(line string) string {
 		return "verify"
 	case strings.HasPrefix(line, "[harness] "):
 		return "harness"
-	case strings.HasPrefix(line, "[done]"), strings.HasPrefix(line, "[failed]"), strings.HasPrefix(line, "[cancelled]"):
+	case strings.HasPrefix(line, "[done]"), strings.HasPrefix(line, "[failed]"), strings.HasPrefix(line, "[paused]"), strings.HasPrefix(line, "[cancelled]"):
 		return "outcome"
 	case strings.HasPrefix(line, "No provider"), strings.HasPrefix(line, "Still connecting"):
 		return "warn"
@@ -214,6 +215,8 @@ func renderOutcome(line string) string {
 		return successStyle.Render("● " + label)
 	case "failed":
 		return errorStyle.Render("● " + label)
+	case "paused":
+		return warnStyle.Render("● paused · tool round limit reached · /continue to keep going")
 	default:
 		return warnStyle.Render("● " + label)
 	}

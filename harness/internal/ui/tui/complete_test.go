@@ -13,11 +13,11 @@ func TestMatchSuggestions(t *testing.T) {
 		want []string
 	}{
 		{in: "hello"},
-		{in: "/", want: []string{"/providers", "/model", "/clear", "/help", "/trust", "/cost", "/escalate", "/undo", "/abort", "/exit"}},
+		{in: "/", want: []string{"/providers", "/model", "/clear", "/help", "/trust", "/cost", "/escalate", "/continue", "/undo", "/abort", "/exit"}},
 		{in: "/ex", want: []string{"/exit"}},
 		{in: "/qu", want: []string{"/exit"}},
-		{in: "/co", want: []string{"/cost"}},
-		{in: "/con", want: []string{"/providers"}},
+		{in: "/co", want: []string{"/cost", "/continue"}},
+		{in: "/con", want: []string{"/continue"}},
 		{in: "/providers ", want: []string{"opencode-go", "deepinfra"}},
 		{in: "/providers d", want: []string{"deepinfra"}},
 		{in: "/connect o", want: []string{"opencode-go"}},

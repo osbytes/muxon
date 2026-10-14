@@ -28,7 +28,7 @@ func ParseSlash(line string) (Slash, bool) {
 		return Slash{Name: "model", Rest: rest}, true
 	case "quit":
 		return Slash{Name: "exit", Rest: rest}, true
-	case "help", "abort", "undo", "escalate", "cost", "clear", "providers", "trust", "model", "exit":
+	case "help", "abort", "undo", "escalate", "continue", "cost", "clear", "providers", "trust", "model", "exit":
 		return Slash{Name: name, Rest: rest}, true
 	default:
 		return Slash{}, false

@@ -61,6 +61,51 @@ func messageText(msgs []provider.Message) string {
 	return b.String()
 }
 
+func TestBuildTurnShowsRoundsAndActiveTools(t *testing.T) {
+	specs := []tools.Spec{
+		{Name: "read", Description: "read"},
+		{Name: "write", Description: "write"},
+		{Name: "list", Description: "list"},
+	}
+	below := BuildTurn(TurnInput{
+		Goal:          "fix it",
+		ToolProtocol:  "native",
+		ToolSpecs:     specs,
+		ContextWindow: 32768,
+		Phase:         tools.PhaseEditing,
+		ToolRounds:    31,
+		MaxToolRounds: 40,
+	})
+	text := messageText(below.Messages)
+	if !strings.Contains(text, "Tool rounds: 31/40") {
+		t.Fatalf("tail missing rounds: %s", text)
+	}
+	if strings.Contains(text, "near the tool round limit") {
+		t.Fatalf("wrap-up appeared before the threshold: %s", text)
+	}
+	if !strings.Contains(text, "Active: read, write") {
+		t.Fatalf("active tools = %s", text)
+	}
+	if strings.Contains(text, "list") && strings.Contains(text, "Active: read, write, list") {
+		t.Fatalf("planning-only list tool listed in editing: %s", text)
+	}
+	above := BuildTurn(TurnInput{
+		Goal:          "fix it",
+		ToolProtocol:  "native",
+		ToolSpecs:     specs,
+		ContextWindow: 32768,
+		Phase:         tools.PhaseEditing,
+		ToolRounds:    32,
+		MaxToolRounds: 40,
+	})
+	if !strings.Contains(messageText(above.Messages), wrapUpNudge) {
+		t.Fatal("wrap-up missing at 32/40")
+	}
+	if wrapUpAt(10) != 5 {
+		t.Fatalf("wrapUpAt(10) = %d, want 5", wrapUpAt(10))
+	}
+}
+
 func TestPrefixHashStableSameSession(t *testing.T) {
 	dir := t.TempDir()
 	in := TurnInput{

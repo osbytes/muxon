@@ -49,7 +49,7 @@ func (deleteTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage)
 		if err := os.Rename(srcAbs, dstAbs); err != nil {
 			return tools.Fail(env, "delete", err.Error()), nil
 		}
-		return tools.OK(env, "delete", "moved "+a.Path+" to "+a.Dest, 0, 0), nil
+		return deleted(env, "moved "+a.Path+" to "+a.Dest), nil
 	}
 	st, err := os.Stat(srcAbs)
 	if err != nil {
@@ -66,10 +66,17 @@ func (deleteTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage)
 		if err := os.Remove(srcAbs); err != nil {
 			return tools.Fail(env, "delete", err.Error()), nil
 		}
-		return tools.OK(env, "delete", "removed directory "+a.Path, 0, 0), nil
+		return deleted(env, "removed directory "+a.Path), nil
 	}
 	if err := os.Remove(srcAbs); err != nil {
 		return tools.Fail(env, "delete", err.Error()), nil
 	}
-	return tools.OK(env, "delete", "removed "+a.Path, 0, 0), nil
+	return deleted(env, "removed "+a.Path), nil
+}
+
+func deleted(env *tools.Env, msg string) tools.Result {
+	if env.Workspace != nil {
+		env.Workspace.NoteMutation()
+	}
+	return tools.OK(env, "delete", msg, 0, 0)
 }

@@ -38,7 +38,7 @@ Every trace starts with `session.start` carrying `schema_version` (semver) and t
 | `compact.run` | level, tokens_before, tokens_after |
 | `escalate` | from_model, to_model, reason, escalation_generation |
 | `interrupt` | during (stream, tool), action (pause, cancel) |
-| `session.end` | outcome (`done`, `failed`, `cancelled`), reason, verified, verify_attempts, escalation_generation, tool_rounds, workspace_changed, protected_files_changed, total_cost_usd, total_tokens |
+| `session.end` | outcome (`done`, `failed`, `paused`, `cancelled`), reason, verified, verify_attempts, escalation_generation, tool_rounds, workspace_changed, protected_files_changed, total_cost_usd, total_tokens |
 
 An interactive session with several goals emits `goal.end` (same fields) per goal; `session.end` repeats the last goal's outcome plus session totals. A headless run has one goal.
 
