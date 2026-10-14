@@ -36,6 +36,8 @@ type Env struct {
 	Headless       bool
 	AllowGitCommit bool
 	FilterCommand  string
+	// AskUser blocks until the interactive user answers. Nil when no user is present.
+	AskUser func(ctx context.Context, question string, choices []string) (string, error)
 }
 
 // EnsureSecurity fills default policy/ignore when unset.

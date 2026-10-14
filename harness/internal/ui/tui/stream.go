@@ -25,6 +25,15 @@ func FormatEvent(ev observability.Event) (string, bool) {
 			status = "pass"
 		}
 		return fmt.Sprintf("▸ verify %s", status), true
+	case "state.transition":
+		if ev.To == "verifying" {
+			return "[harness] verify running", true
+		}
+		return "", false
+	case "escalate":
+		return fmt.Sprintf("[harness] escalating to %s (%s)", ev.ToModel, ev.Reason), true
+	case "loop.detected":
+		return "[harness] loop detected", true
 	default:
 		return "", false
 	}

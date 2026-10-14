@@ -22,14 +22,20 @@ func ParseSlash(line string) (Slash, bool) {
 		rest = fields[1]
 	}
 	switch name {
-	case "help", "abort", "undo", "escalate", "cost":
+	case "provider", "connect":
+		return Slash{Name: "providers", Rest: rest}, true
+	case "help", "abort", "undo", "escalate", "cost", "providers", "trust":
 		return Slash{Name: name, Rest: rest}, true
 	default:
 		return Slash{}, false
 	}
 }
 
-// HelpText is the short slash list.
+// HelpText lists the slash commands with one-line descriptions.
 func HelpText() string {
-	return "/help /abort /undo /escalate /cost"
+	rows := make([]string, len(commandDocs))
+	for i, c := range commandDocs {
+		rows[i] = padRight(c.name, 12) + c.desc
+	}
+	return strings.Join(rows, "\n")
 }

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/PLACEHOLDER/thee/harness/internal/config"
 	"github.com/PLACEHOLDER/thee/harness/internal/contextengine"
@@ -47,6 +48,8 @@ type Config struct {
 	WorkerModelOverride string
 	NoPlan              bool
 	OnEvent             func(observability.Event)
+	OnAssistant         func(text string)
+	AskUser             func(ctx context.Context, question string, choices []string) (string, error)
 	ForceEscalate       bool
 	Interactive         bool
 }
@@ -170,6 +173,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		Headless:       !cfg.Interactive,
 		AllowGitCommit: eff.AllowCommit,
 		FilterCommand:  eff.FilterCommand,
+		AskUser:        cfg.AskUser,
 	}
 	estimator := contextengine.NewEstimator()
 	pol := security.NewPolicy()
@@ -314,6 +318,20 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				Phase:        phase,
 				Specs:        reg.Specs(),
 			})
+			if err != nil && cfg.Interactive && errors.Is(err, toolcall.ErrNoToolCalls) {
+				if text := visibleAssistantText(out.Text); text != "" {
+					callCost, _ := router.CostUSD(rates, resp.Usage)
+					budget.Charge(resp.Usage.InputTokens, resp.Usage.OutputTokens)
+					budget.ChargeCost(callCost)
+					totals.Add(resp.Usage, callCost)
+					emit(observability.ModelResponseEvent(callCost, resp.Usage))
+					if cfg.OnAssistant != nil {
+						cfg.OnAssistant(text)
+					}
+					emit(observability.StateTransitionEvent(state, StateDone, "answered"))
+					return finish(Outcome{State: StateDone, Reason: "answered", ExitCode: 0}), nil
+				}
+			}
 			if err != nil {
 				malformed++
 				if repair.ConsecutiveFailure(err) {
@@ -330,6 +348,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				return finish(Outcome{State: StateFailed, Reason: "no_tool_call", ExitCode: 1}), nil
 			}
 			repair = RepairState{}
+			if text := visibleAssistantText(out.Text); text != "" && cfg.OnAssistant != nil {
+				cfg.OnAssistant(text)
+			}
 			estimator.ObserveUsage(resp.Usage.InputTokens, turn.EstimatedInputTokens)
 			budget.Charge(resp.Usage.InputTokens, resp.Usage.OutputTokens)
 			callCost, _ := router.CostUSD(rates, resp.Usage)
@@ -384,6 +405,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 						_ = cpStore.Save(pa.Path)
 					}
 				}
+				if call.Name == "finish" && res.OK && session.FinishSummary != "" && cfg.OnAssistant != nil {
+					cfg.OnAssistant(session.FinishSummary)
+				}
 				if call.Name == "finish" {
 					if session.PendingVerify {
 						emit(observability.StateTransitionEvent(state, StateVerifying, "finish"))
@@ -433,7 +457,11 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		}
 	}
 	if state == StateDone {
-		return finish(Outcome{State: StateDone, Reason: "verified", ExitCode: 0}), nil
+		reason := "no_changes"
+		if session.EverVerifyPassed {
+			reason = "verified"
+		}
+		return finish(Outcome{State: StateDone, Reason: reason, ExitCode: 0}), nil
 	}
 	return finish(Outcome{State: StateFailed, Reason: "tool_rounds_exhausted", ExitCode: 1}), nil
 }
@@ -455,4 +483,12 @@ func M0ScriptedResponses() []provider.Response {
 		{ToolCalls: []provider.ToolCall{{ID: "2", Name: "patch", Arguments: patchArgs}}, FinishReason: "tool_calls"},
 		{ToolCalls: []provider.ToolCall{{ID: "3", Name: "finish", Arguments: finishArgs}}, FinishReason: "tool_calls"},
 	}
+}
+
+func visibleAssistantText(text string) string {
+	text = strings.TrimSpace(text)
+	if text == "" || strings.HasPrefix(text, "{") || strings.HasPrefix(text, "[") {
+		return ""
+	}
+	return text
 }
