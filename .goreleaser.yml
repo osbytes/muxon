@@ -1,0 +1,24 @@
+version: 2
+
+project_name: thee
+
+builds:
+  - id: thee
+    dir: harness
+    main: ./cmd/thee
+    binary: thee
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+
+changelog:
+  disable: true

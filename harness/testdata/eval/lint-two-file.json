@@ -1,0 +1,5 @@
+{
+  "id": "lint-two-file-001",
+  "prompt": "fix the two-file lint so A and B stay consistent",
+  "fixture": "lint-two-file"
+}

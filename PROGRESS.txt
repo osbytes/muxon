@@ -6,17 +6,13 @@ Last updated: 2026-10-13
 
 Summary
 -------
-Part 1 (walking skeleton) is DONE for M0.
-Part 2 (workspace tools and safety) is DONE.
-Part 3 (context engine and repo-map) is DONE.
-Part 4 (tool-calling stack) is DONE (M1 live smoke skipped — no API key).
-Part 5 (director, verifier, trust) is DONE.
-Part 6 (router, escalation, cost) is DONE.
-Part 7 (headless CLI milestone A) is DONE.
-
+Parts 1–10 are DONE for the v1 cut line in the implementation plan.
 Milestone M0: PASS
 Milestone M1: pending (4.10 skipped — no API key)
-Milestone A: PASS (go test ./... green; scripted thee run + doctor/cost/trust/eval)
+Milestone A: PASS
+Milestone B: PASS (scripted TUI fixture reaches done)
+Milestone C: PASS (local basket files, results.jsonl, thee eval report). Live model matrix not run.
+Milestone D: PASS as stubs (goreleaser config, auth, export, gc, completion, serve). No tag published.
 
 Monorepo layout: DONE
 Module path: github.com/PLACEHOLDER/thee/harness (replace PLACEHOLDER before publish)
@@ -31,34 +27,53 @@ Parts (plan order)
 [done]  Part  5 — Director, verifier, trust
 [done]  Part  6 — Router, escalation, cost
 [done]  Part  7 — Headless CLI milestone A
-[todo]  Part  8 — TUI milestone B
-[todo]  Part  9 — Probe, eval, replay milestone C
-[todo]  Part 10 — Release milestone D
+[done]  Part  8 — TUI milestone B
+[done]  Part  9 — Probe, eval, replay milestone C
+[done]  Part 10 — Release milestone D
+
+
+Part 10 step checklist (harness/)
+---------------------------------
+10.1 auth login (keyring, fake store in tests)     done
+10.2 trace export (redacted)                       done
+10.3 gc + completion                               done
+10.4 serve stub exit 3                             done
+10.5 goreleaser + README + checklist note          done
+
+
+Part 9 step checklist (harness/)
+--------------------------------
+9.1  trace record / replay                         done
+9.2  models list / show                            done
+9.3  models probe (httptest; served context is integration-only)  done
+9.4  test + git tools                              done
+9.5  eval basket files + report                    done
+9.6  resume                                        done
+9.7  anthropic adapter                             skipped (no recorded fixture)
+
+
+Part 8 step checklist (harness/)
+--------------------------------
+8.1  Bubble Tea shell                              done
+8.2  streaming + tool lines                        done
+8.3  approval + trust modals                       done
+8.4  interrupts + slash commands                   done
+8.5  multi-goal scripted fixture                   done
 
 
 Part 7 step checklist (harness/)
 --------------------------------
-7.1  all run flags (verify-cmd, permission, yolo, model, budgets, eval)   done
-7.2  presenters (--json, -q)                                              done
-7.3  SIGINT → 130                                                         done
-7.4  doctor                                                               done
-7.5  cost                                                                 done
-7.6  trust subcommands (abs paths, thee.toml hash on add)                 done
-7.7  eval run + fix-test.json fixture                                     done
+7.1–7.7  done
 
 
 Part 6 step checklist (harness/)
 --------------------------------
-6.1  catalog.json merge                                                   done
-6.2  role binding + provider factory                                      done
-6.3  cost accounting + trace model.response / session.end totals          done
-6.4  escalation triggers + director swap                                  done
-6.5  classification (heuristic + optional router) + goal.start            done
+6.1–6.5  done
 
 
 Part 5 step checklist (harness/)
 --------------------------------
-5.1–5.13  done (see prior entries)
+5.1–5.13  done
 
 
 Part 4 step checklist (harness/)
@@ -85,5 +100,5 @@ Part 1 step checklist (harness/)
 
 Notes
 -----
-- Live BYOK `thee run` uses merged manifest + router worker binding; CI still uses THEE_SCRIPTED_PROVIDER_FILE.
-- Next: Part 8 (TUI milestone B).
+- Probe pass thresholds, live models.yaml pricing, ADR-003, and the live model-matrix basket stay open in docs/harness-architecture/adrs.md.
+- Next: replace PLACEHOLDER, then cut a real release tag when ready.

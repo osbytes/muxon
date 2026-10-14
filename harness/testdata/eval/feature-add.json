@@ -1,0 +1,5 @@
+{
+  "id": "feature-add-001",
+  "prompt": "make Enabled return true so the existing test passes",
+  "fixture": "small-feature"
+}

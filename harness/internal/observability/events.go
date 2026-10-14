@@ -37,14 +37,16 @@ type Event struct {
 	ToModel              string `json:"to_model,omitempty"`
 	EscalationGeneration int    `json:"escalation_generation,omitempty"`
 
-	InputTokens     int     `json:"input_tokens,omitempty"`
-	OutputTokens    int     `json:"output_tokens,omitempty"`
-	CachedTokens    int     `json:"cached_tokens,omitempty"`
-	ReasoningTokens int     `json:"reasoning_tokens,omitempty"`
-	CostUSD         float64 `json:"cost_usd,omitempty"`
-	TotalCostUSD    float64 `json:"total_cost_usd,omitempty"`
-	ToolRounds      int     `json:"tool_rounds,omitempty"`
-	VerifyAttempts  int     `json:"verify_attempts,omitempty"`
+	InputTokens        int     `json:"input_tokens,omitempty"`
+	OutputTokens       int     `json:"output_tokens,omitempty"`
+	CachedTokens       int     `json:"cached_tokens,omitempty"`
+	ReasoningTokens    int     `json:"reasoning_tokens,omitempty"`
+	CostUSD            float64 `json:"cost_usd,omitempty"`
+	TotalCostUSD       float64 `json:"total_cost_usd,omitempty"`
+	ToolRounds         int     `json:"tool_rounds,omitempty"`
+	VerifyAttempts     int     `json:"verify_attempts,omitempty"`
+	MalformedToolCalls int     `json:"malformed_tool_calls,omitempty"`
+	LoopsDetected      int     `json:"loops_detected,omitempty"`
 }
 
 // UsageTotals aggregates session usage for session.end.
@@ -85,7 +87,7 @@ func GoalStartEvent(taskType string, confidence float64) Event {
 	}
 }
 
-func SessionEndEvent(outcome, reason string, totals UsageTotals, toolRounds, verifyAttempts, escalations int) Event {
+func SessionEndEvent(outcome, reason string, totals UsageTotals, toolRounds, verifyAttempts, escalations, malformed, loops int) Event {
 	return Event{
 		Type:                 "session.end",
 		Outcome:              outcome,
@@ -98,6 +100,8 @@ func SessionEndEvent(outcome, reason string, totals UsageTotals, toolRounds, ver
 		ToolRounds:           toolRounds,
 		VerifyAttempts:       verifyAttempts,
 		EscalationGeneration: escalations,
+		MalformedToolCalls:   malformed,
+		LoopsDetected:        loops,
 	}
 }
 

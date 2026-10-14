@@ -47,6 +47,8 @@ type Config struct {
 	WorkerModelOverride string
 	NoPlan              bool
 	OnEvent             func(observability.Event)
+	ForceEscalate       bool
+	Interactive         bool
 }
 
 // Run executes the session state machine.
@@ -121,6 +123,8 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 
 	session := &tools.SessionState{}
 	var totals observability.UsageTotals
+	var malformed int
+	var loopsDetected int
 
 	emit := func(ev observability.Event) {
 		_ = tw.Append(ev)
@@ -129,7 +133,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		}
 	}
 	finish := func(o Outcome) Outcome {
-		emit(observability.SessionEndEvent(o.State, o.Reason, totals, session.ToolRounds, session.VerifyAttempts, session.EscalationsUsed))
+		emit(observability.SessionEndEvent(o.State, o.Reason, totals, session.ToolRounds, session.VerifyAttempts, session.EscalationsUsed, malformed, loopsDetected))
 		return o
 	}
 
@@ -151,11 +155,22 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		reg.Register(impl.NewRepoMap())
 		reg.Register(impl.NewTodo())
 		reg.Register(impl.NewAskUser())
+		reg.Register(impl.NewGit())
+		if eff.FilterCommand != "" {
+			reg.Register(impl.NewTest())
+		}
 		cp := NewCheckpointStore(ws.Root(), sid)
 		reg.Register(impl.NewCheckpoint(cp.RestoreLatest))
 	}
 
-	toolEnv := &tools.Env{Workspace: ws, Trusted: trusted, Session: session}
+	toolEnv := &tools.Env{
+		Workspace:      ws,
+		Trusted:        trusted,
+		Session:        session,
+		Headless:       !cfg.Interactive,
+		AllowGitCommit: eff.AllowCommit,
+		FilterCommand:  eff.FilterCommand,
+	}
 	estimator := contextengine.NewEstimator()
 	pol := security.NewPolicy()
 	ign, _ := security.LoadIgnore(ws.Root(), pol)
@@ -243,6 +258,10 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		}
 		switch state {
 		case StateActing:
+			if cfg.ForceEscalate {
+				tryEscalate(router.EscalationInput{ForceUser: true})
+				cfg.ForceEscalate = false
+			}
 			if class.LowConfidence() {
 				tryEscalate(router.EscalationInput{LowRouterConfidence: true})
 			}
@@ -296,6 +315,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				Specs:        reg.Specs(),
 			})
 			if err != nil {
+				malformed++
 				if repair.ConsecutiveFailure(err) {
 					if tryEscalate(router.EscalationInput{ConsecutiveMalformed: true}) {
 						repair = RepairState{}
@@ -320,6 +340,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				emit(observability.TruncatedByServerEvent())
 			}
 			if nudge, fire := loops.CheckRepeated(ws.Changed()); fire {
+				loopsDetected++
 				emit(observability.Event{Type: "loop.detected", Reason: "repeated_call"})
 				if loops.ShouldEscalate() {
 					if tryEscalate(router.EscalationInput{LoopSecondFire: true}) {

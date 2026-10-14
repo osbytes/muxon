@@ -13,6 +13,7 @@ type EscalationInput struct {
 	LoopSecondFire         bool
 	LowRouterConfidence    bool
 	TagMatchAlwaysEscalate bool
+	ForceUser              bool
 	RemainingCostUSD       float64
 	EstimatedNextCostUSD   float64
 	HasEscalatedRole       bool
@@ -40,6 +41,9 @@ func ShouldEscalate(in EscalationInput) EscalationDecision {
 	}
 	if in.RemainingCostUSD > 0 && in.EstimatedNextCostUSD > in.RemainingCostUSD {
 		return EscalationDecision{Reason: "budget_skip"}
+	}
+	if in.ForceUser {
+		return EscalationDecision{Escalate: true, Reason: "user"}
 	}
 	if in.ConsecutiveVerifyFails >= in.EscalateAfterVerify {
 		return EscalationDecision{Escalate: true, Reason: "verify_fails"}

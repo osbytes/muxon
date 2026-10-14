@@ -10,12 +10,16 @@ import (
 
 // SessionCostSummary is parsed from trace session.end.
 type SessionCostSummary struct {
-	InputTokens     int
-	OutputTokens    int
-	CachedTokens    int
-	ReasoningTokens int
-	TotalCostUSD    float64
-	Outcome         string
+	InputTokens        int
+	OutputTokens       int
+	CachedTokens       int
+	ReasoningTokens    int
+	TotalCostUSD       float64
+	Outcome            string
+	ToolRounds         int
+	Escalations        int
+	MalformedToolCalls int
+	LoopsDetected      int
 }
 
 // ReadLatestSessionCost reads the newest session trace under workspace/.thee/sessions.
@@ -56,12 +60,16 @@ func ReadSessionCost(tracePath string) (SessionCostSummary, string, error) {
 		}
 		if ev.Type == "session.end" {
 			sum = SessionCostSummary{
-				InputTokens:     ev.InputTokens,
-				OutputTokens:    ev.OutputTokens,
-				CachedTokens:    ev.CachedTokens,
-				ReasoningTokens: ev.ReasoningTokens,
-				TotalCostUSD:    ev.TotalCostUSD,
-				Outcome:         ev.Outcome,
+				InputTokens:        ev.InputTokens,
+				OutputTokens:       ev.OutputTokens,
+				CachedTokens:       ev.CachedTokens,
+				ReasoningTokens:    ev.ReasoningTokens,
+				TotalCostUSD:       ev.TotalCostUSD,
+				Outcome:            ev.Outcome,
+				ToolRounds:         ev.ToolRounds,
+				Escalations:        ev.EscalationGeneration,
+				MalformedToolCalls: ev.MalformedToolCalls,
+				LoopsDetected:      ev.LoopsDetected,
 			}
 		}
 	}

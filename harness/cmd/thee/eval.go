@@ -74,15 +74,19 @@ var evalRunCmd = &cobra.Command{
 			reward = 1
 		}
 		_ = eval.AppendResult(workDir, eval.ResultRow{
-			TaskID:       task.ID,
-			Trial:        1,
-			Reward:       reward,
-			ModelID:      modelID,
-			InputTokens:  sum.InputTokens,
-			OutputTokens: sum.OutputTokens,
-			CachedTokens: sum.CachedTokens,
-			CostUSD:      sum.TotalCostUSD,
-			WallS:        time.Since(start).Seconds(),
+			TaskID:             task.ID,
+			Trial:              1,
+			Reward:             reward,
+			ModelID:            modelID,
+			InputTokens:        sum.InputTokens,
+			OutputTokens:       sum.OutputTokens,
+			CachedTokens:       sum.CachedTokens,
+			CostUSD:            sum.TotalCostUSD,
+			ToolRounds:         sum.ToolRounds,
+			Escalations:        sum.Escalations,
+			MalformedToolCalls: sum.MalformedToolCalls,
+			LoopsDetected:      sum.LoopsDetected,
+			WallS:              time.Since(start).Seconds(),
 		})
 		if out.ExitCode != 0 {
 			return exitError{code: mapExitCode(out), msg: out.Reason}
@@ -91,9 +95,26 @@ var evalRunCmd = &cobra.Command{
 	},
 }
 
+var evalReportCmd = &cobra.Command{
+	Use:   "report",
+	Short: "Summarize .thee/eval/results.jsonl",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		dir, err := workspaceDir(cmd)
+		if err != nil {
+			return err
+		}
+		rows, err := eval.LoadResults(filepath.Join(dir, ".thee", "eval", "results.jsonl"))
+		if err != nil {
+			return err
+		}
+		fmt.Print(eval.FormatReport(rows))
+		return nil
+	},
+}
+
 func init() {
 	evalRunCmd.Flags().Bool("trust", false, "Trust workspace for verify")
-	evalCmd.AddCommand(evalRunCmd)
+	evalCmd.AddCommand(evalRunCmd, evalReportCmd)
 	rootCmd.AddCommand(evalCmd)
 }
 
@@ -185,15 +206,19 @@ func runEvalTask(ctx context.Context, task eval.Task, workDir string, prov provi
 		modelID = w.ID
 	}
 	_ = eval.AppendResult(workDir, eval.ResultRow{
-		TaskID:       task.ID,
-		Trial:        1,
-		Reward:       reward,
-		ModelID:      modelID,
-		InputTokens:  sum.InputTokens,
-		OutputTokens: sum.OutputTokens,
-		CachedTokens: sum.CachedTokens,
-		CostUSD:      sum.TotalCostUSD,
-		WallS:        time.Since(start).Seconds(),
+		TaskID:             task.ID,
+		Trial:              1,
+		Reward:             reward,
+		ModelID:            modelID,
+		InputTokens:        sum.InputTokens,
+		OutputTokens:       sum.OutputTokens,
+		CachedTokens:       sum.CachedTokens,
+		CostUSD:            sum.TotalCostUSD,
+		ToolRounds:         sum.ToolRounds,
+		Escalations:        sum.Escalations,
+		MalformedToolCalls: sum.MalformedToolCalls,
+		LoopsDetected:      sum.LoopsDetected,
+		WallS:              time.Since(start).Seconds(),
 	})
 	return out, nil
 }

@@ -133,7 +133,7 @@ What the spec still needs before code depends on it:
 - [ ] Loop-detector thresholds checked against recorded traces
 - [ ] Eval basket run across the model matrix: baseline vs thee-harness on same SKUs
 - [ ] ADR-003 finalized
-- [ ] Go `internal/` package skeleton matching component docs ([implementation-plan.md](./implementation-plan.md#repository-layout-target))
+- [x] Go `internal/` package skeleton matching component docs ([implementation-plan.md](./implementation-plan.md#repository-layout-target))
 
 ## Research references
 

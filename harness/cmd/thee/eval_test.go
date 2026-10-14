@@ -45,4 +45,12 @@ func TestEvalRunWritesReward(t *testing.T) {
 	if row.Reward != 1 {
 		t.Fatalf("%+v", row)
 	}
+	rows, err := eval.LoadResults(resultsPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	report := eval.FormatReport(rows)
+	if !strings.Contains(report, "pass_rate 1.000") {
+		t.Fatalf("%s", report)
+	}
 }
