@@ -126,6 +126,9 @@ func (w *Workspace) CheckFresh(rel string) error {
 	}
 	cur, err := os.ReadFile(abs)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
 		return err
 	}
 	seen, ok := w.track.original[rel]
