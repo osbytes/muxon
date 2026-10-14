@@ -13,7 +13,7 @@ func TestMatchSuggestions(t *testing.T) {
 		want []string
 	}{
 		{in: "hello"},
-		{in: "/", want: []string{"/providers", "/model", "/help", "/trust", "/cost", "/escalate", "/undo", "/abort", "/exit"}},
+		{in: "/", want: []string{"/providers", "/model", "/clear", "/help", "/trust", "/cost", "/escalate", "/undo", "/abort", "/exit"}},
 		{in: "/ex", want: []string{"/exit"}},
 		{in: "/qu", want: []string{"/exit"}},
 		{in: "/co", want: []string{"/cost"}},
@@ -52,7 +52,7 @@ func TestSuggestionTabAndEnter(t *testing.T) {
 	m := sessionModel(t.TempDir())
 	m.input.SetValue("/")
 	var updated tea.Model
-	for range 2 {
+	for range 3 {
 		updated, _ = m.Update(tea.KeyMsg{Type: tea.KeyDown})
 		m = updated.(Model)
 	}

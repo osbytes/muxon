@@ -3,6 +3,8 @@ package director
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -11,6 +13,7 @@ import (
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
 	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/thee/harness/internal/tools"
 )
 
 func runInteractive(t *testing.T, script []provider.Response, ask func(context.Context, string, []string) (string, error)) (Outcome, []string) {
@@ -113,6 +116,108 @@ func historyText(msgs []provider.Message) string {
 		}
 	}
 	return b.String()
+}
+
+func TestRejectedToolCallStaysPaired(t *testing.T) {
+	listArgs, _ := json.Marshal(map[string]any{"path": "."})
+	first, _ := runInteractiveGoal(t, "add a clear command", nil, []provider.Response{
+		{ToolCalls: []provider.ToolCall{{ID: "call_list", Name: "list", Arguments: listArgs}}, FinishReason: "tool_calls"},
+		{Text: "I will edit the command list instead."},
+	})
+	if first.State != StateDone || first.Reason != "answered" {
+		t.Fatalf("Run() outcome = %+v, want done answered", first)
+	}
+	joined := historyText(first.History)
+	if !strings.Contains(joined, "not allowed in editing phase") {
+		t.Fatalf("history = %q, want phase rejection", joined)
+	}
+	if err := unpairedToolCalls(first.History); err != nil {
+		t.Fatal(err)
+	}
+	second, _ := runInteractiveGoal(t, "try again", first.History, []provider.Response{
+		{Text: "Starting from the failed list call."},
+	})
+	if second.State != StateDone || second.Reason != "answered" {
+		t.Fatalf("follow-up outcome = %+v, want done answered", second)
+	}
+	again := historyText(second.History)
+	for _, want := range []string{"not allowed in editing phase", "try again", "Starting from the failed list call."} {
+		if !strings.Contains(again, want) {
+			t.Fatalf("follow-up history = %q, want %q", again, want)
+		}
+	}
+}
+
+func TestToolRunErrorKeepsResult(t *testing.T) {
+	t.Setenv("THEE_HOME", t.TempDir())
+	dir := testutil.CopyFixture(t, "go-failing-test")
+	manifest, err := config.LoadEmbeddedManifest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	readArgs, _ := json.Marshal(map[string]any{"path": "sum.go", "start_line": 1, "end_line": 5})
+	out, err := Run(context.Background(), Config{
+		Goal: "read the file", Workspace: dir, Trusted: true, Interactive: true,
+		RegisterAllTools: true, TheeVersion: "t",
+		Provider: scripted.New([]provider.Response{{
+			ToolCalls:    []provider.ToolCall{{ID: "call_read", Name: "read", Arguments: readArgs}},
+			FinishReason: "tool_calls",
+		}}),
+		Manifest:     manifest,
+		TracePath:    filepath.Join(t.TempDir(), "t.jsonl"),
+		MaxRounds:    10,
+		replaceTools: []tools.Tool{errTool{name: "read", err: errors.New("disk failed")}},
+	})
+	if out.Reason != "tool_error" {
+		t.Fatalf("Run() outcome = %+v, err %v, want tool_error", out, err)
+	}
+	if err == nil || !strings.Contains(err.Error(), "disk failed") {
+		t.Fatalf("Run() err = %v, want disk failed", err)
+	}
+	if perr := unpairedToolCalls(out.History); perr != nil {
+		t.Fatal(perr)
+	}
+	if joined := historyText(out.History); !strings.Contains(joined, "disk failed") {
+		t.Fatalf("history = %q, want tool error", joined)
+	}
+	second, _ := runInteractiveGoal(t, "try again", out.History, []provider.Response{
+		{Text: "The read failed, so I will not retry it."},
+	})
+	if second.State != StateDone || second.Reason != "answered" {
+		t.Fatalf("follow-up outcome = %+v, want done answered", second)
+	}
+}
+
+type errTool struct {
+	name string
+	err  error
+}
+
+func (e errTool) Name() string { return e.name }
+
+func (e errTool) Spec() tools.Spec {
+	return tools.Spec{Name: e.name, Description: e.name, Parameters: json.RawMessage(`{"type":"object","properties":{}}`)}
+}
+
+func (e errTool) Run(context.Context, *tools.Env, json.RawMessage) (tools.Result, error) {
+	return tools.Result{}, e.err
+}
+
+func unpairedToolCalls(msgs []provider.Message) error {
+	answered := map[string]bool{}
+	for _, msg := range msgs {
+		if msg.Role == "tool" && msg.ToolCallID != "" {
+			answered[msg.ToolCallID] = true
+		}
+	}
+	for _, msg := range msgs {
+		for _, call := range msg.ToolCalls {
+			if !answered[call.ID] {
+				return fmt.Errorf("tool call %s (%s) has no result", call.ID, call.Name)
+			}
+		}
+	}
+	return nil
 }
 
 func TestInteractivePlainReplyAnswers(t *testing.T) {
