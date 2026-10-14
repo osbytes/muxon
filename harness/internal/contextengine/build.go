@@ -67,7 +67,7 @@ func BuildTurn(in TurnInput) TurnOutput {
 		repoText = index.FormatSymbols(syms, 0)
 	}
 
-	budget := turnInputBudget(in.ContextWindow)
+	budget := TurnInputBudget(in.ContextWindow)
 	pb := PrefixBudget{TurnInputBudget: budget}
 	instructions, repoText, note := pb.Apply(instructions, repoText)
 
@@ -88,7 +88,7 @@ func BuildTurn(in TurnInput) TurnOutput {
 		sec5,
 	}, "\n\n")
 
-	history := CompactHistory(in.History, budget, in.Estimator)
+	history := CompactHistory(in.History, budget, in.ContextWindow, in.Estimator)
 
 	phaseLine := "Active: " + activeToolsForPhase(in.Phase) + "\n"
 	var step2 string
@@ -105,7 +105,7 @@ func BuildTurn(in TurnInput) TurnOutput {
 	if tail != "" {
 		msgs = append(msgs, provider.Message{Role: "user", Content: tail})
 	}
-	if len(in.History) == 0 && in.Goal != "" {
+	if in.Goal != "" && !historyEndsWithGoal(history, in.Goal) {
 		msgs = append(msgs, provider.Message{Role: "user", Content: in.Goal})
 	}
 
@@ -126,7 +126,9 @@ func BuildTurn(in TurnInput) TurnOutput {
 	return out
 }
 
-func turnInputBudget(contextWindow int) int {
+// TurnInputBudget is the prompt budget for a model window: the window minus a
+// 10% margin and reserved output tokens.
+func TurnInputBudget(contextWindow int) int {
 	if contextWindow <= 0 {
 		contextWindow = 32768
 	}
@@ -137,6 +139,14 @@ func turnInputBudget(contextWindow int) int {
 func hashPrefixSections(s1, s2, s3, s4, s5 string) string {
 	h := sha256.Sum256([]byte(strings.Join([]string{s1, s2, s3, s4, s5}, "\x1e")))
 	return hex.EncodeToString(h[:16])
+}
+
+func historyEndsWithGoal(history []provider.Message, goal string) bool {
+	if len(history) == 0 {
+		return false
+	}
+	last := history[len(history)-1]
+	return last.Role == "user" && last.Content == goal
 }
 
 func activeToolsForPhase(phase string) string {

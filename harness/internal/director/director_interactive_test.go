@@ -36,6 +36,85 @@ func runInteractive(t *testing.T, script []provider.Response, ask func(context.C
 	return out, said
 }
 
+func TestProviderErrorIsReturned(t *testing.T) {
+	t.Setenv("THEE_HOME", t.TempDir())
+	dir := testutil.CopyFixture(t, "go-failing-test")
+	manifest, err := config.LoadEmbeddedManifest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, err := Run(context.Background(), Config{
+		Goal: "hello", Workspace: dir, Trusted: true, Interactive: true, TheeVersion: "t",
+		Provider: scripted.New(nil), Manifest: manifest,
+		TracePath: filepath.Join(t.TempDir(), "t.jsonl"),
+	})
+	if out.Reason != "model_error" {
+		t.Fatalf("outcome %+v, err %v", out, err)
+	}
+	if err == nil || !strings.Contains(err.Error(), "queue exhausted") {
+		t.Fatalf("Run() err = %v, want queue exhausted", err)
+	}
+}
+
+func TestFollowUpKeepsPriorTurn(t *testing.T) {
+	readArgs, _ := json.Marshal(map[string]any{"path": "sum.go", "start_line": 1, "end_line": 5})
+	first, _ := runInteractiveGoal(t, "explain tool calling", nil, []provider.Response{
+		{ToolCalls: []provider.ToolCall{{ID: "1", Name: "read", Arguments: readArgs}}, FinishReason: "tool_calls"},
+		{Text: "Tool calls go through toolcall.Next."},
+	})
+	joined := historyText(first.History)
+	for _, want := range []string{"explain tool calling", "sum.go", "Tool calls go through toolcall.Next."} {
+		if !strings.Contains(joined, want) {
+			t.Fatalf("first History = %q, want %q", joined, want)
+		}
+	}
+	second, _ := runInteractiveGoal(t, "try again", first.History, []provider.Response{
+		{Text: "Starting from the tool-calling question."},
+	})
+	again := historyText(second.History)
+	for _, want := range []string{"explain tool calling", "sum.go", "Tool calls go through toolcall.Next.", "try again"} {
+		if !strings.Contains(again, want) {
+			t.Fatalf("second History = %q, want %q", again, want)
+		}
+	}
+}
+
+func runInteractiveGoal(t *testing.T, goal string, history []provider.Message, script []provider.Response) (Outcome, []string) {
+	t.Helper()
+	t.Setenv("THEE_HOME", t.TempDir())
+	dir := testutil.CopyFixture(t, "go-failing-test")
+	manifest, err := config.LoadEmbeddedManifest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var said []string
+	out, err := Run(context.Background(), Config{
+		Goal: goal, Workspace: dir, Trusted: true, Interactive: true, RegisterAllTools: true, TheeVersion: "t",
+		Provider: scripted.New(script), Manifest: manifest, History: history,
+		TracePath:   filepath.Join(t.TempDir(), "t.jsonl"),
+		MaxRounds:   10,
+		OnAssistant: func(text string) { said = append(said, text) },
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return out, said
+}
+
+func historyText(msgs []provider.Message) string {
+	var b strings.Builder
+	for _, m := range msgs {
+		b.WriteString(m.Content)
+		b.WriteByte('\n')
+		for _, call := range m.ToolCalls {
+			b.WriteString(call.Name)
+			b.Write(call.Arguments)
+			b.WriteByte('\n')
+		}
+	}
+	return b.String()
+}
+
 func TestInteractivePlainReplyAnswers(t *testing.T) {
 	out, said := runInteractive(t, []provider.Response{{Text: "Hi! What should I work on?"}}, nil)
 	if out.State != StateDone || out.Reason != "answered" {

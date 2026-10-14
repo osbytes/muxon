@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
@@ -65,6 +66,22 @@ func TestStandardSystemGoldenHash(t *testing.T) {
 	if block != string(want) {
 		sum := sha256.Sum256([]byte(block))
 		t.Fatalf("standard system changed hash=%s", hex.EncodeToString(sum[:8]))
+	}
+}
+
+func TestRulesAllowTextReply(t *testing.T) {
+	for _, variant := range []string{VariantCompact, VariantStandard} {
+		t.Run(variant, func(t *testing.T) {
+			r, err := RenderVariant(variant, nil)
+			if err != nil {
+				t.Fatalf("RenderVariant(%q) error = %v", variant, err)
+			}
+			for _, banned := range []string{"nothing else", "not chat"} {
+				if strings.Contains(r.SystemRules, banned) {
+					t.Errorf("RenderVariant(%q) rules contain %q", variant, banned)
+				}
+			}
+		})
 	}
 }
 

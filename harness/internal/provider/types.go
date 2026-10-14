@@ -43,6 +43,8 @@ type Message struct {
 	ToolCalls  []ToolCall
 	ToolCallID string
 	Name       string
+	// Replay is provider output that must be sent back unchanged on the next turn.
+	Replay json.RawMessage
 }
 
 // ToolDef describes a tool for native protocol.
@@ -65,6 +67,8 @@ type Response struct {
 	ToolCalls    []ToolCall
 	FinishReason string
 	Usage        Usage
+	// Replay is provider output that must be sent back unchanged on the next turn.
+	Replay json.RawMessage
 }
 
 // Usage is normalized token usage.

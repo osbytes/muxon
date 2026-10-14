@@ -56,7 +56,7 @@ func TestDirectorVerifyFailEmitsEscalate(t *testing.T) {
 			MaxEscalations:           1,
 		},
 	})
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "queue exhausted") {
 		t.Fatal(err)
 	}
 	data, err := os.ReadFile(tracePath)

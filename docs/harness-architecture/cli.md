@@ -156,7 +156,9 @@ Parsed only in the input line (not passed to the model). Unknown `/foo` is sent 
 | Command | Effect |
 |---------|--------|
 | `/help` | Short command list. |
+| `/model [id]` | Switch the worker model. With no argument, pick from the connected provider's model list. |
 | `/abort` | Cancel goal (`cancelled`). |
+| `/exit` | Quit thee. `/quit` is the same command. |
 | `/undo` | Revert last applied patch batch ([session-director](./session-director.md#checkpoints--resume)). |
 | `/escalate` | Force worker → escalated if budget allows ([model-router](./model-router.md#escalation-triggers)). |
 | `/cost` | Print session totals (same as status bar, more detail). |
@@ -164,7 +166,7 @@ Parsed only in the input line (not passed to the model). Unknown `/foo` is sent 
 | `/trust` | Open trust UI for this workspace. |
 | `/permission read-only\|edit\|full` | Lower or raise tier within user cap (raising may prompt). |
 
-Future: `/model`, `/resume`, `/checkpoint` — defer until loop is stable.
+Future: `/resume`, `/checkpoint` — defer until loop is stable.
 
 ---
 

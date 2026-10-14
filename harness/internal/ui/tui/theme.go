@@ -16,6 +16,7 @@ var (
 	colorSuccess = lipgloss.Color("#7FD88F")
 	colorError   = lipgloss.Color("#E06C75")
 	colorWarn    = lipgloss.Color("#F5A742")
+	colorSelect  = lipgloss.Color("#32343F")
 )
 
 const logo = "▀█▀ █ █ █▀▀ █▀▀\n █  █▀█ ██▄ ██▄"
@@ -43,12 +44,21 @@ type commandDoc struct {
 
 var commandDocs = []commandDoc{
 	{"/providers", "connect a model provider (OpenCode Go, DeepInfra)"},
+	{"/model", "switch the worker model"},
 	{"/help", "show commands"},
 	{"/trust", "trust this workspace so goals can run"},
 	{"/cost", "session cost and tokens"},
 	{"/escalate", "use the stronger model on the next goal"},
 	{"/undo", "revert the last patch"},
 	{"/abort", "cancel the running goal"},
+	{"/exit", "quit thee"},
+}
+
+// commandAliases maps a canonical command to names that should complete to it.
+var commandAliases = map[string][]string{
+	"/providers": {"provider", "connect"},
+	"/model":     {"models"},
+	"/exit":      {"quit"},
 }
 
 func commandList(nameStyle, descStyle lipgloss.Style) string {
@@ -97,23 +107,38 @@ func shortPath(p string) string {
 	return p
 }
 
-func renderTranscript(lines []string, width int) string {
+type entry struct {
+	line string
+	tool *toolCall
+}
+
+func renderTranscript(entries []entry, width int, expandTools bool) string {
 	if width < 10 {
 		width = 10
 	}
 	var blocks []string
-	for i := 0; i < len(lines); i++ {
-		line := lines[i]
-		kind := lineKind(line)
-		if kind == "tool" && i+1 < len(lines) && strings.HasPrefix(lines[i+1], "▸ result ") {
-			blocks = append(blocks, renderTool(line, lines[i+1]))
-			i++
+	prevTool := false
+	for i := 0; i < len(entries); i++ {
+		if tc := entries[i].tool; tc != nil {
+			group := []*toolCall{tc}
+			for i+1 < len(entries) && entries[i+1].tool != nil && groupable(tc, entries[i+1].tool) {
+				i++
+				group = append(group, entries[i].tool)
+			}
+			if len(blocks) > 0 && !prevTool {
+				blocks = append(blocks, "")
+			}
+			blocks = append(blocks, renderToolGroup(group, expandTools, width))
+			prevTool = true
 			continue
 		}
-		if len(blocks) > 0 && kind != "tool" {
+		line := entries[i].line
+		kind := lineKind(line)
+		if len(blocks) > 0 && !(kind == "verify" && prevTool) {
 			blocks = append(blocks, "")
 		}
 		blocks = append(blocks, renderLine(line, kind, width))
+		prevTool = kind == "verify"
 	}
 	return strings.Join(blocks, "\n")
 }
@@ -126,10 +151,6 @@ func lineKind(line string) string {
 		return "assistant"
 	case strings.HasPrefix(line, "▸ verify "):
 		return "verify"
-	case strings.HasPrefix(line, "▸ result "):
-		return "result"
-	case strings.HasPrefix(line, "▸ "):
-		return "tool"
 	case strings.HasPrefix(line, "[harness] "):
 		return "harness"
 	case strings.HasPrefix(line, "[done]"), strings.HasPrefix(line, "[failed]"), strings.HasPrefix(line, "[cancelled]"):
@@ -153,15 +174,11 @@ func renderLine(line, kind string, width int) string {
 		return userStyle.Width(width - 1).Render(strings.TrimPrefix(line, "> "))
 	case "assistant":
 		return assistantStyle.Width(width).Render(strings.TrimPrefix(line, "[assistant] "))
-	case "tool":
-		return renderTool(line, "")
-	case "result":
-		return "  " + resultMark(line)
 	case "verify":
 		if strings.HasSuffix(line, "pass") {
-			return "  " + successStyle.Render("✓ verify passed")
+			return renderToolRow("Verify", "passed", successStyle, false, width)
 		}
-		return "  " + errorStyle.Render("✗ verify failed")
+		return renderToolRow("Verify", "failed", errorStyle, true, width)
 	case "harness":
 		return infoStyle.Italic(true).Render(strings.TrimPrefix(line, "[harness] "))
 	case "outcome":
@@ -178,22 +195,6 @@ func renderLine(line, kind string, width int) string {
 	default:
 		return infoStyle.Width(width).Render(line)
 	}
-}
-
-func renderTool(call, result string) string {
-	name := strings.TrimPrefix(call, "▸ ")
-	out := "  " + mutedStyle.Render("⚙ ") + textStyle.Render(name)
-	if result != "" {
-		out += "  " + resultMark(result)
-	}
-	return out
-}
-
-func resultMark(result string) string {
-	if strings.HasSuffix(result, "ok") {
-		return successStyle.Render("✓")
-	}
-	return errorStyle.Render("✗")
 }
 
 func renderOutcome(line string) string {

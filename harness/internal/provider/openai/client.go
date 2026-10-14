@@ -105,6 +105,9 @@ type usageWire struct {
 
 // Complete implements provider.Provider.
 func (c *Client) Complete(ctx context.Context, req provider.Request) (provider.Response, error) {
+	if responsesModel(req.ModelID) {
+		return c.completeResponses(ctx, req)
+	}
 	out, err := c.completeOnce(ctx, req)
 	if err != nil {
 		if api, ok := err.(*provider.APIError); ok && api.Kind == provider.APIErrorConstraintRejected {
@@ -150,6 +153,13 @@ func (c *Client) completeOnce(ctx context.Context, req provider.Request) (provid
 
 // Stream implements provider.Provider.
 func (c *Client) Stream(ctx context.Context, req provider.Request) (provider.Stream, error) {
+	if responsesModel(req.ModelID) {
+		resp, err := c.completeResponses(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+		return &singleResponse{resp: resp}, nil
+	}
 	body, err := c.encodeRequest(req, true)
 	if err != nil {
 		return nil, err

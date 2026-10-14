@@ -48,17 +48,66 @@ func TestViewHasRegions(t *testing.T) {
 
 func TestTranscriptRendersBlocks(t *testing.T) {
 	m := sessionModel(t.TempDir())
-	for _, line := range []string{"> fix the test", "▸ read", "▸ result ok", "▸ verify pass", "[done] verified"} {
-		m.appendLine(line)
-	}
+	m.appendLine("> fix the test")
+	runTool(&m, "patch", `{"path":"sum.go"}`, true, "")
+	m.appendLine("▸ verify pass")
+	m.appendLine("[done] verified")
 	view := m.View()
-	for _, want := range []string{"fix the test", "⚙ read", "✓ verify passed", "● done · verified"} {
+	for _, want := range []string{"fix the test", "Edit sum.go", "⎿  applied", "Verify", "⎿  passed", "● done · verified"} {
 		if !strings.Contains(view, want) {
 			t.Errorf("View() missing %q:\n%s", want, view)
 		}
 	}
-	if strings.Contains(view, "▸ result") {
-		t.Errorf("View() shows raw result line:\n%s", view)
+}
+
+func runTool(m *Model, name, args string, ok bool, output string) {
+	m.applyTool(director.ToolActivity{Name: name, Args: json.RawMessage(args)})
+	m.applyTool(director.ToolActivity{Name: name, Args: json.RawMessage(args), Done: true, OK: ok, Output: output})
+}
+
+func TestToolRowsShowArgsAndSummary(t *testing.T) {
+	m := sessionModel(t.TempDir())
+	runTool(&m, "search", `{"pattern":"agent loop"}`, true, "a.go:1:x\nb.go:2:y\n")
+	m.appendLine("[assistant] reading")
+	runTool(&m, "read", `{"path":"internal/director/director.go","start_line":1,"end_line":3}`, true, "a\nb\nc")
+	view := m.View()
+	for _, want := range []string{`Search "agent loop"`, "2 matches", "Read internal/director/director.go:1-3", "3 lines"} {
+		if !strings.Contains(view, want) {
+			t.Errorf("View() missing %q:\n%s", want, view)
+		}
+	}
+}
+
+func TestConsecutiveReadsCollapse(t *testing.T) {
+	m := sessionModel(t.TempDir())
+	for _, p := range []string{"a.go", "b.go", "c.go", "d.go", "e.go"} {
+		runTool(&m, "read", `{"path":"`+p+`","start_line":1,"end_line":2}`, true, "x\ny")
+	}
+	runTool(&m, "read", `{"path":"missing.go","start_line":1,"end_line":2}`, false, "file not found")
+	view := m.View()
+	for _, want := range []string{"Read 6 files", "1 failed", "+3 more", "ctrl+o expand"} {
+		if !strings.Contains(view, want) {
+			t.Errorf("collapsed View() missing %q:\n%s", want, view)
+		}
+	}
+	if strings.Contains(view, "Read b.go") {
+		t.Errorf("collapsed View() lists individual reads:\n%s", view)
+	}
+	updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyCtrlO})
+	view = updated.(Model).View()
+	for _, want := range []string{"Read e.go:1-2", "Read missing.go:1-2", "file not found"} {
+		if !strings.Contains(view, want) {
+			t.Errorf("expanded View() missing %q:\n%s", want, view)
+		}
+	}
+}
+
+func TestHiddenToolsSkipTranscript(t *testing.T) {
+	m := sessionModel(t.TempDir())
+	runTool(&m, "ask_user", `{"question":"q"}`, true, "")
+	runTool(&m, "finish", `{"summary":"s"}`, true, "")
+	if len(m.transcript) != 0 {
+		t.Fatalf("transcript = %q, want empty", m.transcriptText())
 	}
 }
 
@@ -189,6 +238,37 @@ func TestProvidersShowsConnectError(t *testing.T) {
 	}
 }
 
+func TestReconnectRestoresModel(t *testing.T) {
+	fake := &fakeOpenCode{status: 200, body: `{}`}
+	setupOpenCode(t, fake, "sk-test")
+	if err := config.SaveLastProvider("opencode-go"); err != nil {
+		t.Fatal(err)
+	}
+	if err := config.SaveLastModel("gpt-6-luna"); err != nil {
+		t.Fatal(err)
+	}
+	manifest, err := config.LoadEmbeddedManifest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	m := NewModel(Options{Workspace: t.TempDir(), Manifest: manifest, Trusted: true, AutoConnect: "opencode-go"})
+	updated, _ := m.Update(m.startCmd())
+	got := updated.(Model)
+	if got.opt.WorkerModel != "gpt-6-luna" {
+		t.Fatalf("WorkerModel = %q, want gpt-6-luna", got.opt.WorkerModel)
+	}
+	md, err := got.opt.Manifest.ResolveRole("worker")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if md.Model != "gpt-6-luna" {
+		t.Fatalf("worker model = %q, want gpt-6-luna", md.Model)
+	}
+	if !strings.Contains(got.transcriptText(), "gpt-6-luna") {
+		t.Fatalf("transcript %q", got.transcriptText())
+	}
+}
+
 func TestAutoConnectLastProvider(t *testing.T) {
 	fake := &fakeOpenCode{status: 200, body: `{}`}
 	setupOpenCode(t, fake, "sk-test")
@@ -202,13 +282,25 @@ func TestAutoConnectLastProvider(t *testing.T) {
 	}
 }
 
+func TestSlashExit(t *testing.T) {
+	m := sessionModel(t.TempDir())
+	m.input.SetValue("/exit")
+	_, cmd := m.Update(tea.KeyMsg{Type: tea.KeyEnter})
+	if cmd == nil {
+		t.Fatal("Update(/exit) cmd = nil, want quit")
+	}
+	if _, ok := cmd().(tea.QuitMsg); !ok {
+		t.Fatalf("Update(/exit) msg = %T, want tea.QuitMsg", cmd())
+	}
+}
+
 func TestSlashHelp(t *testing.T) {
 	m := sessionModel(t.TempDir())
 	m.input.SetValue("/help")
 	updated, _ := m.Update(tea.KeyMsg{Type: tea.KeyEnter})
 	model := updated.(Model)
-	if !strings.Contains(strings.Join(model.transcript, "\n"), "/abort") {
-		t.Fatalf("%v", model.transcript)
+	if !strings.Contains(model.transcriptText(), "/abort") {
+		t.Fatalf("%v", model.transcriptText())
 	}
 }
 
@@ -329,7 +421,7 @@ func TestScriptedFixtureDone(t *testing.T) {
 	if model.LastOutcome().State != director.StateDone {
 		t.Fatalf("%+v\n%s", model.LastOutcome(), model.View())
 	}
-	if !strings.Contains(model.View(), "verify pass") {
+	if view := model.View(); !strings.Contains(view, "Edit sum.go") || !strings.Contains(view, "⎿  passed") {
 		t.Fatalf("view %s", model.View())
 	}
 	finishArgs, _ := json.Marshal(map[string]string{"summary": "still good"})
@@ -388,7 +480,7 @@ func TestAskUserShowsQuestionAndSendsAnswer(t *testing.T) {
 		t.Fatal("ask_user never reached the TUI")
 	}
 	if model.LastOutcome().State != director.StateDone {
-		t.Fatalf("%+v\n%s", model.LastOutcome(), strings.Join(model.transcript, "\n"))
+		t.Fatalf("%+v\n%s", model.LastOutcome(), model.transcriptText())
 	}
 	if view := model.View(); !strings.Contains(view, "picked sum.go") {
 		t.Fatalf("finish summary missing:\n%s", view)
