@@ -7,9 +7,11 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/PLACEHOLDER/thee/harness/internal/config"
 	"github.com/PLACEHOLDER/thee/harness/internal/contextengine"
+	"github.com/PLACEHOLDER/thee/harness/internal/db"
 	"github.com/PLACEHOLDER/thee/harness/internal/observability"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider/openai"
@@ -140,6 +142,15 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	}
 	defer tw.Close()
 
+	database, err := db.Open(ws.Root())
+	if err != nil {
+		return Outcome{State: StateFailed, Reason: "setup", ExitCode: 3}, err
+	}
+	defer database.Close()
+	warnDB(database.StartChat(db.Chat{
+		ID: sid, Workspace: ws.Root(), Model: model.Model, Provider: model.Provider,
+	}))
+
 	session := &tools.SessionState{}
 	var totals observability.UsageTotals
 	var malformed int
@@ -147,6 +158,11 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	history := append([]provider.Message(nil), cfg.History...)
 	if goal := strings.TrimSpace(cfg.Goal); goal != "" {
 		history = append(history, provider.Message{Role: "user", Content: goal})
+		warnDB(database.AppendMessages(sid, []db.Message{{Role: "user", Content: goal}}))
+	}
+	var lastTurnID int64
+	appendMsg := func(msg provider.Message) {
+		warnDB(database.AppendMessages(sid, []db.Message{storedMessage(msg)}))
 	}
 
 	emit := func(ev observability.Event) {
@@ -154,10 +170,27 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		if cfg.OnEvent != nil {
 			cfg.OnEvent(ev)
 		}
+		if kind, ok := eventKind(ev); ok {
+			payload, err := json.Marshal(ev)
+			if err != nil {
+				warnDB(err)
+				return
+			}
+			warnDB(database.RecordEvent(sid, db.Event{Kind: kind, Payload: payload}))
+		}
 	}
 	finish := func(o Outcome) Outcome {
 		o.History = append([]provider.Message(nil), history...)
 		emit(observability.SessionEndEvent(o.State, o.Reason, totals, session.ToolRounds, session.VerifyAttempts, session.EscalationsUsed, malformed, loopsDetected))
+		warnDB(database.FinishChat(sid, db.Summary{
+			Outcome:         o.State,
+			Reason:          o.Reason,
+			InputTokens:     totals.InputTokens,
+			OutputTokens:    totals.OutputTokens,
+			CachedTokens:    totals.CachedTokens,
+			ReasoningTokens: totals.ReasoningTokens,
+			CostUSD:         totals.CostUSD,
+		}))
 		return o
 	}
 
@@ -276,6 +309,22 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		return true
 	}
 
+	compactHistory := func(msgs []provider.Message, budget, window int) []provider.Message {
+		next := contextengine.CompactHistory(msgs, budget, window, estimator)
+		if historyChanged(msgs, next) {
+			payload, err := json.Marshal(map[string]int{
+				"tokens_before": estimator.EstimateMessages(msgs),
+				"tokens_after":  estimator.EstimateMessages(next),
+			})
+			if err != nil {
+				warnDB(err)
+			} else {
+				warnDB(database.RecordEvent(sid, db.Event{Kind: "compact", Payload: payload}))
+			}
+		}
+		return next
+	}
+
 	for round := 0; round < caps.MaxToolRounds && state != StateDone && state != StateFailed && state != StateCancelled; round++ {
 		if err := ctx.Err(); err != nil {
 			if errors.Is(err, context.Canceled) {
@@ -300,7 +349,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				firstTurn = false
 			}
 			window := model.Capabilities.ContextWindow
-			history = contextengine.CompactHistory(history, contextengine.TurnInputBudget(window), window, estimator)
+			history = compactHistory(history, contextengine.TurnInputBudget(window), window)
 			turn := contextengine.BuildTurn(contextengine.TurnInput{
 				Goal:          cfg.Goal,
 				History:       history,
@@ -321,7 +370,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			}
 			if !budget.FitsModelCall(turn.EstimatedInputTokens) {
 				if !budget.Compacted {
-					history = contextengine.CompactHistory(history, turn.EstimatedInputTokens/2, model.Capabilities.ContextWindow, estimator)
+					history = compactHistory(history, turn.EstimatedInputTokens/2, model.Capabilities.ContextWindow)
 					budget.Compacted = true
 					continue
 				}
@@ -338,14 +387,31 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				Tools:           turn.Tools,
 				MaxOutputTokens: caps.MaxOutputTokens,
 			}
+			started := time.Now()
 			out, resp, err := toolcall.Next(ctx, activeProv, req, toolcall.DispatchInput{
 				ToolProtocol: model.Capabilities.ToolProtocol,
 				Phase:        phase,
 				Specs:        reg.Specs(),
 			})
+			callCost, _ := router.CostUSD(rates, resp.Usage)
+			if id, werr := database.RecordTurn(sid, db.Turn{
+				Request:              storedRequest(turn),
+				Response:             storedResponse(resp, err),
+				InputTokens:          resp.Usage.InputTokens,
+				OutputTokens:         resp.Usage.OutputTokens,
+				CachedTokens:         resp.Usage.CachedTokens,
+				ReasoningTokens:      resp.Usage.ReasoningTokens,
+				CostUSD:              callCost,
+				Latency:              time.Since(started),
+				PrefixHash:           turn.PrefixHash,
+				EstimatedInputTokens: turn.EstimatedInputTokens,
+			}); werr != nil {
+				warnDB(werr)
+			} else {
+				lastTurnID = id
+			}
 			if err != nil && cfg.Interactive && errors.Is(err, toolcall.ErrNoToolCalls) {
 				if text := visibleAssistantText(out.Text); text != "" {
-					callCost, _ := router.CostUSD(rates, resp.Usage)
 					budget.Charge(resp.Usage.InputTokens, resp.Usage.OutputTokens)
 					budget.ChargeCost(callCost)
 					totals.Add(resp.Usage, callCost)
@@ -353,7 +419,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					if cfg.OnAssistant != nil {
 						cfg.OnAssistant(text)
 					}
-					history = append(history, provider.Message{Role: "assistant", Content: text})
+					msg := provider.Message{Role: "assistant", Content: text}
+					history = append(history, msg)
+					appendMsg(msg)
 					emit(observability.StateTransitionEvent(state, StateDone, "answered"))
 					return finish(Outcome{State: StateDone, Reason: "answered", ExitCode: 0}), nil
 				}
@@ -371,7 +439,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					return finish(Outcome{State: StateFailed, Reason: "tool_parse_exhausted", ExitCode: 1}), err
 				}
 				if repair.ShouldRepair(err) {
-					history = append(history, repair.RepairMessage())
+					msg := repair.RepairMessage()
+					history = append(history, msg)
+					appendMsg(msg)
 					continue
 				}
 				return finish(Outcome{State: StateFailed, Reason: "no_tool_call", ExitCode: 1}), err
@@ -383,7 +453,6 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			}
 			estimator.ObserveUsage(resp.Usage.InputTokens, turn.EstimatedInputTokens)
 			budget.Charge(resp.Usage.InputTokens, resp.Usage.OutputTokens)
-			callCost, _ := router.CostUSD(rates, resp.Usage)
 			budget.ChargeCost(callCost)
 			totals.Add(resp.Usage, callCost)
 			emit(observability.ModelResponseEvent(callCost, resp.Usage))
@@ -399,7 +468,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					}
 					return finish(Outcome{State: StateFailed, Reason: "loop_detected", ExitCode: 1}), nil
 				}
-				history = append(history, provider.Message{Role: "user", Content: nudge})
+				msg := provider.Message{Role: "user", Content: nudge}
+				history = append(history, msg)
+				appendMsg(msg)
 			}
 			history = contextengine.AppendAssistantToolCalls(history, out.Calls)
 			if text != "" && len(history) > 0 {
@@ -407,6 +478,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			}
 			if n := len(history); n > 0 && len(resp.Replay) > 0 {
 				history[n-1].Replay = resp.Replay
+			}
+			if n := len(history); n > 0 {
+				appendMsg(history[n-1])
 			}
 			emit(observability.StateTransitionEvent(state, StateTooling, ""))
 			state = StateTooling
@@ -418,6 +492,20 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments, Done: true, OK: res.OK, Output: res.Text})
 				}
 				history = contextengine.AppendToolResult(history, call.ID, call.Name, res.Text)
+				appendMsg(provider.Message{Role: "tool", Content: res.Text, ToolCallID: call.ID, Name: call.Name})
+				errText := ""
+				if !res.OK {
+					errText = res.Text
+				}
+				warnDB(database.RecordTool(sid, db.ToolCall{
+					TurnID:    lastTurnID,
+					Name:      call.Name,
+					Phase:     phase,
+					Arguments: call.Arguments,
+					Result:    res.Text,
+					OK:        res.OK,
+					Error:     errText,
+				}))
 			}
 			rejectCall := func(call provider.ToolCall, msg string) {
 				if cfg.OnTool != nil {
@@ -507,11 +595,13 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				if tryEscalate(router.EscalationInput{ConsecutiveVerifyFails: session.ConsecutiveVerifyFails}) {
 					bundle := verifier.ParseGoTest(vres.Excerpt)
 					history = appendVerifyFailure(history, verifier.FormatVerifyFailure(vres, bundle))
+					appendMsg(history[len(history)-1])
 					state = StateActing
 					continue
 				}
 				bundle := verifier.ParseGoTest(vres.Excerpt)
 				history = appendVerifyFailure(history, verifier.FormatVerifyFailure(vres, bundle))
+				appendMsg(history[len(history)-1])
 				emit(observability.StateTransitionEvent(state, StateActing, "verify_fail"))
 				state = StateActing
 			}
