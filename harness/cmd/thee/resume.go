@@ -44,7 +44,7 @@ var resumeCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		prov, _, err := loadRunProvider(manifest, "")
+		prov, providerID, hint, err := loadInteractiveProvider(manifest)
 		if err != nil {
 			return exitError{code: 3, msg: err.Error()}
 		}
@@ -58,10 +58,13 @@ var resumeCmd = &cobra.Command{
 			SessionID:   id,
 			Trusted:     security.WorkspaceTrusted(dir, false),
 			Provider:    prov,
+			ProviderID:  providerID,
 			Manifest:    manifest,
 			Version:     version,
 			WorkerModel: worker,
 			Permission:  eff.Permission,
+			SetupHint:   hint,
+			AutoConnect: autoConnectID(prov),
 		})
 	},
 }

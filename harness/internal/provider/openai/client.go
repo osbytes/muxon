@@ -18,6 +18,7 @@ type Client struct {
 	BaseURL    string
 	APIKey     string
 	HTTPClient *http.Client
+	Headers    map[string]string
 }
 
 // NewClient returns a client with sane defaults.
@@ -127,8 +128,7 @@ func (c *Client) completeOnce(ctx context.Context, req provider.Request) (provid
 		if err != nil {
 			return err
 		}
-		httpReq.Header.Set("Content-Type", "application/json")
-		httpReq.Header.Set("Authorization", "Bearer "+c.APIKey)
+		c.authorize(httpReq)
 		resp, err := c.HTTPClient.Do(httpReq)
 		if err != nil {
 			return err
@@ -158,8 +158,7 @@ func (c *Client) Stream(ctx context.Context, req provider.Request) (provider.Str
 	if err != nil {
 		return nil, err
 	}
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("Authorization", "Bearer "+c.APIKey)
+	c.authorize(httpReq)
 	httpReq.Header.Set("Accept", "text/event-stream")
 	resp, err := c.HTTPClient.Do(httpReq)
 	if err != nil {
@@ -171,6 +170,16 @@ func (c *Client) Stream(ctx context.Context, req provider.Request) (provider.Str
 		return nil, fmt.Errorf("openai chat stream: %s: %s", resp.Status, string(b))
 	}
 	return newSSEStream(resp.Body), nil
+}
+
+func (c *Client) authorize(req *http.Request) {
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+c.APIKey)
+	for k, v := range c.Headers {
+		if v != "" {
+			req.Header.Set(k, v)
+		}
+	}
 }
 
 func (c *Client) encodeRequest(req provider.Request, stream bool) ([]byte, error) {
