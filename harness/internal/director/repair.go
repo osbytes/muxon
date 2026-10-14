@@ -35,11 +35,16 @@ func (r *RepairState) ShouldRepair(err error) bool {
 }
 
 // RepairMessage builds the user message for a repair turn.
-func (r *RepairState) RepairMessage() provider.Message {
+// When parallel is set, the model may send a batch up to the native limit.
+func (r *RepairState) RepairMessage(parallel bool) provider.Message {
 	r.Used = true
+	how := "Emit one valid tool call."
+	if parallel {
+		how = fmt.Sprintf("Emit at most %d valid tool calls.", toolcall.MaxBatchCalls)
+	}
 	return provider.Message{
 		Role:    "user",
-		Content: fmt.Sprintf("Tool call schema error: %s. Emit one valid tool call.", r.LastErr),
+		Content: fmt.Sprintf("Tool call schema error: %s. %s", r.LastErr, how),
 	}
 }
 

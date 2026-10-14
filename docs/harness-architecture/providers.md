@@ -296,7 +296,8 @@ If `input_per_m` / `output_per_m` are omitted, **observability** still records t
 
 What each field drives is in [model-router.md](./model-router.md#capability-profile). Rules:
 
-- Missing fields take conservative defaults, so an unknown model works, just less efficiently.
+- Missing fields take conservative defaults, so an unknown model works, just less efficiently. `parallel_tool_calls` stays off.
+- Native models connected through `/providers` are the exception: they are created with `tool_protocol: native` and `parallel_tool_calls: true`. A later `/model` switch on that provider keeps the flag. One reply may then contain up to 8 calls, run in order.
 - `catalog.json` entries can carry the same `capabilities` block; user values override the shipped manifest.
 - `thee models probe <id>` measures served context, structured-output support, tool protocols, edit formats, and reasoning behavior against the real endpoint, and writes a suggested block to the catalog ([Probe](./model-router.md#probe)).
 - A gateway that publishes capabilities on `GET /v1/models` (our API, or a LiteLLM-style proxy that exposes model info) fills defaults automatically; local config still wins.

@@ -20,9 +20,11 @@ How a call is made is a property of the bound model (`tool_protocol` in its [cap
 
 | Protocol | For | How a call works |
 |----------|-----|------------------|
-| `native` | Models with reliable function calling (frontier, strong open coders) | Full tier tool set in `tools[]`, constant for the session. One native call per reply, or several when `parallel_tool_calls` is set. |
+| `native` | Models with reliable function calling (frontier, strong open coders) | Full tier tool set in `tools[]`, constant for the session. One native call per reply, or up to 8 when `parallel_tool_calls` is set. |
 | `two_step` | Small or unprofiled models (default when unknown) | 1. The prompt lists tools by name and one line; the model names **one**. 2. The next request carries that tool's flat schema and one example; the model fills the arguments. |
 | `fenced` | Models whose native tool calling is broken | Same two steps, but each reply is one fenced block with the same fields. The runtime parses the block. |
+
+When `parallel_tool_calls` is set, one native reply may contain up to 8 calls. thee runs them in order and counts the batch as one tool round. A successful `finish` ends the batch; later calls in that reply are not run. Calls that depend on an earlier result belong in a later turn. `two_step` and `fenced` stay one call per reply. Native models connected through `/providers` default the flag on. Manifest models and unknown models stay off unless the profile sets it.
 
 `two_step` costs about two model calls per tool. That is the price of reliability on small models, and it is why it is not the default for models that do not need it. Observability tracks `model_calls_per_tool` and malformed-call rate per model so the profile can be tuned (`thee models probe`).
 

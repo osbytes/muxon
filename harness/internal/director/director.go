@@ -385,6 +385,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				Ignore:        ign,
 				ToolRounds:    session.ToolRounds,
 				MaxToolRounds: caps.MaxToolRounds,
+				Parallel:      model.Capabilities.ParallelToolCalls,
 			})
 			if baselineNote != "" {
 				turn.Messages[len(turn.Messages)-1].Content = baselineNote + turn.Messages[len(turn.Messages)-1].Content
@@ -414,6 +415,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				ToolProtocol: model.Capabilities.ToolProtocol,
 				Phase:        phase,
 				Specs:        reg.Specs(),
+				Parallel:     model.Capabilities.ParallelToolCalls,
 			})
 			callCost, _ := router.CostUSD(rates, resp.Usage)
 			if id, werr := database.RecordTurn(sid, db.Turn{
@@ -461,7 +463,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					return finish(Outcome{State: StateFailed, Reason: "tool_parse_exhausted", ExitCode: 1}), err
 				}
 				if repair.ShouldRepair(err) {
-					msg := repair.RepairMessage()
+					msg := repair.RepairMessage(model.Capabilities.ParallelToolCalls)
 					history = append(history, msg)
 					appendMsg(msg)
 					continue
@@ -583,7 +585,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				if call.Name == "finish" && res.OK && session.FinishSummary != "" && cfg.OnAssistant != nil {
 					cfg.OnAssistant(session.FinishSummary)
 				}
-				if call.Name == "finish" {
+				if call.Name == "finish" && res.OK {
 					if session.PendingVerify {
 						emit(observability.StateTransitionEvent(state, StateVerifying, "finish"))
 						state = StateVerifying
@@ -591,10 +593,17 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 						emit(observability.StateTransitionEvent(state, StateDone, "finish"))
 						state = StateDone
 					}
-				} else {
-					emit(observability.StateTransitionEvent(state, StateActing, ""))
-					state = StateActing
+					for _, later := range out.Calls[i+1:] {
+						emit(observability.ToolCallEvent(later.Name))
+						if cfg.OnTool != nil {
+							cfg.OnTool(ToolActivity{Name: later.Name, Args: later.Arguments})
+						}
+						noteTool(later, tools.Fail(toolEnv, later.Name, "not run: finish was called earlier in this batch"))
+					}
+					break
 				}
+				emit(observability.StateTransitionEvent(state, StateActing, ""))
+				state = StateActing
 			}
 
 		case StateVerifying:

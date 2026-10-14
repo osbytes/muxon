@@ -101,3 +101,42 @@ func TestModelCommandOpensPicker(t *testing.T) {
 		t.Fatalf("view %s", m.View())
 	}
 }
+
+func TestConnectedProviderKeepsParallelAcrossModelSwitch(t *testing.T) {
+	manifest, err := config.LoadEmbeddedManifest()
+	if err != nil {
+		t.Fatal(err)
+	}
+	choice := ProviderChoice{
+		ID:        "opencode-go",
+		Title:     "OpenCode Go",
+		BaseURL:   "https://opencode.ai/zen/go/v1",
+		APIKeyEnv: "OPENCODE_API_KEY",
+		ModelID:   "opencode-go-luna",
+		ModelName: "gpt-6-luna",
+	}
+	installChoice(manifest, choice)
+	connected, err := manifest.ResolveModel(choice.ModelID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !connected.Capabilities.ParallelToolCalls || connected.Capabilities.ToolProtocol != "native" {
+		t.Fatalf("connected capabilities = %+v", connected.Capabilities)
+	}
+	installWorkerModel(manifest, choice.ID, choice.ModelName)
+	worker, err := manifest.ResolveRole("worker")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if worker.ID != choice.ModelID || !worker.Capabilities.ParallelToolCalls {
+		t.Fatalf("worker after connect = %+v", worker)
+	}
+	installWorkerModel(manifest, choice.ID, "gpt-6-luna-next")
+	switched, err := manifest.ResolveRole("worker")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if switched.Model != "gpt-6-luna-next" || !switched.Capabilities.ParallelToolCalls {
+		t.Fatalf("worker after /model = %+v", switched)
+	}
+}

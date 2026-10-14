@@ -294,10 +294,11 @@ func installChoice(manifest *config.Manifest, c ProviderChoice) {
 			Provider: c.ID,
 			Model:    c.ModelName,
 			Capabilities: config.Capabilities{
-				ContextWindow: 131072,
-				ToolProtocol:  "native",
-				EditFormat:    "search_replace",
-				PromptVariant: "compact",
+				ContextWindow:     131072,
+				ToolProtocol:      "native",
+				EditFormat:        "search_replace",
+				PromptVariant:     "compact",
+				ParallelToolCalls: true,
 			},
 		})
 		config.ApplyDefaults(&manifest.Models[len(manifest.Models)-1].Capabilities)

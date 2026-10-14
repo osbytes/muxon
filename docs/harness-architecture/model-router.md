@@ -26,7 +26,7 @@ Each model entry carries capability fields (schema in [providers.md](./providers
 | `tool_protocol` | `native` · `two_step` · `fenced` | How tools are offered and parsed ([tools/README.md](./tools/README.md#tool-calling-protocols)) |
 | `structured_output` | `json_schema` · `grammar` · `json_object` · `none` | Whether tool-call output is constrained at decode time ([Constrained decoding](./tools/README.md#constrained-decoding)) |
 | `text_tool_dialect` | `none` · `hermes` · `qwen_xml` · `json_block` · `auto` | Which in-text tool-call shapes the salvage parser looks for ([Salvage before repair](./tools/README.md#salvage-before-repair)) |
-| `parallel_tool_calls` | bool | Whether several calls per reply are accepted |
+| `parallel_tool_calls` | bool | Whether a native reply may contain up to 8 calls, run in order as one tool round. Off unless set. Native models connected through `/providers` default it on. |
 | `edit_format` | `udiff` · `search_replace` | Which `patch` schema the model sees ([patch](./tools/patch.md)) |
 | `vision` | bool | Whether `browser` screenshots are sent as images |
 | `reasoning` | `none` · `tokens` · `effort` | Reasoning params sent; reasoning tokens metered |
@@ -93,7 +93,7 @@ Escalate **worker → escalated** when any:
 
 Escalation is allowed only while `escalation_generation < max_escalations` (default 1) **and** the estimated cost of continuing on the escalated model fits the remaining dollar budget. Otherwise the trigger is recorded and the session director applies its caps, which end in `failed` rather than looping. See [session-director.md](./session-director.md#caps-and-budgets).
 
-On escalation, the escalated model inherits the compacted context, not the raw transcript. If its profile allows (`tool_protocol: native`, `parallel_tool_calls: true`), it may batch calls.
+On escalation, the escalated model inherits the compacted context, not the raw transcript. If its profile allows (`tool_protocol: native`, `parallel_tool_calls: true`), it may batch up to 8 calls in one reply. A successful `finish` ends that batch.
 
 De-escalate: after successful verify, next **new user goal** starts at worker.
 

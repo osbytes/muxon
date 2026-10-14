@@ -44,12 +44,13 @@ type ModelDef struct {
 
 // Capabilities holds model capability profile fields.
 type Capabilities struct {
-	ContextWindow int    `yaml:"context_window" json:"context_window"`
-	ToolProtocol  string `yaml:"tool_protocol" json:"tool_protocol"`
-	EditFormat    string `yaml:"edit_format" json:"edit_format"`
-	PromptVariant string `yaml:"prompt_variant" json:"prompt_variant"`
-	StructuredOut string `yaml:"structured_output" json:"structured_output"`
-	MaxOutput     int    `yaml:"max_output_tokens" json:"max_output_tokens"`
+	ContextWindow     int    `yaml:"context_window" json:"context_window"`
+	ToolProtocol      string `yaml:"tool_protocol" json:"tool_protocol"`
+	EditFormat        string `yaml:"edit_format" json:"edit_format"`
+	PromptVariant     string `yaml:"prompt_variant" json:"prompt_variant"`
+	StructuredOut     string `yaml:"structured_output" json:"structured_output"`
+	MaxOutput         int    `yaml:"max_output_tokens" json:"max_output_tokens"`
+	ParallelToolCalls bool   `yaml:"parallel_tool_calls" json:"parallel_tool_calls"`
 }
 
 // LoadEmbeddedManifest parses the shipped models.yaml.

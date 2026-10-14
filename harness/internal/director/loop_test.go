@@ -78,3 +78,15 @@ func TestPatchThrashFiresOnSecondRejection(t *testing.T) {
 		t.Fatal("different old text counted as the same rejection")
 	}
 }
+
+func TestDistinctReadsInOneBatchDoNotLoop(t *testing.T) {
+	d := &loopDetector{}
+	for i := 0; i < 8; i++ {
+		args := []byte(`{"path":"f` + string(rune('a'+i)) + `.go","start_line":1,"end_line":2}`)
+		d.RecordToolCall("read", args, 0)
+		d.RecordResult(provider.ToolCall{Name: "read", Arguments: args}, true)
+	}
+	if _, _, fire := d.Check(); fire {
+		t.Fatal("distinct reads in one batch fired a loop detector")
+	}
+}
