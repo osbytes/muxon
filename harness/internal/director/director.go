@@ -29,6 +29,7 @@ type Outcome struct {
 	State    string
 	Reason   string
 	ExitCode int
+	History  []provider.Message
 }
 
 // Config drives a director run.
@@ -49,9 +50,22 @@ type Config struct {
 	NoPlan              bool
 	OnEvent             func(observability.Event)
 	OnAssistant         func(text string)
+	OnTool              func(ToolActivity)
 	AskUser             func(ctx context.Context, question string, choices []string) (string, error)
 	ForceEscalate       bool
 	Interactive         bool
+	History             []provider.Message
+}
+
+// ToolActivity describes one tool call for live display. OnTool receives it
+// once before the tool runs (Done false) and once after (Done true). It is
+// never written to the trace, so arguments and output stay out of ZDR logs.
+type ToolActivity struct {
+	Name   string
+	Args   json.RawMessage
+	Done   bool
+	OK     bool
+	Output string
 }
 
 // Run executes the session state machine.
@@ -128,6 +142,10 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	var totals observability.UsageTotals
 	var malformed int
 	var loopsDetected int
+	history := append([]provider.Message(nil), cfg.History...)
+	if goal := strings.TrimSpace(cfg.Goal); goal != "" {
+		history = append(history, provider.Message{Role: "user", Content: goal})
+	}
 
 	emit := func(ev observability.Event) {
 		_ = tw.Append(ev)
@@ -136,6 +154,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		}
 	}
 	finish := func(o Outcome) Outcome {
+		o.History = append([]provider.Message(nil), history...)
 		emit(observability.SessionEndEvent(o.State, o.Reason, totals, session.ToolRounds, session.VerifyAttempts, session.EscalationsUsed, malformed, loopsDetected))
 		return o
 	}
@@ -220,7 +239,6 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	baseline.StartBaseline(ctx, ws.Root(), verifyArgv, eff.Baseline)
 
 	state := StateActing
-	history := []provider.Message{}
 	firstTurn := true
 	baselineNote := ""
 
@@ -276,6 +294,8 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				baselineNote = baseline.Note()
 				firstTurn = false
 			}
+			window := model.Capabilities.ContextWindow
+			history = contextengine.CompactHistory(history, contextengine.TurnInputBudget(window), window, estimator)
 			turn := contextengine.BuildTurn(contextengine.TurnInput{
 				Goal:          cfg.Goal,
 				History:       history,
@@ -296,7 +316,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			}
 			if !budget.FitsModelCall(turn.EstimatedInputTokens) {
 				if !budget.Compacted {
-					history = contextengine.CompactHistory(history, turn.EstimatedInputTokens/2, estimator)
+					history = contextengine.CompactHistory(history, turn.EstimatedInputTokens/2, model.Capabilities.ContextWindow, estimator)
 					budget.Compacted = true
 					continue
 				}
@@ -328,9 +348,13 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					if cfg.OnAssistant != nil {
 						cfg.OnAssistant(text)
 					}
+					history = append(history, provider.Message{Role: "assistant", Content: text})
 					emit(observability.StateTransitionEvent(state, StateDone, "answered"))
 					return finish(Outcome{State: StateDone, Reason: "answered", ExitCode: 0}), nil
 				}
+			}
+			if err != nil && !repairableToolErr(err) {
+				return finish(Outcome{State: StateFailed, Reason: "model_error", ExitCode: 1}), err
 			}
 			if err != nil {
 				malformed++
@@ -339,16 +363,17 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 						repair = RepairState{}
 						continue
 					}
-					return finish(Outcome{State: StateFailed, Reason: "tool_parse_exhausted", ExitCode: 1}), nil
+					return finish(Outcome{State: StateFailed, Reason: "tool_parse_exhausted", ExitCode: 1}), err
 				}
 				if repair.ShouldRepair(err) {
 					history = append(history, repair.RepairMessage())
 					continue
 				}
-				return finish(Outcome{State: StateFailed, Reason: "no_tool_call", ExitCode: 1}), nil
+				return finish(Outcome{State: StateFailed, Reason: "no_tool_call", ExitCode: 1}), err
 			}
 			repair = RepairState{}
-			if text := visibleAssistantText(out.Text); text != "" && cfg.OnAssistant != nil {
+			text := visibleAssistantText(out.Text)
+			if text != "" && cfg.OnAssistant != nil {
 				cfg.OnAssistant(text)
 			}
 			estimator.ObserveUsage(resp.Usage.InputTokens, turn.EstimatedInputTokens)
@@ -372,6 +397,12 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				history = append(history, provider.Message{Role: "user", Content: nudge})
 			}
 			history = contextengine.AppendAssistantToolCalls(history, out.Calls)
+			if text != "" && len(history) > 0 {
+				history[len(history)-1].Content = text
+			}
+			if n := len(history); n > 0 && len(resp.Replay) > 0 {
+				history[n-1].Replay = resp.Replay
+			}
 			emit(observability.StateTransitionEvent(state, StateTooling, ""))
 			state = StateTooling
 			session.ToolRounds++
@@ -390,11 +421,17 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				if err != nil {
 					return finish(Outcome{State: StateFailed, Reason: "unknown_tool", ExitCode: 1}), nil
 				}
+				if cfg.OnTool != nil {
+					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments})
+				}
 				res, err := tool.Run(ctx, toolEnv, call.Arguments)
 				if err != nil {
 					return finish(Outcome{State: StateFailed, Reason: "tool_error", ExitCode: 1}), err
 				}
 				emit(observability.ToolResultEvent(res.OK))
+				if cfg.OnTool != nil {
+					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments, Done: true, OK: res.OK, Output: res.Text})
+				}
 				history = contextengine.AppendToolResult(history, call.ID, call.Name, res.Text)
 				if call.Name == "patch" && res.OK {
 					var pa struct {

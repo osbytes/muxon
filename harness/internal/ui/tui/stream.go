@@ -8,17 +8,10 @@ import (
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
 )
 
-// FormatEvent returns one transcript line for tool and verify events.
+// FormatEvent returns one transcript line for verify and harness events.
+// Tool calls render from director.ToolActivity instead.
 func FormatEvent(ev observability.Event) (string, bool) {
 	switch ev.Type {
-	case "tool.call":
-		return fmt.Sprintf("▸ %s", ev.Name), true
-	case "tool.result":
-		status := "fail"
-		if ev.OK {
-			status = "ok"
-		}
-		return fmt.Sprintf("▸ result %s", status), true
 	case "verify.run":
 		status := "fail"
 		if ev.Passed {

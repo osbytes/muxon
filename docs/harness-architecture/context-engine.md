@@ -49,7 +49,7 @@ Small models follow short, concrete instructions better than long ones, and they
 | Examples | One complete worked turn: search, read, patch, finish, with real-looking arguments | None, or one in the step-2 schema only |
 | Step-2 schema | Flat schema, one filled example, and the field order the model should write | Schema only |
 | Repair message | The schema error, the bad field, and a corrected example | The schema error |
-| Answer style | "Reply with one tool call and nothing else." | Brief reasoning allowed before calls |
+| Answer style | Plain text is a valid reply. Short lines: answer in text; call a tool only to read or change files. | Same policy, with the reason on each line. |
 
 Variant text lives in versioned files shipped with the binary. Changing one is a prompt-layout change and re-records the replay fixtures ([observability.md](./observability.md#trace-replay-harness-self-tests)). Users can override a variant per model in the catalog, which is how a family with known quirks gets its own wording without a release.
 

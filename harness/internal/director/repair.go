@@ -1,10 +1,16 @@
 package director
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/thee/harness/internal/toolcall"
 )
+
+func repairableToolErr(err error) bool {
+	return errors.Is(err, toolcall.ErrNoToolCalls) || errors.Is(err, toolcall.ErrMultipleToolCalls)
+}
 
 // RepairState tracks one repair attempt per parse streak.
 type RepairState struct {

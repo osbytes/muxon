@@ -40,37 +40,48 @@ type Options struct {
 
 // Model is the Bubble Tea session UI.
 type Model struct {
-	opt           Options
-	input         textarea.Model
-	keyInput      textinput.Model
-	awaitingKey   string
-	pickerOpen    bool
-	pickerIndex   int
-	connecting    string
-	pendingGoal   string
-	asking        *askUserMsg
-	startCmd      tea.Cmd
-	viewport      viewport.Model
-	transcript    []string
-	state         string
-	taskType      string
-	rounds        int
-	verifies      int
-	inputTokens   int
-	outputTokens  int
-	cachedTokens  int
-	costUSD       float64
-	cost          string
-	modal         *Modal
-	forceEscalate bool
-	lastPatch     string
-	lastOutcome   director.Outcome
-	lastInterrupt time.Time
-	notice        string
-	width         int
-	height        int
-	run           *runCtrl
-	events        <-chan tea.Msg
+	opt                 Options
+	input               textarea.Model
+	keyInput            textinput.Model
+	awaitingKey         string
+	pickerOpen          bool
+	pickerIndex         int
+	connecting          string
+	pendingGoal         string
+	asking              *askUserMsg
+	startCmd            tea.Cmd
+	viewport            viewport.Model
+	transcript          []entry
+	history             []provider.Message
+	expandTools         bool
+	completeIndex       int
+	completeDismissed   bool
+	choice              ProviderChoice
+	modelChoices        []string
+	modelsLoading       bool
+	modelsAuthoritative bool
+	modelEpoch          int
+	modelPicker         bool
+	modelPickerIndex    int
+	state               string
+	taskType            string
+	rounds              int
+	verifies            int
+	inputTokens         int
+	outputTokens        int
+	cachedTokens        int
+	costUSD             float64
+	cost                string
+	modal               *Modal
+	forceEscalate       bool
+	lastPatch           string
+	lastOutcome         director.Outcome
+	lastInterrupt       time.Time
+	notice              string
+	width               int
+	height              int
+	run                 *runCtrl
+	events              <-chan tea.Msg
 }
 
 type runCtrl struct {
@@ -200,12 +211,19 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case providerConnected:
 		m.finishConnect(msg)
 		return m, nil
+	case modelsLoaded:
+		m.finishModels(msg)
+		m.layout()
+		return m, nil
 	case tea.KeyMsg:
 		if m.awaitingKey != "" {
 			return m.updateKeyPrompt(msg)
 		}
 		if m.pickerOpen {
 			return m.updatePicker(msg)
+		}
+		if m.modelPicker {
+			return m.updateModelPicker(msg)
 		}
 		if m.modal != nil && !m.modal.Done {
 			m.modal.Press(msg.String())
@@ -219,22 +237,39 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.Interrupt(time.Now())
 			return m, nil
 		}
+		if msg.String() == "ctrl+o" {
+			m.expandTools = !m.expandTools
+			m.syncViewport()
+			return m, nil
+		}
 		if m.inputBusy() {
 			return m, nil
+		}
+		if model, cmd, ok := m.updateComplete(msg); ok {
+			return model, cmd
 		}
 		if msg.String() == "enter" {
 			line := strings.TrimSpace(m.input.Value())
 			m.input.Reset()
+			m.completeIndex = 0
+			m.completeDismissed = false
 			return m.submit(line)
 		}
+		prev := m.input.Value()
 		var cmd tea.Cmd
 		m.input, cmd = m.input.Update(msg)
+		if m.input.Value() != prev {
+			cmd = tea.Batch(cmd, m.noteInputChange())
+		}
 		return m, cmd
 	case liveEvent:
 		m.applyEvent(msg.ev)
 		return m, listen(m.events)
 	case assistantLine:
 		m.appendLine("[assistant] " + msg.text)
+		return m, listen(m.events)
+	case toolMsg:
+		m.applyTool(msg.act)
 		return m, listen(m.events)
 	case askUserMsg:
 		m.asking = &msg
@@ -243,6 +278,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Batch(m.input.Focus(), listen(m.events))
 	case goalDone:
 		m.asking = nil
+		if len(msg.out.History) > 0 {
+			m.history = msg.out.History
+		}
 		m.lastOutcome = msg.out
 		if msg.out.State != "" {
 			m.state = msg.out.State
@@ -251,7 +289,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.appendLine(fmt.Sprintf("[%s] %s", msg.out.State, msg.out.Reason))
 		}
 		if msg.err != nil {
-			m.appendLine(msg.err.Error())
+			m.appendLine("[error] " + shortError(msg.err))
 		}
 		m.events = nil
 		cmd := m.input.Focus()
@@ -341,11 +379,17 @@ func (m Model) submit(line string) (tea.Model, tea.Cmd) {
 		case "providers":
 			cmd := m.providersCommand(slash.Rest)
 			return m, cmd
+		case "model":
+			cmd := m.modelCommand(slash.Rest)
+			return m, cmd
 		case "abort":
 			m.appendLine("cancelled")
 			m.lastOutcome = director.Outcome{State: director.StateCancelled, Reason: "user_cancel", ExitCode: 130}
 			m.state = director.StateCancelled
 			m.cancelRun()
+		case "exit":
+			m.cancelRun()
+			return m, func() tea.Msg { return tea.Quit() }
 		case "undo":
 			if m.lastPatch == "" {
 				m.appendLine("nothing to undo")
@@ -395,6 +439,7 @@ func (m Model) submit(line string) (tea.Model, tea.Cmd) {
 func (m *Model) startGoal(goal string, force bool) tea.Cmd {
 	opt := m.opt
 	trusted := m.trusted()
+	prior := append([]provider.Message(nil), m.history...)
 	events := make(chan tea.Msg, 32)
 	m.events = events
 	go func() {
@@ -415,11 +460,15 @@ func (m *Model) startGoal(goal string, force bool) tea.Cmd {
 			ForceEscalate:    force,
 			Interactive:      true,
 			RegisterAllTools: true,
+			History:          prior,
 			OnEvent: func(ev observability.Event) {
 				events <- liveEvent{ev: ev}
 			},
 			OnAssistant: func(text string) {
 				events <- assistantLine{text: text}
+			},
+			OnTool: func(act director.ToolActivity) {
+				events <- toolMsg{act: act}
 			},
 			AskUser: func(ctx context.Context, question string, choices []string) (string, error) {
 				reply := make(chan string, 1)
@@ -517,8 +566,40 @@ func (m *Model) Interrupt(now time.Time) {
 }
 
 func (m *Model) appendLine(line string) {
-	m.transcript = append(m.transcript, line)
+	m.transcript = append(m.transcript, entry{line: line})
 	m.syncViewport()
+}
+
+func (m *Model) applyTool(act director.ToolActivity) {
+	if hiddenTools[act.Name] {
+		return
+	}
+	if act.Done {
+		for i := len(m.transcript) - 1; i >= 0; i-- {
+			if tc := m.transcript[i].tool; tc != nil && tc.name == act.Name && !tc.done {
+				tc.finish(act)
+				m.syncViewport()
+				return
+			}
+		}
+	}
+	tc := newToolCall(act)
+	if act.Done {
+		tc.finish(act)
+	}
+	m.transcript = append(m.transcript, entry{tool: tc})
+	m.syncViewport()
+}
+
+func (m Model) transcriptText() string {
+	lines := make([]string, len(m.transcript))
+	for i, e := range m.transcript {
+		lines[i] = e.line
+		if e.tool != nil {
+			lines[i] = e.tool.title()
+		}
+	}
+	return strings.Join(lines, "\n")
 }
 
 const (
@@ -528,7 +609,7 @@ const (
 )
 
 func (m *Model) syncViewport() {
-	m.viewport.SetContent(renderTranscript(m.transcript, m.viewport.Width))
+	m.viewport.SetContent(renderTranscript(m.transcript, m.viewport.Width, m.expandTools))
 	m.viewport.GotoBottom()
 }
 
@@ -540,7 +621,7 @@ func (m *Model) layout() {
 	width := m.contentWidth()
 	height := max(m.height, 12)
 	m.viewport.Width = width
-	m.viewport.Height = max(height-chromeLines, 3)
+	m.viewport.Height = max(height-chromeLines-m.suggestionRows(), 3)
 	m.input.SetWidth(width - 4)
 	m.input.SetHeight(inputLines)
 	m.keyInput.Width = width - 6
@@ -557,6 +638,10 @@ func (m Model) statusText() string {
 		formatTokens(m.inputTokens), formatTokens(m.cachedTokens), formatTokens(m.outputTokens))
 }
 
+func shortError(err error) string {
+	return truncateRight(strings.Join(strings.Fields(err.Error()), " "), 240)
+}
+
 func formatTokens(n int) string {
 	if n >= 1000 {
 		return fmt.Sprintf("%.1fk", float64(n)/1000)
@@ -571,19 +656,24 @@ func (m Model) View() string {
 	switch {
 	case m.pickerOpen:
 		body = lipgloss.Place(width, m.viewport.Height, lipgloss.Center, lipgloss.Center, m.pickerView())
+	case m.modelPicker:
+		body = lipgloss.Place(width, m.viewport.Height, lipgloss.Center, lipgloss.Center, m.modelPickerView())
 	case m.modal != nil && !m.modal.Done:
 		body = lipgloss.Place(width, m.viewport.Height, lipgloss.Center, lipgloss.Center, m.modal.View())
 	case len(m.transcript) == 0:
 		body = lipgloss.Place(width, m.viewport.Height, lipgloss.Center, lipgloss.Center, m.welcomeView())
 	}
 	pad := lipgloss.NewStyle().PaddingLeft(sideMargin)
-	return strings.Join([]string{
+	parts := []string{
 		"",
 		pad.Render(body),
 		pad.Render(m.activityView()),
-		pad.Render(m.inputView(width)),
-		pad.Render(m.footerView(width)),
-	}, "\n")
+	}
+	if menu := m.suggestionView(width); menu != "" {
+		parts = append(parts, pad.Render(menu))
+	}
+	parts = append(parts, pad.Render(m.inputView(width)), pad.Render(m.footerView(width)))
+	return strings.Join(parts, "\n")
 }
 
 func (m Model) welcomeView() string {
@@ -612,7 +702,13 @@ func (m Model) activityView() string {
 	if m.inputBusy() {
 		return accentStyle.Render("● ") + textStyle.Render(m.state+"…") + mutedStyle.Render("   ctrl+c interrupt")
 	}
-	return mutedStyle.Render("enter send · alt+enter newline · /help commands")
+	if m.modelsLoading && wantsModelList(m.input.Value()) {
+		return mutedStyle.Render("loading models…")
+	}
+	if m.suggestionRows() > 0 {
+		return mutedStyle.Render("↑↓ select · tab complete · enter run · esc close")
+	}
+	return mutedStyle.Render("enter send · alt+enter newline · ctrl+o tool details · /help commands")
 }
 
 func (m Model) inputView(width int) string {

@@ -225,9 +225,25 @@ func (m *Model) finishConnect(msg providerConnected) {
 	m.opt.Provider = msg.provider
 	m.opt.ProviderID = msg.choice.ID
 	m.opt.Manifest = msg.manifest
-	m.opt.WorkerModel = msg.choice.ModelName
+	m.choice = msg.choice
+	m.modelEpoch++
+	m.modelsLoading = false
+	m.modelsAuthoritative = false
+	m.modelChoices = nil
+	m.modelPicker = false
+	model := msg.choice.ModelName
+	if config.LastProvider() == msg.choice.ID {
+		if saved := config.LastModel(); saved != "" {
+			model = saved
+		}
+	}
+	if err := m.applyWorkerModel(model); err != nil {
+		m.opt.WorkerModel = model
+		m.appendLine("[error] " + err.Error())
+	}
 	_ = config.SaveLastProvider(msg.choice.ID)
-	m.appendLine("[connected] " + msg.choice.Title + " · " + msg.choice.ModelName)
+	_ = config.SaveLastModel(m.opt.WorkerModel)
+	m.appendLine("[connected] " + msg.choice.Title + " · " + m.opt.WorkerModel)
 }
 
 // autoConnect reconnects the provider saved by the last session when its key is available.
