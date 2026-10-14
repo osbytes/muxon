@@ -55,6 +55,8 @@ type Config struct {
 	ForceEscalate       bool
 	Interactive         bool
 	History             []provider.Message
+	// replaceTools overwrites tools of the same name after registration.
+	replaceTools []tools.Tool
 }
 
 // ToolActivity describes one tool call for live display. OnTool receives it
@@ -183,6 +185,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		}
 		cp := NewCheckpointStore(ws.Root(), sid)
 		reg.Register(impl.NewCheckpoint(cp.RestoreLatest))
+	}
+	for _, extra := range cfg.replaceTools {
+		reg.Register(extra)
 	}
 
 	toolEnv := &tools.Env{
@@ -407,7 +412,23 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			state = StateTooling
 			session.ToolRounds++
 
-			for _, call := range out.Calls {
+			noteTool := func(call provider.ToolCall, res tools.Result) {
+				emit(observability.ToolResultEvent(res.OK))
+				if cfg.OnTool != nil {
+					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments, Done: true, OK: res.OK, Output: res.Text})
+				}
+				history = contextengine.AppendToolResult(history, call.ID, call.Name, res.Text)
+			}
+			rejectCall := func(call provider.ToolCall, msg string) {
+				if cfg.OnTool != nil {
+					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments})
+				}
+				noteTool(call, tools.Fail(toolEnv, call.Name, msg))
+				emit(observability.StateTransitionEvent(state, StateActing, ""))
+				state = StateActing
+			}
+
+			for i, call := range out.Calls {
 				if out.Salvaged {
 					emit(observability.ToolCallSalvagedEvent(call.Name))
 				} else {
@@ -415,24 +436,30 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				}
 				loops.RecordToolCall(call.Name, call.Arguments)
 				if err := reg.Check(call.Name, phase); err != nil {
-					return finish(Outcome{State: StateFailed, Reason: "phase_violation", ExitCode: 1}), nil
+					rejectCall(call, err.Error())
+					continue
 				}
 				tool, err := reg.Get(call.Name)
 				if err != nil {
-					return finish(Outcome{State: StateFailed, Reason: "unknown_tool", ExitCode: 1}), nil
+					rejectCall(call, err.Error())
+					continue
 				}
 				if cfg.OnTool != nil {
 					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments})
 				}
 				res, err := tool.Run(ctx, toolEnv, call.Arguments)
 				if err != nil {
+					noteTool(call, tools.Fail(toolEnv, call.Name, err.Error()))
+					for _, later := range out.Calls[i+1:] {
+						emit(observability.ToolCallEvent(later.Name))
+						if cfg.OnTool != nil {
+							cfg.OnTool(ToolActivity{Name: later.Name, Args: later.Arguments})
+						}
+						noteTool(later, tools.Fail(toolEnv, later.Name, "not run"))
+					}
 					return finish(Outcome{State: StateFailed, Reason: "tool_error", ExitCode: 1}), err
 				}
-				emit(observability.ToolResultEvent(res.OK))
-				if cfg.OnTool != nil {
-					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments, Done: true, OK: res.OK, Output: res.Text})
-				}
-				history = contextengine.AppendToolResult(history, call.ID, call.Name, res.Text)
+				noteTool(call, res)
 				if call.Name == "patch" && res.OK {
 					var pa struct {
 						Path string `json:"path"`

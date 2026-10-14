@@ -45,6 +45,7 @@ type commandDoc struct {
 var commandDocs = []commandDoc{
 	{"/providers", "connect a model provider (OpenCode Go, DeepInfra)"},
 	{"/model", "switch the worker model"},
+	{"/clear", "clear the current chat"},
 	{"/help", "show commands"},
 	{"/trust", "trust this workspace so goals can run"},
 	{"/cost", "session cost and tokens"},

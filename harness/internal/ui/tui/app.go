@@ -376,6 +376,10 @@ func (m Model) submit(line string) (tea.Model, tea.Cmd) {
 		switch slash.Name {
 		case "help":
 			m.appendLine(HelpText())
+		case "clear":
+			m.transcript = nil
+			m.history = nil
+			m.syncViewport()
 		case "providers":
 			cmd := m.providersCommand(slash.Rest)
 			return m, cmd
