@@ -104,7 +104,7 @@ func (tc *toolCall) summary() string {
 		return "running…"
 	}
 	if !tc.ok {
-		return firstLine(tc.output)
+		return firstLine(toolResultBody(tc.output))
 	}
 	n := countLines(tc.output)
 	switch tc.name {
@@ -217,6 +217,24 @@ func countLines(s string) int {
 		return 0
 	}
 	return strings.Count(s, "\n") + 1
+}
+
+func toolResultBody(s string) string {
+	const open = "<tool_result"
+	start := strings.Index(s, open)
+	if start < 0 {
+		return s
+	}
+	rest := s[start:]
+	nl := strings.IndexByte(rest, '\n')
+	if nl < 0 {
+		return s
+	}
+	body := rest[nl+1:]
+	if end := strings.LastIndex(body, "</tool_result>"); end >= 0 {
+		body = body[:end]
+	}
+	return strings.TrimSpace(body)
 }
 
 func firstLine(s string) string {
