@@ -1,5 +1,11 @@
 {
   "id": "dep-bump-001",
-  "prompt": "bump the uuid dependency in go.mod",
-  "fixture": "dep-bump"
+  "prompt": "bump the uuid dependency in go.mod to a version newer than v1.6.0",
+  "fixture": "dep-bump",
+  "check": {
+    "cmd": ["python3", "check_mod.py"],
+    "files": "checks/dep-bump-001"
+  },
+  "timeout_s": 600,
+  "tags": ["go", "deps"]
 }

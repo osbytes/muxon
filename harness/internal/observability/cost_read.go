@@ -20,6 +20,9 @@ type SessionCostSummary struct {
 	Escalations        int
 	MalformedToolCalls int
 	LoopsDetected      int
+	SalvagedToolCalls  int
+	PatchApplies       int
+	WellFormedPatches  int
 }
 
 // ReadLatestSessionCost reads the newest session trace under workspace/.thee/sessions.
@@ -52,13 +55,27 @@ func ReadSessionCost(tracePath string) (SessionCostSummary, string, error) {
 	}
 	defer f.Close()
 	var sum SessionCostSummary
+	var salvaged, patches, wellFormed int
 	sc := bufio.NewScanner(f)
 	for sc.Scan() {
 		var ev Event
 		if err := json.Unmarshal(sc.Bytes(), &ev); err != nil {
 			continue
 		}
-		if ev.Type == "session.end" {
+		switch ev.Type {
+		case "tool.call":
+			if ev.Salvaged {
+				salvaged++
+			}
+		case "tool.result":
+			if ev.ApplyStrategy == "" {
+				continue
+			}
+			patches++
+			if ev.ApplyStrategy == "exact" || ev.ApplyStrategy == "whitespace" {
+				wellFormed++
+			}
+		case "session.end":
 			sum = SessionCostSummary{
 				InputTokens:        ev.InputTokens,
 				OutputTokens:       ev.OutputTokens,
@@ -73,5 +90,8 @@ func ReadSessionCost(tracePath string) (SessionCostSummary, string, error) {
 			}
 		}
 	}
+	sum.SalvagedToolCalls = salvaged
+	sum.PatchApplies = patches
+	sum.WellFormedPatches = wellFormed
 	return sum, tracePath, sc.Err()
 }

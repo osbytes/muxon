@@ -1,0 +1,8 @@
+{
+  "id": "wrong-const-001",
+  "prompt": "set Version to 1",
+  "fixture": "wrong-const",
+  "check": {"cmd": ["go", "test", "."], "files": "checks/wrong-const-001"},
+  "timeout_s": 600,
+  "tags": ["go", "fix"]
+}

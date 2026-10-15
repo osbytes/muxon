@@ -1,0 +1,39 @@
+name: Eval basket
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 1"
+
+jobs:
+  basket:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: harness
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24.x"
+          cache-dependency-path: harness/go.sum
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - run: go build -o thee ./cmd/thee
+      - name: DeepInfra basket
+        env:
+          DEEPINFRA_API_KEY: ${{ secrets.DEEPINFRA_API_KEY }}
+        run: |
+          ./thee eval basket \
+            --matrix testdata/eval/matrix-ci.yaml \
+            --tasks 'testdata/eval/*.json' \
+            --trials 1 \
+            --concurrency 2 \
+            --budget-usd 5 \
+            --trust \
+            --out "$GITHUB_WORKSPACE/.thee/eval"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-runs
+          path: .thee/eval/runs

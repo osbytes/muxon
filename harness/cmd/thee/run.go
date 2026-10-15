@@ -182,16 +182,22 @@ func appendEvalRow(workspace, taskPath, modelID string, out director.Outcome, st
 	if out.State == director.StateDone {
 		reward = 1
 	}
-	return eval.AppendResult(workspace, eval.ResultRow{
-		TaskID:       task.ID,
-		Trial:        1,
-		Reward:       reward,
-		ModelID:      modelID,
-		InputTokens:  sum.InputTokens,
-		OutputTokens: sum.OutputTokens,
-		CachedTokens: sum.CachedTokens,
-		CostUSD:      sum.TotalCostUSD,
-		WallS:        time.Since(start).Seconds(),
+	return eval.AppendResult(filepath.Join(workspace, ".thee", "eval", "results.jsonl"), eval.ResultRow{
+		TaskID:             task.ID,
+		Trial:              1,
+		Reward:             reward,
+		ModelID:            modelID,
+		InputTokens:        sum.InputTokens,
+		OutputTokens:       sum.OutputTokens,
+		CachedTokens:       sum.CachedTokens,
+		CostUSD:            sum.TotalCostUSD,
+		ToolRounds:         sum.ToolRounds,
+		Escalations:        sum.Escalations,
+		MalformedToolCalls: sum.MalformedToolCalls,
+		SalvagedToolCalls:  sum.SalvagedToolCalls,
+		LoopsDetected:      sum.LoopsDetected,
+		Reason:             out.Reason,
+		WallS:              time.Since(start).Seconds(),
 	})
 }
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -11,46 +10,45 @@ import (
 	"github.com/PLACEHOLDER/thee/harness/internal/director"
 	"github.com/PLACEHOLDER/thee/harness/internal/eval"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
 )
 
 func TestEvalRunWritesReward(t *testing.T) {
 	home := t.TempDir()
 	t.Setenv("THEE_HOME", home)
-	workDir := testutil.CopyFixture(t, "go-failing-test")
+	results := filepath.Join(t.TempDir(), "results.jsonl")
 	task := eval.Task{
 		ID:      "fix-test-001",
 		Prompt:  "fix the failing test",
 		Fixture: "go-failing-test",
 	}
-	out, err := runEvalTask(context.Background(), task, workDir, scripted.New(director.M0ScriptedResponses()), true)
+	res, err := eval.RunTrial(context.Background(), task, eval.TrialOptions{
+		Provider:    scripted.New(director.M0ScriptedResponses()),
+		Trusted:     true,
+		ResultsPath: results,
+		Timeout:     0,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if out.State != director.StateDone {
-		t.Fatalf("%+v", out)
+	if res.Outcome.State != director.StateDone {
+		t.Fatalf("%+v", res.Outcome)
 	}
-	resultsPath := filepath.Join(workDir, ".thee", "eval", "results.jsonl")
-	data, err := os.ReadFile(resultsPath)
+	if res.Row.Reward != 1 {
+		t.Fatalf("%+v", res.Row)
+	}
+	data, err := os.ReadFile(results)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !strings.Contains(string(data), `"reward":1`) {
 		t.Fatalf("%s", data)
 	}
-	var row eval.ResultRow
-	if err := json.Unmarshal([]byte(strings.TrimSpace(string(data))), &row); err != nil {
-		t.Fatal(err)
-	}
-	if row.Reward != 1 {
-		t.Fatalf("%+v", row)
-	}
-	rows, err := eval.LoadResults(resultsPath)
+	rows, err := eval.LoadResults(results)
 	if err != nil {
 		t.Fatal(err)
 	}
 	report := eval.FormatReport(rows)
-	if !strings.Contains(report, "pass_rate 1.000") {
+	if !strings.Contains(report, "pass rate        1.000") {
 		t.Fatalf("%s", report)
 	}
 }

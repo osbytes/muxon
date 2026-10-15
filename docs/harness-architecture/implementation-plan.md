@@ -813,7 +813,7 @@ Add director replay test in **Part 5** before TUI (step 5.13).
 |------|------------|
 | Small model cannot complete loop | M0/M1 live smokes; stop if M1 fails |
 | `two_step` latency | `model_calls_per_tool`; probe one-step `oneOf` (9.3) |
-| Polyglot index | Go-first (D12); search still works |
+| Multi-language index | Go-first (D12); search still works |
 | Ollama truncation | `num_ctx`, probe, step 4.9 |
 | Scope creep | Out-of-scope table; stub `full` tools |
 | Prompt drift | Goldens + replay hash (9.1) |

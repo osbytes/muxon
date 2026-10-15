@@ -20,9 +20,10 @@ type Event struct {
 	From string `json:"from,omitempty"`
 	To   string `json:"to,omitempty"`
 
-	Name     string `json:"name,omitempty"`
-	OK       bool   `json:"ok,omitempty"`
-	Salvaged bool   `json:"salvaged,omitempty"`
+	Name          string `json:"name,omitempty"`
+	OK            bool   `json:"ok,omitempty"`
+	Salvaged      bool   `json:"salvaged,omitempty"`
+	ApplyStrategy string `json:"apply_strategy,omitempty"`
 
 	Command    []string `json:"command,omitempty"`
 	ExitCode   int      `json:"exit_code,omitempty"`
@@ -126,8 +127,8 @@ func TruncatedByServerEvent() Event {
 	return Event{Type: "truncated_by_server"}
 }
 
-func ToolResultEvent(ok bool) Event {
-	return Event{Type: "tool.result", OK: ok}
+func ToolResultEvent(ok bool, applyStrategy string) Event {
+	return Event{Type: "tool.result", OK: ok, ApplyStrategy: applyStrategy}
 }
 
 func VerifyRunEvent(cmd []string, exitCode int, passed bool, durationMS int64) Event {

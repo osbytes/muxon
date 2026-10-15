@@ -9,16 +9,18 @@ const (
 )
 
 var planningTools = map[string]bool{
-	"search":   true,
-	"list":     true,
-	"read":     true,
-	"repo-map": true,
-	"ask_user": true,
+	"search":     true,
+	"web_search": true,
+	"list":       true,
+	"read":       true,
+	"repo-map":   true,
+	"ask_user":   true,
 }
 
 var editingTools = map[string]bool{
 	"read":       true,
 	"search":     true,
+	"web_search": true,
 	"patch":      true,
 	"write":      true,
 	"delete":     true,

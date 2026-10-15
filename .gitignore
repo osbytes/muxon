@@ -16,6 +16,7 @@
 
 # Harness runtime
 .thee/
+/dist/
 
 # Env / secrets
 .env

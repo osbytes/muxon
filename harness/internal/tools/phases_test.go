@@ -11,3 +11,11 @@ func TestPatchRejectedInPlanning(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestWebSearchAllowedInBothPhases(t *testing.T) {
+	for _, phase := range []string{PhasePlanning, PhaseEditing} {
+		if err := CheckPhase(phase, "web_search"); err != nil {
+			t.Errorf("web_search rejected in %s: %v", phase, err)
+		}
+	}
+}

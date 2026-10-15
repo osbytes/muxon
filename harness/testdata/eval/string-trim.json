@@ -1,0 +1,8 @@
+{
+  "id": "string-trim-001",
+  "prompt": "Clean should trim leading and trailing spaces",
+  "fixture": "string-trim",
+  "check": {"cmd": ["go", "test", "."], "files": "checks/string-trim-001"},
+  "timeout_s": 600,
+  "tags": ["go", "fix"]
+}

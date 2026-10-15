@@ -1,0 +1,8 @@
+{
+  "id": "map-default-001",
+  "prompt": "Label should return unknown when the key is missing, and alpha for a",
+  "fixture": "map-default",
+  "check": {"cmd": ["go", "test", "."], "files": "checks/map-default-001"},
+  "timeout_s": 600,
+  "tags": ["go", "fix"]
+}

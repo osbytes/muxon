@@ -64,5 +64,7 @@ func (patchTool) Run(ctx context.Context, env *tools.Env, args json.RawMessage) 
 		return tools.Fail(env, "patch", err.Error()), nil
 	}
 	verifier.NoteTestEdit(env.Session, a.Path)
-	return tools.OK(env, "patch", "patched "+a.Path+" ("+strategy+")", 0, 0), nil
+	res := tools.OK(env, "patch", "patched "+a.Path+" ("+strategy+")", 0, 0)
+	res.ApplyStrategy = strategy
+	return res, nil
 }

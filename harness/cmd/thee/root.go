@@ -8,8 +8,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "thee",
-	Short: "thee coding agent harness",
+	Use:          "thee",
+	Short:        "thee coding agent harness",
+	SilenceUsage: true,
 }
 
 func execute() error {

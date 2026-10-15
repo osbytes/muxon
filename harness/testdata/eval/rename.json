@@ -1,5 +1,11 @@
 {
   "id": "rename-001",
-  "prompt": "rename OldName to NewName",
-  "fixture": "rename-symbol"
+  "prompt": "rename OldName to NewName and return \"new\"",
+  "fixture": "rename-symbol",
+  "check": {
+    "cmd": ["go", "test", "."],
+    "files": "checks/rename-001"
+  },
+  "timeout_s": 600,
+  "tags": ["go", "rename"]
 }

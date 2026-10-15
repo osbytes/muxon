@@ -1,5 +1,11 @@
 {
   "id": "lint-two-file-001",
-  "prompt": "fix the two-file lint so A and B stay consistent",
-  "fixture": "lint-two-file"
+  "prompt": "make A and B return the same value, and make that value 1",
+  "fixture": "lint-two-file",
+  "check": {
+    "cmd": ["go", "test", "."],
+    "files": "checks/lint-two-file-001"
+  },
+  "timeout_s": 600,
+  "tags": ["go", "lint"]
 }

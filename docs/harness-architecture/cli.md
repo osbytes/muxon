@@ -57,7 +57,7 @@ thee trust list|add|rm        # ~/.thee/trust.json
 thee memory list|show|rm|review
 
 thee trace export|record|replay
-thee eval run|report          # basket + results.jsonl
+thee eval run|basket|report|compare|export-swebench
 thee gc                       # prune old shadow refs / sessions
 
 thee serve [flags]            # v1 stub or minimal JSONL; full protocol later

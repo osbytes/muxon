@@ -1,0 +1,8 @@
+{
+  "id": "question-sum-001",
+  "prompt": "Write the answer to 2+3 into answer.txt. The file should contain only the digits of the answer.",
+  "fixture": "question-sum",
+  "check": {"cmd": ["python3", "check_answer.py"], "files": "checks/question-sum-001"},
+  "timeout_s": 600,
+  "tags": ["question"]
+}
