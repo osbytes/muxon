@@ -106,6 +106,31 @@ func TestBuildTurnShowsRoundsAndActiveTools(t *testing.T) {
 	}
 }
 
+func TestParallelCatalogChangesPrefix(t *testing.T) {
+	in := TurnInput{
+		Goal:          "fix it",
+		ToolProtocol:  "native",
+		ToolSpecs:     []tools.Spec{{Name: "read", Description: "read"}},
+		ContextWindow: 32768,
+	}
+	off := messageText(BuildTurn(in).Messages)
+	if !strings.Contains(off, "call one tool per turn") {
+		t.Fatalf("catalog = %s", off)
+	}
+	h1 := PrefixHashForSession(in)
+	if PrefixHashForSession(in) != h1 {
+		t.Fatal("prefix hash changed with the same parallel flag")
+	}
+	in.Parallel = true
+	on := messageText(BuildTurn(in).Messages)
+	if !strings.Contains(on, "up to 8 independent tools") {
+		t.Fatalf("parallel catalog = %s", on)
+	}
+	if PrefixHashForSession(in) == h1 {
+		t.Fatal("turning parallel on left the prefix hash unchanged")
+	}
+}
+
 func TestPrefixHashStableSameSession(t *testing.T) {
 	dir := t.TempDir()
 	in := TurnInput{

@@ -22,7 +22,7 @@ type RenderedPrompt struct {
 }
 
 // RenderVariant loads embedded templates and builds the tool catalog.
-func RenderVariant(variant string, specs []tools.Spec) (RenderedPrompt, error) {
+func RenderVariant(variant string, specs []tools.Spec, parallel bool) (RenderedPrompt, error) {
 	if variant == "" {
 		variant = VariantCompact
 	}
@@ -33,7 +33,7 @@ func RenderVariant(variant string, specs []tools.Spec) (RenderedPrompt, error) {
 	}
 	out := RenderedPrompt{
 		SystemRules: strings.TrimSpace(string(rules)),
-		ToolCatalog: renderCatalog(specs, variant),
+		ToolCatalog: renderCatalog(specs, variant, parallel),
 	}
 	if variant == VariantCompact {
 		ex, err := fs.ReadFile(assets.PromptFS, "prompts/compact/example_two_step.tmpl")
@@ -45,7 +45,7 @@ func RenderVariant(variant string, specs []tools.Spec) (RenderedPrompt, error) {
 	return out, nil
 }
 
-func renderCatalog(specs []tools.Spec, variant string) string {
+func renderCatalog(specs []tools.Spec, variant string, parallel bool) string {
 	var b strings.Builder
 	b.WriteString("Tool catalog:\n")
 	for _, s := range specs {
@@ -56,7 +56,11 @@ func renderCatalog(specs []tools.Spec, variant string) string {
 		b.WriteString(line)
 		b.WriteByte('\n')
 	}
-	b.WriteString("Protocol: call one tool per turn with valid JSON arguments.\n")
+	if parallel {
+		b.WriteString("Protocol: you may call up to 8 independent tools in one turn (for example several reads or searches). Call dependent tools in later turns.\n")
+	} else {
+		b.WriteString("Protocol: call one tool per turn with valid JSON arguments.\n")
+	}
 	return b.String()
 }
 

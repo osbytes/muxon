@@ -16,7 +16,7 @@ func TestCompactSystemGoldenHash(t *testing.T) {
 		{Name: "read", Description: "Read file lines"},
 		{Name: "patch", Description: "Apply patch"},
 	}
-	r, err := RenderVariant(VariantCompact, specs)
+	r, err := RenderVariant(VariantCompact, specs, false)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func TestStandardSystemGoldenHash(t *testing.T) {
 		{Name: "read", Description: "Read file lines"},
 		{Name: "patch", Description: "Apply patch"},
 	}
-	r, err := RenderVariant(VariantStandard, specs)
+	r, err := RenderVariant(VariantStandard, specs, false)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -72,7 +72,7 @@ func TestStandardSystemGoldenHash(t *testing.T) {
 func TestRulesAllowTextReply(t *testing.T) {
 	for _, variant := range []string{VariantCompact, VariantStandard} {
 		t.Run(variant, func(t *testing.T) {
-			r, err := RenderVariant(variant, nil)
+			r, err := RenderVariant(variant, nil, false)
 			if err != nil {
 				t.Fatalf("RenderVariant(%q) error = %v", variant, err)
 			}
@@ -86,7 +86,7 @@ func TestRulesAllowTextReply(t *testing.T) {
 }
 
 func TestStandardRendersWithoutExample(t *testing.T) {
-	r, err := RenderVariant(VariantStandard, []tools.Spec{{Name: "read", Description: "read"}})
+	r, err := RenderVariant(VariantStandard, []tools.Spec{{Name: "read", Description: "read"}}, false)
 	if err != nil {
 		t.Fatal(err)
 	}

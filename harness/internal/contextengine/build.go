@@ -30,6 +30,7 @@ type TurnInput struct {
 	Ignore        *security.IgnoreRules
 	ToolRounds    int
 	MaxToolRounds int
+	Parallel      bool
 }
 
 // TurnOutput is assembled messages and optional native tools.
@@ -52,7 +53,7 @@ func BuildTurn(in TurnInput) TurnOutput {
 	if variant == "" {
 		variant = VariantCompact
 	}
-	rendered, err := RenderVariant(variant, in.ToolSpecs)
+	rendered, err := RenderVariant(variant, in.ToolSpecs, in.Parallel)
 	if err != nil {
 		rendered = RenderedPrompt{SystemRules: "You are thee.", ToolCatalog: "Tools available."}
 	}
