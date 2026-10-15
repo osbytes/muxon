@@ -206,6 +206,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	reg.Register(impl.NewFinish())
 	if cfg.RegisterAllTools {
 		reg.Register(impl.NewSearch())
+		reg.Register(impl.NewWebSearch())
 		reg.Register(impl.NewList())
 		reg.Register(impl.NewWrite())
 		reg.Register(impl.NewDelete())
@@ -512,7 +513,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 
 			noteTool := func(call provider.ToolCall, res tools.Result) {
 				loops.RecordResult(call, res.OK)
-				emit(observability.ToolResultEvent(res.OK))
+				emit(observability.ToolResultEvent(res.OK, res.ApplyStrategy))
 				if cfg.OnTool != nil {
 					cfg.OnTool(ToolActivity{Name: call.Name, Args: call.Arguments, Done: true, OK: res.OK, Output: res.Text})
 				}

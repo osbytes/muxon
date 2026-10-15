@@ -86,6 +86,13 @@ func ResolveProviderKey(envName, providerID string) (string, error) {
 		if v, err := secrets.Get(keyringService, providerID); err == nil && v != "" {
 			return v, nil
 		}
+		v, err := OpenCodeAuthKey(providerID)
+		if err != nil {
+			return "", err
+		}
+		if v != "" {
+			return v, nil
+		}
 	}
 	if envName == "" {
 		return "", fmt.Errorf("missing API key")

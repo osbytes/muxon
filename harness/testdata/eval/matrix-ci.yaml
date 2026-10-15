@@ -1,0 +1,10 @@
+# DeepInfra-only slice used by the weekly workflow. Frontier stays on the full matrix.
+models:
+  - model_id: qwen3-9b
+    overrides:
+      tool_protocol: two_step
+      prompt_variant: compact
+  - model_id: qwen3-32b
+    overrides:
+      tool_protocol: native
+      prompt_variant: compact

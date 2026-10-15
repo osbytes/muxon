@@ -10,6 +10,7 @@ import (
 
 	"github.com/PLACEHOLDER/thee/harness/internal/config"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/thee/harness/internal/provider/openai"
 )
 
 func TestWorkerProviderSendsBoundModelID(t *testing.T) {
@@ -48,5 +49,31 @@ func TestWorkerProviderSendsBoundModelID(t *testing.T) {
 	_, err = p.Complete(context.Background(), provider.Request{ModelID: b.Model.Model, Messages: []provider.Message{{Role: "user", Content: "hi"}}})
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestOpenCodeProviderSetsSessionHeader(t *testing.T) {
+	t.Setenv("TEST_API_KEY", "secret-not-logged")
+	m := &config.Manifest{
+		Providers: map[string]config.ProviderDef{
+			"opencode-go": {BaseURL: "https://opencode.ai/zen/go/v1", APIKeyEnv: "TEST_API_KEY"},
+		},
+		Roles: map[string]config.RoleDef{
+			"worker": {ModelID: "kimi"},
+		},
+		Models: []config.ModelDef{{
+			ID: "kimi", Provider: "opencode-go", Model: "kimi-k2.7-code",
+		}},
+	}
+	p, _, err := NewProviderForRole(m, "worker", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	client, ok := p.(*openai.Client)
+	if !ok {
+		t.Fatalf("provider type %T", p)
+	}
+	if client.Headers["x-opencode-session"] == "" {
+		t.Fatal("missing x-opencode-session")
 	}
 }

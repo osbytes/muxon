@@ -1,0 +1,8 @@
+{
+  "id": "py-sign-001",
+  "prompt": "sign should return 1 for positive numbers, -1 for negative numbers, and 0 for zero",
+  "fixture": "py-sign",
+  "check": {"cmd": ["python3", "-m", "unittest", "test_sign"], "files": "checks/py-sign-001"},
+  "timeout_s": 600,
+  "tags": ["python", "fix"]
+}

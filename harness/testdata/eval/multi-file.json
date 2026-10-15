@@ -1,0 +1,8 @@
+{
+  "id": "multi-file-001",
+  "prompt": "Double should return twice its argument. Add is already correct.",
+  "fixture": "multi-file",
+  "check": {"cmd": ["go", "test", "."], "files": "checks/multi-file-001"},
+  "timeout_s": 600,
+  "tags": ["go", "multi-file"]
+}

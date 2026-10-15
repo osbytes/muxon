@@ -2,10 +2,12 @@ package router
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/PLACEHOLDER/thee/harness/internal/config"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider/openai"
+	"github.com/PLACEHOLDER/thee/harness/internal/session"
 )
 
 // NewProvider builds a provider client for a binding.
@@ -16,7 +18,11 @@ func NewProvider(b *Binding) (provider.Provider, error) {
 		if err != nil {
 			return nil, err
 		}
-		return openai.NewClient(b.Provider.BaseURL, key), nil
+		client := openai.NewClient(b.Provider.BaseURL, key)
+		if strings.Contains(b.Provider.BaseURL, "opencode.ai") {
+			client.Headers = map[string]string{"x-opencode-session": session.NewID()}
+		}
+		return client, nil
 	default:
 		return nil, fmt.Errorf("unsupported provider api %q", b.Provider.API)
 	}

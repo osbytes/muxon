@@ -10,8 +10,9 @@ import (
 
 // Result is returned to the model from a tool.
 type Result struct {
-	OK   bool
-	Text string
+	OK            bool
+	Text          string
+	ApplyStrategy string
 }
 
 // WorkspaceOps is implemented by workspace.Workspace.

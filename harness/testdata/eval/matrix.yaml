@@ -1,0 +1,14 @@
+# Model matrix for thee eval basket. Prices are pinned in models.yaml (2026-10-14).
+models:
+  - model_id: qwen3-9b
+    overrides:
+      tool_protocol: two_step
+      prompt_variant: compact
+  - model_id: qwen3-32b
+    overrides:
+      tool_protocol: native
+      prompt_variant: compact
+  - model_id: gpt-5
+    overrides:
+      tool_protocol: native
+      prompt_variant: standard

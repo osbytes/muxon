@@ -105,6 +105,7 @@ Results stay shaped and capped: a hit list, a diff stat, an exit code and the la
 | Tool | What it does |
 |------|----------------|
 | [test](./test.md) | Run a targeted subset of the project's tests |
+| `web_search` | Search the public web and return a capped list of links and snippets |
 | [shell](./shell.md) | Run one command (debug, `full` tier) |
 | [process](./process.md) | Start a long-running process and read it later |
 | [browser](./browser.md) | Fetch a URL or drive a page |

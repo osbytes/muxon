@@ -75,10 +75,12 @@ Session: 4.2M in (3.1M cached) / 180k out (40k reasoning)  ~$1.14  (worker 92%, 
 
 ## Eval integration
 
-- Headless `thee run --eval tasks/fix-test-001.json` appends result row to `.thee/eval/results.jsonl`, built from `session.end`.
-- Nightly: run basket against pinned `models.yaml` on DeepInfra **flex** tier.
-- The basket always runs a **model matrix**, not one model: the default worker, one model around 27–32B, one around 8B, one local model behind Ollama or llama.cpp, and one frontier model as the reference. The small-model claim is only as good as the smallest row, and a harness change that helps the frontier row while hurting the 8B row is a regression.
-- How those rows become a score, and how SWE-bench and Terminal-Bench get graded outside this binary: [benchmarks.md](../benchmarks.md).
+- `thee eval run task.json` copies the fixture into a fresh temp workspace, runs the director, then runs the task's hidden `check` (files copied in only after the agent exits). Reward is 1 only when that check exits 0. A timeout is reward 0 with `timeout_hit`.
+- `thee eval basket --matrix testdata/eval/matrix.yaml --trials 3` writes `.thee/eval/runs/<run-id>/results.jsonl` and `run.json`. `--budget-usd` stops scheduling once spent cost reaches the cap.
+- `thee eval report <run-id>` groups by model and capability overrides and prints a task-clustered 95% bootstrap interval. `thee eval compare <run-a> <run-b>` pairs tasks and prints an exact McNemar p-value.
+- `thee run --eval tasks/fix-test-001.json` still appends one row to the workspace `.thee/eval/results.jsonl` from `session.end`. That path is not the hidden grader.
+- Weekly workflow (`.github/workflows/eval.yml`) runs the DeepInfra slice. The frontier row is manual. A harness change that helps the frontier row while hurting the 9B row is a regression.
+- How those rows become a score, and how SWE-bench gets graded outside this binary: [benchmarks.md](../benchmarks.md).
 
 Trace schema subset aligned with opencode-harness ideas (compatibility optional).
 

@@ -179,6 +179,6 @@ Everything the harness needs to make a small model do real work, grouped by the 
 | Workspace trust, tiers, argv-only exec, sandbox | Goose, Codex, DvalinCode | [security-and-policy.md](./security-and-policy.md) |
 | Untrusted-content wrapping and taint gating | Prompt-injection research | [security-and-policy.md](./security-and-policy.md#prompt-injection) |
 | JSONL traces and trace replay tests | opencode-harness, Agent AFK | [observability.md](./observability.md) |
-| Eval basket across a model matrix, plus public benches | Aider polyglot, Harbor, SWE-bench | [benchmarks.md](../benchmarks.md) |
+| Eval basket across a model matrix, plus public benches | SWE-bench | [benchmarks.md](../benchmarks.md) |
 
 Decisions behind these choices: [adrs.md](./adrs.md).

@@ -1,0 +1,8 @@
+{
+  "id": "missing-func-001",
+  "prompt": "add a Greeter function that returns hi",
+  "fixture": "missing-func",
+  "check": {"cmd": ["go", "test", "."], "files": "checks/missing-func-001"},
+  "timeout_s": 600,
+  "tags": ["go", "feature"]
+}

@@ -1,5 +1,11 @@
 {
   "id": "feature-add-001",
   "prompt": "make Enabled return true so the existing test passes",
-  "fixture": "small-feature"
+  "fixture": "small-feature",
+  "check": {
+    "cmd": ["go", "test", "."],
+    "files": "checks/feature-add-001"
+  },
+  "timeout_s": 600,
+  "tags": ["go", "feature"]
 }

@@ -1,5 +1,11 @@
 {
   "id": "fix-test-001",
   "prompt": "fix the failing test",
-  "fixture": "go-failing-test"
+  "fixture": "go-failing-test",
+  "check": {
+    "cmd": ["go", "test", "."],
+    "files": "checks/fix-test-001"
+  },
+  "timeout_s": 600,
+  "tags": ["go", "fix"]
 }

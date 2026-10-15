@@ -1,0 +1,11 @@
+# OpenCode Go models. The key is read from OPENCODE_API_KEY, then
+# ~/.local/share/opencode/auth.json under the provider id opencode-go.
+models:
+  - model_id: opencode-go-kimi
+    overrides:
+      tool_protocol: native
+      prompt_variant: compact
+  - model_id: opencode-go-luna
+    overrides:
+      tool_protocol: native
+      prompt_variant: standard

@@ -1,0 +1,8 @@
+{
+  "id": "py-add-001",
+  "prompt": "make add return the sum of its arguments",
+  "fixture": "py-add",
+  "check": {"cmd": ["python3", "-m", "unittest", "test_add"], "files": "checks/py-add-001"},
+  "timeout_s": 600,
+  "tags": ["python", "fix"]
+}

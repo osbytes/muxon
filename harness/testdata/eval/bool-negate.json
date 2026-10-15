@@ -1,0 +1,8 @@
+{
+  "id": "bool-negate-001",
+  "prompt": "Not should return the boolean opposite of its argument",
+  "fixture": "bool-negate",
+  "check": {"cmd": ["go", "test", "."], "files": "checks/bool-negate-001"},
+  "timeout_s": 600,
+  "tags": ["go", "fix"]
+}

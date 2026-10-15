@@ -1,8 +1,20 @@
 version: 1
+# List prices pinned 2026-10-14.
+# DeepInfra (https://deepinfra.com/pricing): Qwen3.5-9B $0.10/$0.15, Qwen3-32B $0.08/$0.28 per 1M tokens.
+# OpenAI gpt-5: $1.25 input, $0.125 cached input, $10 output per 1M tokens.
+# OpenCode Go (https://opencode.ai/docs/go/, short-context tier): Kimi K2.7 Code $0.95/$0.19 cached/$4.00, GPT 6 Luna $0.10/$0.01 cached/$0.50.
 providers:
   deepinfra:
     base_url: https://api.deepinfra.com/v1/openai
     api_key_env: DEEPINFRA_API_KEY
+  openai:
+    api: openai_chat
+    base_url: https://api.openai.com/v1
+    api_key_env: OPENAI_API_KEY
+  opencode-go:
+    api: openai_chat
+    base_url: https://opencode.ai/zen/go/v1
+    api_key_env: OPENCODE_API_KEY
 roles:
   worker:
     model_id: m0-worker
@@ -15,3 +27,59 @@ models:
       tool_protocol: native
       edit_format: search_replace
       prompt_variant: compact
+  - id: qwen3-9b
+    provider: deepinfra
+    model: Qwen/Qwen3.5-9B
+    input_per_m: 0.10
+    output_per_m: 0.15
+    capabilities:
+      context_window: 262144
+      tool_protocol: two_step
+      edit_format: search_replace
+      prompt_variant: compact
+  - id: qwen3-32b
+    provider: deepinfra
+    model: Qwen/Qwen3-32B
+    input_per_m: 0.08
+    output_per_m: 0.28
+    capabilities:
+      context_window: 40960
+      tool_protocol: native
+      edit_format: search_replace
+      prompt_variant: compact
+  - id: gpt-5
+    provider: openai
+    model: gpt-5
+    input_per_m: 1.25
+    cached_input_per_m: 0.125
+    output_per_m: 10
+    capabilities:
+      context_window: 400000
+      tool_protocol: native
+      edit_format: search_replace
+      prompt_variant: standard
+  # OpenCode Go. Key: OPENCODE_API_KEY, else ~/.local/share/opencode/auth.json provider opencode-go.
+  - id: opencode-go-kimi
+    provider: opencode-go
+    model: kimi-k2.7-code
+    input_per_m: 0.95
+    cached_input_per_m: 0.19
+    output_per_m: 4.00
+    capabilities:
+      context_window: 131072
+      tool_protocol: native
+      edit_format: search_replace
+      prompt_variant: compact
+      parallel_tool_calls: true
+  - id: opencode-go-luna
+    provider: opencode-go
+    model: gpt-6-luna
+    input_per_m: 0.10
+    cached_input_per_m: 0.01
+    output_per_m: 0.50
+    capabilities:
+      context_window: 131072
+      tool_protocol: native
+      edit_format: search_replace
+      prompt_variant: standard
+      parallel_tool_calls: true
