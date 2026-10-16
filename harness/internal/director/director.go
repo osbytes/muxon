@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -179,7 +180,14 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			warnDB(database.RecordEvent(sid, db.Event{Kind: kind, Payload: payload}))
 		}
 	}
-	finish := func(o Outcome) Outcome {
+	finish := func(o Outcome, detail string) Outcome {
+		if o.State != StateDone {
+			level := "error"
+			if o.State == StateCancelled || o.State == StatePaused {
+				level = "warn"
+			}
+			recordChatLog(database, sid, level, o.Reason, "session", detail)
+		}
 		o.History = append([]provider.Message(nil), history...)
 		emit(observability.SessionEndEvent(o.State, o.Reason, totals, session.ToolRounds, session.VerifyAttempts, session.EscalationsUsed, malformed, loopsDetected))
 		warnDB(database.FinishChat(sid, db.Summary{
@@ -253,7 +261,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	}
 	verifyArgv, verifyOK := verifier.Resolve(ws.Root(), verifyOpt)
 	if !verifyOK {
-		return finish(Outcome{State: StateFailed, Reason: "no_verify_command", ExitCode: 3}), nil
+		return finish(Outcome{State: StateFailed, Reason: "no_verify_command", ExitCode: 3}, "no verify command for workspace"), nil
 	}
 
 	var baseline verifier.BaselineCache
@@ -283,6 +291,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			return false
 		}
 		from := model.Model
+		recordChatLog(database, sid, "info", "escalated", "router", fmt.Sprintf("%s: %s -> %s", dec.Reason, from, escalatedModel.Model))
 		emit(observability.EscalateEvent(from, escalatedModel.Model, dec.Reason, session.EscalationsUsed+1))
 		emit(observability.StateTransitionEvent(state, StateEscalating, dec.Reason))
 		session.EscalationsUsed++
@@ -310,7 +319,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 
 	pauseForRoundLimit := func() (Outcome, error) {
 		if err := ctx.Err(); err != nil && errors.Is(err, context.Canceled) {
-			return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}), nil
+			return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}, err.Error()), nil
 		}
 		msgs := append(append([]provider.Message(nil), history...), provider.Message{Role: "user", Content: toolRoundLimitSummary})
 		if budget.FitsModelCall(estimator.EstimateMessages(msgs)) {
@@ -323,8 +332,9 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			})
 			if err != nil {
 				if errors.Is(err, context.Canceled) {
-					return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}), nil
+					return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}, err.Error()), nil
 				}
+				recordChatLog(database, sid, "warn", "summary call failed", "provider", err.Error())
 			} else {
 				rates := router.RatesFromModel(model)
 				callCost, _ := router.CostUSD(rates, resp.Usage)
@@ -343,15 +353,15 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			}
 		}
 		emit(observability.StateTransitionEvent(state, StatePaused, "tool_rounds_exhausted"))
-		return finish(Outcome{State: StatePaused, Reason: "tool_rounds_exhausted", ExitCode: 0}), nil
+		return finish(Outcome{State: StatePaused, Reason: "tool_rounds_exhausted", ExitCode: 0}, fmt.Sprintf("rounds %d max %d", session.ToolRounds, caps.MaxToolRounds)), nil
 	}
 
 	for round := 0; round < caps.MaxToolRounds && state != StateDone && state != StateFailed && state != StateCancelled; round++ {
 		if err := ctx.Err(); err != nil {
 			if errors.Is(err, context.Canceled) {
-				return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}), nil
+				return finish(Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}, err.Error()), nil
 			}
-			return finish(Outcome{State: StateFailed, Reason: "setup", ExitCode: 1}), err
+			return finish(Outcome{State: StateFailed, Reason: "setup", ExitCode: 1}, err.Error()), err
 		}
 		switch state {
 		case StateActing:
@@ -398,12 +408,12 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					budget.Compacted = true
 					continue
 				}
-				return finish(Outcome{State: StateFailed, Reason: "budget_exhausted", ExitCode: 1}), nil
+				return finish(Outcome{State: StateFailed, Reason: "budget_exhausted", ExitCode: 1}, fmt.Sprintf("token budget: estimated input %d + max output %d exceeds remaining %d", turn.EstimatedInputTokens, caps.MaxOutputTokens, budget.Remaining)), nil
 			}
 			rates := router.RatesFromModel(model)
 			estUSD := (float64(turn.EstimatedInputTokens)*rates.InputPerM + float64(caps.MaxOutputTokens)*rates.OutputPerM) / 1e6
 			if !budget.FitsCost(estUSD) {
-				return finish(Outcome{State: StateFailed, Reason: "budget_exhausted", ExitCode: 1}), nil
+				return finish(Outcome{State: StateFailed, Reason: "budget_exhausted", ExitCode: 1}, fmt.Sprintf("cost budget: estimated %.4f + spent %.4f exceeds cap %.4f", estUSD, budget.CostSpentUSD, caps.CostBudgetUSD)), nil
 			}
 			req := provider.Request{
 				ModelID:         model.Model,
@@ -448,28 +458,31 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 					history = append(history, msg)
 					appendMsg(msg)
 					emit(observability.StateTransitionEvent(state, StateDone, "answered"))
-					return finish(Outcome{State: StateDone, Reason: "answered", ExitCode: 0}), nil
+					return finish(Outcome{State: StateDone, Reason: "answered", ExitCode: 0}, ""), nil
 				}
 			}
 			if err != nil && !repairableToolErr(err) {
-				return finish(Outcome{State: StateFailed, Reason: "model_error", ExitCode: 1}), err
+				return finish(Outcome{State: StateFailed, Reason: "model_error", ExitCode: 1}, toolFailureText(err, resp)), err
 			}
 			if err != nil {
 				malformed++
+				detail := toolFailureText(err, resp)
 				if repair.ConsecutiveFailure(err) {
 					if tryEscalate(router.EscalationInput{ConsecutiveMalformed: true}) {
+						recordChatLog(database, sid, "error", "tool call parse failed", "toolcall", detail)
 						repair = RepairState{}
 						continue
 					}
-					return finish(Outcome{State: StateFailed, Reason: "tool_parse_exhausted", ExitCode: 1}), err
+					return finish(Outcome{State: StateFailed, Reason: "tool_parse_exhausted", ExitCode: 1}, detail), err
 				}
 				if repair.ShouldRepair(err) {
+					recordChatLog(database, sid, "warn", "tool call parse failed", "toolcall", detail)
 					msg := repair.RepairMessage(model.Capabilities.ParallelToolCalls)
 					history = append(history, msg)
 					appendMsg(msg)
 					continue
 				}
-				return finish(Outcome{State: StateFailed, Reason: "no_tool_call", ExitCode: 1}), err
+				return finish(Outcome{State: StateFailed, Reason: "no_tool_call", ExitCode: 1}, detail), err
 			}
 			repair = RepairState{}
 			text := visibleAssistantText(out.Text)
@@ -486,12 +499,13 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 			}
 			if nudge, pattern, fire := loops.Check(); fire {
 				loopsDetected++
+				recordChatLog(database, sid, "warn", "loop detected", "loop", pattern)
 				emit(observability.Event{Type: "loop.detected", Reason: pattern})
 				if loops.ShouldEscalate() {
 					if tryEscalate(router.EscalationInput{LoopSecondFire: true}) {
 						continue
 					}
-					return finish(Outcome{State: StateFailed, Reason: "loop_detected", ExitCode: 1}), nil
+					return finish(Outcome{State: StateFailed, Reason: "loop_detected", ExitCode: 1}, pattern), nil
 				}
 				msg := provider.Message{Role: "user", Content: nudge}
 				history = append(history, msg)
@@ -522,6 +536,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				errText := ""
 				if !res.OK {
 					errText = res.Text
+					recordChatLog(database, sid, "error", "tool call failed", call.Name, res.Text)
 				}
 				warnDB(database.RecordTool(sid, db.ToolCall{
 					TurnID:    lastTurnID,
@@ -571,7 +586,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 						}
 						noteTool(later, tools.Fail(toolEnv, later.Name, "not run"))
 					}
-					return finish(Outcome{State: StateFailed, Reason: "tool_error", ExitCode: 1}), err
+					return finish(Outcome{State: StateFailed, Reason: "tool_error", ExitCode: 1}, err.Error()), err
 				}
 				noteTool(call, res)
 				if call.Name == "patch" && res.OK {
@@ -610,11 +625,11 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		case StateVerifying:
 			session.VerifyAttempts++
 			if session.VerifyAttempts > caps.MaxVerifyAttempts {
-				return finish(Outcome{State: StateFailed, Reason: "verify_exhausted", ExitCode: 1}), nil
+				return finish(Outcome{State: StateFailed, Reason: "verify_exhausted", ExitCode: 1}, fmt.Sprintf("attempts %d max %d", session.VerifyAttempts, caps.MaxVerifyAttempts)), nil
 			}
 			vres, err := verifier.Run(ctx, ws.Root(), verifyArgv)
 			if err != nil {
-				return finish(Outcome{State: StateFailed, Reason: "verify_error", ExitCode: 1}), err
+				return finish(Outcome{State: StateFailed, Reason: "verify_error", ExitCode: 1}, err.Error()), err
 			}
 			emit(observability.VerifyRunEvent(vres.Command, vres.ExitCode, vres.Passed, vres.DurationMS))
 			if vres.Passed {
@@ -625,22 +640,21 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 				state = StateDone
 			} else {
 				session.ConsecutiveVerifyFails++
+				bundle := verifier.ParseGoTest(vres.Excerpt)
+				failure := verifier.FormatVerifyFailure(vres, bundle)
+				recordChatLog(database, sid, "warn", "verify failed", "verify", fmt.Sprintf("exit %d\n%s", vres.ExitCode, failure))
+				history = appendVerifyFailure(history, failure)
+				appendMsg(history[len(history)-1])
 				if tryEscalate(router.EscalationInput{ConsecutiveVerifyFails: session.ConsecutiveVerifyFails}) {
-					bundle := verifier.ParseGoTest(vres.Excerpt)
-					history = appendVerifyFailure(history, verifier.FormatVerifyFailure(vres, bundle))
-					appendMsg(history[len(history)-1])
 					state = StateActing
 					continue
 				}
-				bundle := verifier.ParseGoTest(vres.Excerpt)
-				history = appendVerifyFailure(history, verifier.FormatVerifyFailure(vres, bundle))
-				appendMsg(history[len(history)-1])
 				emit(observability.StateTransitionEvent(state, StateActing, "verify_fail"))
 				state = StateActing
 			}
 
 		default:
-			return finish(Outcome{State: StateFailed, Reason: "bad_state", ExitCode: 1}), nil
+			return finish(Outcome{State: StateFailed, Reason: "bad_state", ExitCode: 1}, state), nil
 		}
 	}
 	if state == StateDone {
@@ -648,10 +662,10 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		if session.EverVerifyPassed {
 			reason = "verified"
 		}
-		return finish(Outcome{State: StateDone, Reason: reason, ExitCode: 0}), nil
+		return finish(Outcome{State: StateDone, Reason: reason, ExitCode: 0}, ""), nil
 	}
 	if !cfg.Interactive {
-		return finish(Outcome{State: StateFailed, Reason: "tool_rounds_exhausted", ExitCode: 1}), nil
+		return finish(Outcome{State: StateFailed, Reason: "tool_rounds_exhausted", ExitCode: 1}, fmt.Sprintf("rounds %d max %d", session.ToolRounds, caps.MaxToolRounds)), nil
 	}
 	return pauseForRoundLimit()
 }

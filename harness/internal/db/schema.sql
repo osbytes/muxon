@@ -72,3 +72,16 @@ CREATE TABLE IF NOT EXISTS events (
     created_at TEXT NOT NULL,
     UNIQUE (chat_id, seq)
 );
+
+-- Application logs and Go errors tied to a chat session.
+CREATE TABLE IF NOT EXISTS logs (
+    id INTEGER PRIMARY KEY,
+    chat_id TEXT NOT NULL REFERENCES chats(id),
+    seq INTEGER NOT NULL,
+    level TEXT NOT NULL DEFAULT 'info',
+    message TEXT NOT NULL DEFAULT '',
+    source TEXT NOT NULL DEFAULT '',
+    error TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    UNIQUE (chat_id, seq)
+);

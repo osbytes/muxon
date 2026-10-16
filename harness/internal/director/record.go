@@ -3,6 +3,8 @@ package director
 import (
 	"encoding/json"
 	"log/slog"
+	"strings"
+	"unicode/utf8"
 
 	"github.com/PLACEHOLDER/thee/harness/internal/contextengine"
 	"github.com/PLACEHOLDER/thee/harness/internal/db"
@@ -66,6 +68,66 @@ func storedRequest(turn contextengine.TurnOutput) json.RawMessage {
 		return json.RawMessage(`{}`)
 	}
 	return raw
+}
+
+func recordChatLog(database *db.DB, chatID, level, message, source, errText string) {
+	warnDB(database.RecordLog(chatID, db.Log{
+		Level:   level,
+		Message: message,
+		Source:  source,
+		Error:   clipLog(errText),
+	}))
+}
+
+// toolFailureText is the stored reason for a failed model or tool-call turn.
+func toolFailureText(err error, resp provider.Response) string {
+	var b strings.Builder
+	if err != nil {
+		b.WriteString(err.Error())
+	}
+	if names := toolNames(resp.ToolCalls); names != "" {
+		if b.Len() > 0 {
+			b.WriteByte('\n')
+		}
+		b.WriteString("calls: ")
+		b.WriteString(names)
+	}
+	if text := strings.TrimSpace(resp.Text); text != "" {
+		if b.Len() > 0 {
+			b.WriteByte('\n')
+		}
+		b.WriteString("model text: ")
+		b.WriteString(text)
+	}
+	return b.String()
+}
+
+func toolNames(calls []provider.ToolCall) string {
+	if len(calls) == 0 {
+		return ""
+	}
+	names := make([]string, 0, len(calls))
+	for _, call := range calls {
+		if call.Name != "" {
+			names = append(names, call.Name)
+		}
+	}
+	return strings.Join(names, ", ")
+}
+
+func clipLog(s string) string {
+	const max = 4096
+	if len(s) <= max {
+		return s
+	}
+	cut := max
+	for cut > 0 && !utf8.RuneStart(s[cut]) {
+		cut--
+	}
+	if cut == 0 {
+		cut = max
+	}
+	return s[:cut] + "…"
 }
 
 func storedResponse(resp provider.Response, callErr error) json.RawMessage {
