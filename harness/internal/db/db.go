@@ -20,7 +20,7 @@ import (
 //go:embed schema.sql
 var schemaSQL string
 
-const schemaVersion = 1
+const schemaVersion = 2
 
 // File is the database path for a workspace.
 func File(workspace string) string {
@@ -78,6 +78,14 @@ type ToolCall struct {
 type Event struct {
 	Kind    string
 	Payload json.RawMessage
+}
+
+// Log is one application log entry tied to a chat session.
+type Log struct {
+	Level   string
+	Message string
+	Source  string
+	Error   string
 }
 
 // Summary closes a chat with the totals from the runs that used it.
@@ -251,6 +259,25 @@ func (d *DB) RecordEvent(chatID string, ev Event) error {
 	})
 }
 
+// RecordLog stores one application log entry tied to a chat session.
+func (d *DB) RecordLog(chatID string, log Log) error {
+	level := log.Level
+	if level == "" {
+		level = "info"
+	}
+	return d.tx(func(tx *sql.Tx) error {
+		seq, err := nextSeq(tx, "logs", chatID)
+		if err != nil {
+			return err
+		}
+		_, err = tx.Exec(`
+			INSERT INTO logs (chat_id, seq, level, message, source, error, created_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?)`,
+			chatID, seq, level, redact(log.Message), log.Source, redact(log.Error), now())
+		return err
+	})
+}
+
 // FinishChat adds this run's totals and records how the chat ended.
 func (d *DB) FinishChat(chatID string, sum Summary) error {
 	return d.tx(func(tx *sql.Tx) error {
@@ -302,6 +329,7 @@ func nextSeq(tx *sql.Tx, table, chatID string) (int, error) {
 		"messages": "SELECT COALESCE(MAX(seq), 0) + 1 FROM messages WHERE chat_id = ?",
 		"turns":    "SELECT COALESCE(MAX(seq), 0) + 1 FROM turns WHERE chat_id = ?",
 		"events":   "SELECT COALESCE(MAX(seq), 0) + 1 FROM events WHERE chat_id = ?",
+		"logs":     "SELECT COALESCE(MAX(seq), 0) + 1 FROM logs WHERE chat_id = ?",
 	}[table]
 	if query == "" {
 		return 0, fmt.Errorf("unknown sequence table %q", table)
