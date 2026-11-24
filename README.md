@@ -1,6 +1,6 @@
 # thee-harness
 
-Monorepo for **thee**: an open-source, CLI-first coding agent harness (small models, verify-gated `finish`, local JSONL traces). Product overview: [docs/product.md](docs/product.md).
+Monorepo for **thee**: an open-source, CLI-first coding agent harness that runs any model from any provider (open or frontier, hosted or local) from one place, optimized for the weakest model so it holds up on all of them (verify-gated `finish`, local JSONL traces). Product overview: [docs/product.md](docs/product.md).
 
 | Path | What it is |
 |------|------------|
