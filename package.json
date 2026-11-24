@@ -1,0 +1,16 @@
+{
+  "name": "thee",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Release tooling for the thee CLI (changesets). The Go module lives in harness/.",
+  "packageManager": "pnpm@10.15.1",
+  "scripts": {
+    "changeset": "changeset",
+    "release:version": "changeset version",
+    "release:tag": "sh scripts/release-tag.sh"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3"
+  }
+}

@@ -78,7 +78,7 @@ go test ./...
 
 ## Install
 
-Release archives are built with [`.goreleaser.yml`](.goreleaser.yml) (`linux` and `darwin`, `amd64` and `arm64`). This repo does not publish tags yet. Until then:
+Release archives are built with [`.goreleaser.yml`](.goreleaser.yml) (`linux`, `darwin` and `windows`, `amd64` and `arm64`) when a `vX.Y.Z` tag is pushed; versions and `CHANGELOG.md` come from [changesets](.changeset/README.md). See [docs/RELEASING.md](docs/RELEASING.md). No release is tagged yet. Until then:
 
 ```bash
 go build -o thee ./harness/cmd/thee
