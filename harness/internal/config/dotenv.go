@@ -2,6 +2,7 @@ package config
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -49,12 +50,11 @@ func LoadDotEnv(dir string) (string, error) {
 	if err != nil || path == "" {
 		return "", err
 	}
-	f, err := os.Open(path)
+	b, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
-	defer f.Close()
-	vars, err := ParseDotEnv(f.Name(), bufio.NewScanner(f))
+	vars, err := ParseDotEnv(path, bufio.NewScanner(bytes.NewReader(b)))
 	if err != nil {
 		return "", err
 	}

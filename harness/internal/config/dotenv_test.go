@@ -34,13 +34,15 @@ func unsetForTest(t *testing.T, keys ...string) {
 	t.Helper()
 	for _, k := range keys {
 		t.Setenv(k, "")
-		os.Unsetenv(k)
+		if err := os.Unsetenv(k); err != nil {
+			t.Fatal(err)
+		}
 	}
 }
 
 func writeFile(t *testing.T, path, body string) {
 	t.Helper()
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0o750); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.WriteFile(path, []byte(body), 0o600); err != nil {
@@ -55,7 +57,7 @@ func TestLoadDotEnvWalksUpToRepoRoot(t *testing.T) {
 	writeFile(t, filepath.Join(root, ".env"), "THEE_DOTENV_A=from-file\nTHEE_DOTENV_B=from-file\n")
 	t.Setenv("THEE_DOTENV_B", "from-env")
 	sub := filepath.Join(root, "harness", "cmd")
-	if err := os.MkdirAll(sub, 0o755); err != nil {
+	if err := os.MkdirAll(sub, 0o750); err != nil {
 		t.Fatal(err)
 	}
 	path, err := LoadDotEnv(sub)
