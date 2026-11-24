@@ -11,6 +11,7 @@ const maxWriteBytes = 32 * 1024
 
 type writeTool struct{}
 
+// NewWrite returns the write tool.
 func NewWrite() tools.Tool { return &writeTool{} }
 
 func (writeTool) Name() string { return "write" }

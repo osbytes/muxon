@@ -1,9 +1,6 @@
 package director
 
-import (
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-)
-
+// Director states recorded in state.transition events.
 const (
 	StateIdle       = "idle"
 	StateActing     = "acting"
@@ -16,8 +13,3 @@ const (
 	StatePaused     = "paused"
 	StateCancelled  = "cancelled"
 )
-
-// transition records a state change on the trace.
-func transition(tw *observability.Writer, from, to, reason string) {
-	_ = tw.Append(observability.StateTransitionEvent(from, to, reason))
-}

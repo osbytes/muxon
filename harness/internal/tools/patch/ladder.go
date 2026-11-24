@@ -7,17 +7,17 @@ import (
 
 // ApplySearchReplace runs the patch ladder for SEARCH/REPLACE edits.
 func ApplySearchReplace(content string, reps []Replacement) ([]byte, string, error) {
-	out, strat, err := ApplySearchReplaceExact(content, reps)
+	out, strategy, err := ApplySearchReplaceExact(content, reps)
 	if err == nil {
-		return out, strat, nil
+		return out, strategy, nil
 	}
-	out, strat, err = applySearchReplaceWhitespace(content, reps)
+	out, strategy, err = applySearchReplaceWhitespace(content, reps)
 	if err == nil {
-		return out, strat, nil
+		return out, strategy, nil
 	}
-	out, strat, err = applySearchReplaceFuzzy(content, reps)
+	out, strategy, err = applySearchReplaceFuzzy(content, reps)
 	if err == nil {
-		return out, strat, nil
+		return out, strategy, nil
 	}
 	return nil, "", rejectWithContext(content, reps)
 }
@@ -162,9 +162,9 @@ func max(a, b int) int {
 
 // ApplyUDiff runs the patch ladder for unified diffs.
 func ApplyUDiff(content string, diff string) ([]byte, string, error) {
-	out, strat, err := ApplyUDiffExact(content, diff)
+	out, strategy, err := ApplyUDiffExact(content, diff)
 	if err == nil {
-		return out, strat, nil
+		return out, strategy, nil
 	}
 	return nil, "", fmt.Errorf("patch rejected: %v", err)
 }

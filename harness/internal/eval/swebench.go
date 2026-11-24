@@ -45,9 +45,11 @@ func ExportSWEBench(workspace, instanceID, modelName, outPath string) error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	_, err = f.Write(append(b, '\n'))
-	return err
+	if _, err := f.Write(append(b, '\n')); err != nil {
+		_ = f.Close()
+		return err
+	}
+	return f.Close()
 }
 
 func workspacePatch(workspace string) (string, error) {

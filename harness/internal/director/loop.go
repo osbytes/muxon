@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
 )
 
@@ -192,14 +191,6 @@ func loopCallMeta(args []byte) (path string, start, end int, oldHash string) {
 	}
 	sum := sha256.Sum256([]byte(old.String()))
 	return meta.Path, meta.StartLine, meta.EndLine, hex.EncodeToString(sum[:8])
-}
-
-func loopEvent(tw *observability.Writer, pattern string) {
-	_ = tw.Append(observability.Event{Type: "loop.detected", Reason: pattern})
-}
-
-func verifySignatureMessage(sig string) string {
-	return "verify failed:\nsignature: " + sig + "\n"
 }
 
 func appendVerifyFailure(history []provider.Message, text string) []provider.Message {

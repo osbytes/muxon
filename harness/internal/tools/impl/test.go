@@ -11,6 +11,7 @@ import (
 
 type testTool struct{}
 
+// NewTest returns the test tool.
 func NewTest() tools.Tool { return &testTool{} }
 
 func (testTool) Name() string { return "test" }

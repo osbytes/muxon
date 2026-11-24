@@ -136,7 +136,7 @@ func renderTranscript(entries []entry, width int, expandTools bool) string {
 		}
 		line := entries[i].line
 		kind := lineKind(line)
-		if len(blocks) > 0 && !(kind == "verify" && prevTool) {
+		if len(blocks) > 0 && (kind != "verify" || !prevTool) {
 			blocks = append(blocks, "")
 		}
 		blocks = append(blocks, renderLine(line, kind, width))

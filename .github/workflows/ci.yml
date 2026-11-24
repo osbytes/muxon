@@ -40,4 +40,3 @@ jobs:
         with:
           version: v2.15.0
           working-directory: harness
-          only-new-issues: true

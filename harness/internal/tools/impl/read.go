@@ -15,6 +15,7 @@ const maxReadLines = 400
 
 type readTool struct{}
 
+// NewRead returns the read tool.
 func NewRead() tools.Tool { return &readTool{} }
 
 func (readTool) Name() string { return "read" }

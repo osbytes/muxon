@@ -42,7 +42,7 @@ type TurnOutput struct {
 }
 
 // BuildTurn assembles the 12-section layout into provider messages.
-func BuildTurn(in TurnInput) TurnOutput {
+func BuildTurn(in TurnInput) TurnOutput { //nolint:gocyclo // linear assembly of prompt sections; splitting hides the order
 	if in.Estimator == nil {
 		in.Estimator = NewEstimator()
 	}

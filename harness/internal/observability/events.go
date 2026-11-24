@@ -4,6 +4,7 @@ import (
 	"github.com/PLACEHOLDER/thee/harness/internal/provider"
 )
 
+// SchemaVersion is the trace schema version written on session.start.
 const SchemaVersion = "1.0.0"
 
 // Event is one JSONL trace record. Fields depend on Type.
@@ -70,6 +71,7 @@ func (t *UsageTotals) Add(u provider.Usage, costUSD float64) {
 	}
 }
 
+// SessionStartEvent returns the session.start event.
 func SessionStartEvent(theeVersion, workspace string) Event {
 	return Event{
 		Type:          "session.start",
@@ -79,6 +81,7 @@ func SessionStartEvent(theeVersion, workspace string) Event {
 	}
 }
 
+// GoalStartEvent returns the goal.start event.
 func GoalStartEvent(taskType string, confidence float64) Event {
 	return Event{
 		Type:             "goal.start",
@@ -88,6 +91,7 @@ func GoalStartEvent(taskType string, confidence float64) Event {
 	}
 }
 
+// SessionEndEvent returns the session.end event with usage totals and counters.
 func SessionEndEvent(outcome, reason string, totals UsageTotals, toolRounds, verifyAttempts, escalations, malformed, loops int) Event {
 	return Event{
 		Type:                 "session.end",
@@ -106,6 +110,7 @@ func SessionEndEvent(outcome, reason string, totals UsageTotals, toolRounds, ver
 	}
 }
 
+// StateTransitionEvent returns a state.transition event.
 func StateTransitionEvent(from, to, reason string) Event {
 	return Event{
 		Type:   "state.transition",
@@ -115,22 +120,27 @@ func StateTransitionEvent(from, to, reason string) Event {
 	}
 }
 
+// ToolCallEvent returns a tool.call event.
 func ToolCallEvent(name string) Event {
 	return Event{Type: "tool.call", Name: name}
 }
 
+// ToolCallSalvagedEvent returns a tool.call event for a call salvaged from malformed output.
 func ToolCallSalvagedEvent(name string) Event {
 	return Event{Type: "tool.call", Name: name, Salvaged: true}
 }
 
+// TruncatedByServerEvent returns the event recorded when the provider truncated a response.
 func TruncatedByServerEvent() Event {
 	return Event{Type: "truncated_by_server"}
 }
 
+// ToolResultEvent returns a tool.result event.
 func ToolResultEvent(ok bool, applyStrategy string) Event {
 	return Event{Type: "tool.result", OK: ok, ApplyStrategy: applyStrategy}
 }
 
+// VerifyRunEvent returns a verify.run event.
 func VerifyRunEvent(cmd []string, exitCode int, passed bool, durationMS int64) Event {
 	return Event{
 		Type:       "verify.run",
@@ -141,6 +151,7 @@ func VerifyRunEvent(cmd []string, exitCode int, passed bool, durationMS int64) E
 	}
 }
 
+// ModelResponseEvent returns a model.response event with usage and cost.
 func ModelResponseEvent(costUSD float64, u provider.Usage) Event {
 	return Event{
 		Type:            "model.response",
@@ -152,6 +163,7 @@ func ModelResponseEvent(costUSD float64, u provider.Usage) Event {
 	}
 }
 
+// EscalateEvent returns an escalate event.
 func EscalateEvent(fromModel, toModel, reason string, generation int) Event {
 	return Event{
 		Type:                 "escalate",

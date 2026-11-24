@@ -12,6 +12,7 @@ import (
 
 type gitTool struct{}
 
+// NewGit returns the git tool.
 func NewGit() tools.Tool { return &gitTool{} }
 
 func (gitTool) Name() string { return "git" }

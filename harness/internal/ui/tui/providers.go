@@ -32,7 +32,7 @@ type ProviderChoice struct {
 // ProviderChoices lists providers the session can connect, OpenCode Go first.
 func ProviderChoices() []ProviderChoice {
 	return []ProviderChoice{
-		{
+		{ //nolint:gosec // G101: env var name, not a secret
 			ID:        "opencode-go",
 			Title:     "OpenCode Go",
 			BaseURL:   openCodeGoBaseURL,
@@ -40,7 +40,7 @@ func ProviderChoices() []ProviderChoice {
 			ModelID:   "opencode-go-kimi",
 			ModelName: "kimi-k2.7-code",
 		},
-		{
+		{ //nolint:gosec // G101: env var name, not a secret
 			ID:        "deepinfra",
 			Title:     "DeepInfra",
 			BaseURL:   "https://api.deepinfra.com/v1/openai",

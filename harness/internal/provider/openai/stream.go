@@ -21,7 +21,7 @@ func newSSEStream(body io.ReadCloser) *sseStream {
 	return &sseStream{body: body, reader: bufio.NewReader(body)}
 }
 
-func (s *sseStream) Next() (provider.Response, error) {
+func (s *sseStream) Next() (provider.Response, error) { //nolint:gocyclo // SSE line parser; one branch per field type
 	if s.done {
 		return provider.Response{}, fmt.Errorf("stream closed")
 	}

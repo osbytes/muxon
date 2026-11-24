@@ -25,7 +25,7 @@ func (p *Policy) WithDenyRead(patterns []string) *Policy {
 }
 
 // DenyRead reports whether file contents must not be returned.
-func (p *Policy) DenyRead(rel string) bool {
+func (p *Policy) DenyRead(rel string) bool { //nolint:gocyclo // flat list of deny rules checked in order
 	rel = filepath.ToSlash(filepath.Clean(rel))
 	if rel == "." || rel == "" {
 		return false

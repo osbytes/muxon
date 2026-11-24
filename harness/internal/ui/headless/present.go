@@ -12,6 +12,7 @@ import (
 // Mode selects CLI output style.
 type Mode int
 
+// Output modes for headless runs.
 const (
 	ModeHuman Mode = 0
 	ModeJSON  Mode = 1

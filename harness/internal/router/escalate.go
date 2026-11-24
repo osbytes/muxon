@@ -26,7 +26,7 @@ type EscalationDecision struct {
 }
 
 // ShouldEscalate applies spec escalation triggers.
-func ShouldEscalate(in EscalationInput) EscalationDecision {
+func ShouldEscalate(in EscalationInput) EscalationDecision { //nolint:gocyclo // flat list of escalation triggers
 	if !in.HasEscalatedRole {
 		return EscalationDecision{}
 	}

@@ -201,7 +201,7 @@ func (m Model) LastOutcome() director.Outcome {
 }
 
 // Update implements tea.Model.
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) { //nolint:gocyclo // Bubble Tea Update dispatches on message type
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
@@ -373,7 +373,7 @@ func (m *Model) runGoal(goal string) tea.Cmd {
 	return m.startGoal(goal, force)
 }
 
-func (m Model) submit(line string) (tea.Model, tea.Cmd) {
+func (m Model) submit(line string) (tea.Model, tea.Cmd) { //nolint:gocyclo // slash-command dispatch for the input box
 	if slash, ok := ParseSlash(line); ok {
 		switch slash.Name {
 		case "help":

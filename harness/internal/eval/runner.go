@@ -215,12 +215,12 @@ func prepareWorkspace(task Task, opt TrialOptions) (string, error) {
 	}
 	src, err := taskSource(task, opt)
 	if err != nil {
-		os.RemoveAll(work)
+		_ = os.RemoveAll(work)
 		return "", err
 	}
 	if src != "" {
 		if _, err := copyTree(src, work); err != nil {
-			os.RemoveAll(work)
+			_ = os.RemoveAll(work)
 			return "", err
 		}
 	}

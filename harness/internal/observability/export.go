@@ -8,7 +8,7 @@ import (
 )
 
 // ExportRedacted copies a trace, redacting secret-like strings.
-func ExportRedacted(src, dest string) error {
+func ExportRedacted(src, dest string) (err error) {
 	in, err := os.Open(src)
 	if err != nil {
 		return err
@@ -18,7 +18,11 @@ func ExportRedacted(src, dest string) error {
 	if err != nil {
 		return err
 	}
-	defer out.Close()
+	defer func() {
+		if cerr := out.Close(); err == nil {
+			err = cerr
+		}
+	}()
 	sc := bufio.NewScanner(in)
 	for sc.Scan() {
 		line := security.RedactSecrets(sc.Text())

@@ -5,13 +5,13 @@ import (
 )
 
 func TestSearchReplaceExact(t *testing.T) {
-	out, strat, err := ApplySearchReplaceExact("foo\nbar\n", []Replacement{
+	out, strategy, err := ApplySearchReplaceExact("foo\nbar\n", []Replacement{
 		{Search: "bar", Replace: "baz"},
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strat != "exact" || string(out) != "foo\nbaz\n" {
+	if strategy != "exact" || string(out) != "foo\nbaz\n" {
 		t.Fatalf("got %q", out)
 	}
 }
@@ -24,12 +24,12 @@ func TestUDiffExact(t *testing.T) {
 -line2
 +line2fixed
 `
-	out, strat, err := ApplyUDiffExact(content, diff)
+	out, strategy, err := ApplyUDiffExact(content, diff)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strat != "exact" {
-		t.Fatalf("strategy %q", strat)
+	if strategy != "exact" {
+		t.Fatalf("strategy %q", strategy)
 	}
 	if string(out) != "line1\nline2fixed\nline3\n" {
 		t.Fatalf("got %q", out)
