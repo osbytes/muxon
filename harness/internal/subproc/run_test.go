@@ -3,6 +3,7 @@ package subproc
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 	"time"
 )
@@ -17,6 +18,9 @@ func TestDenyBashC(t *testing.T) {
 func TestTimeoutKillsGroup(t *testing.T) {
 	if os.Getenv("RUN_SUBPROC_TIMEOUT") != "1" {
 		t.Skip("set RUN_SUBPROC_TIMEOUT=1 to run")
+	}
+	if runtime.GOOS == "windows" {
+		t.Skip("uses a /bin/sh script")
 	}
 	script := filepath.Join(t.TempDir(), "slow.sh")
 	body := "#!/bin/sh\nsleep 30 &\nwait\n"
