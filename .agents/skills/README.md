@@ -2,7 +2,7 @@
 
 Vendored via [skills CLI](https://github.com/vercel-labs/skills). Cursor discovers these from `.agents/skills/` automatically.
 
-**Precedence:** For thee-harness layout, godoc-only comments, and `internal/` boundaries, **`.cursor/rules/` and this repo’s architecture docs win** if a skill suggests a different structure (e.g. `pkg/`, heavy layering).
+**Precedence:** For thee-harness layout, godoc-only comments, and `internal/` boundaries, **`.agents/rules/` and this repo’s architecture docs win** if a skill suggests a different structure (e.g. `pkg/`, heavy layering).
 
 ## spf13/go-skills
 
