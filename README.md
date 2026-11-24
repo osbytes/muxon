@@ -74,6 +74,8 @@ go test ./...
 | `THEE_TRUST` | — | Set to `1` to trust the workspace (same as `--trust`) |
 | `DEEPINFRA_API_KEY` (etc.) | — | Provider keys per embedded `models.yaml` / `~/.thee/catalog.json` |
 
+`thee` also reads the nearest `.env` at or above the current directory, stopping at the repo root. Shell variables win over the file. To set it up, copy [`.env.example`](.env.example) to `.env` and fill in your keys.
+
 ---
 
 ## Install

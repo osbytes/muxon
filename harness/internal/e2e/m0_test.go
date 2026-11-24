@@ -27,6 +27,7 @@ func TestM0RunE2E(t *testing.T) {
 	}
 	bin := buildThee(t)
 	cmd := exec.Command(bin, "run", "-p", "fix the failing test", "--trust", "--directory", fixtureDir)
+	cmd.Dir = fixtureDir
 	cmd.Env = append(os.Environ(),
 		"THEE_HOME="+home,
 		"THEE_SCRIPTED_PROVIDER_FILE="+scriptPath,
