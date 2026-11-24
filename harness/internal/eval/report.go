@@ -181,7 +181,7 @@ func BootstrapPassRate(rows []ResultRow, samples int, seed int64) (low, high flo
 	if samples < 2 {
 		samples = 2
 	}
-	rng := rand.New(rand.NewSource(seed))
+	rng := rand.New(rand.NewSource(seed)) //nolint:gosec // G404: seeded bootstrap resampling must be reproducible, not secret
 	means := make([]float64, samples)
 	for i := 0; i < samples; i++ {
 		var reward, n float64

@@ -176,7 +176,7 @@ func (c *Client) Stream(ctx context.Context, req provider.Request) (provider.Str
 	}
 	if resp.StatusCode >= 400 {
 		b, _ := io.ReadAll(resp.Body)
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		return nil, fmt.Errorf("openai chat stream: %s: %s", resp.Status, string(b))
 	}
 	return newSSEStream(resp.Body), nil

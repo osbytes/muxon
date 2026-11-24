@@ -9,6 +9,7 @@ import (
 
 type finishTool struct{}
 
+// NewFinish returns the finish tool.
 func NewFinish() tools.Tool { return &finishTool{} }
 
 func (finishTool) Name() string { return "finish" }

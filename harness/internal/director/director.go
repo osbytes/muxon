@@ -74,7 +74,7 @@ type ToolActivity struct {
 }
 
 // Run executes the session state machine.
-func Run(ctx context.Context, cfg Config) (Outcome, error) {
+func Run(ctx context.Context, cfg Config) (Outcome, error) { //nolint:gocyclo // main director loop; candidate for a split into per-state handlers
 	if err := ctx.Err(); err != nil {
 		return Outcome{State: StateCancelled, Reason: "user_cancel", ExitCode: 130}, nil
 	}

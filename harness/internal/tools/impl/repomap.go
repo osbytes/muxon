@@ -10,6 +10,7 @@ import (
 
 type repoMapTool struct{}
 
+// NewRepoMap returns the repomap tool.
 func NewRepoMap() tools.Tool { return &repoMapTool{} }
 
 func (repoMapTool) Name() string { return "repo-map" }

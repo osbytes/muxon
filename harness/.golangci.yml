@@ -18,10 +18,39 @@ linters:
       min-complexity: 15
   exclusions:
     generated: lax
+    # std-error-handling skips unchecked Close/Flush/Remove/Print* results. Files
+    # being written still check Close explicitly where data could be lost.
+    presets:
+      - std-error-handling
     paths:
       - third_party$
       - builtin$
       - examples$
+    rules:
+      # Tests build fixtures with normal permissions, run git/go, and use long
+      # table-driven functions.
+      - path: _test\.go
+        linters:
+          - gosec
+          - gocyclo
+      # A coding agent reads files the model or config names by design. Workspace
+      # confinement is enforced by internal/security and internal/workspace.
+      - linters:
+          - gosec
+        text: "G304:"
+      # These packages run git or user-configured verify/eval commands. argv is
+      # built from fixed binaries or trusted config, never through a shell.
+      - path: internal/(eval|session|subproc|workspace)/
+        linters:
+          - gosec
+        text: "G204:"
+      # Workspace files, checkouts, eval copies, and traces under <workspace>/.thee
+      # keep normal 0755/0644 permissions so the user's tools can read them.
+      # Private state under THEE_HOME uses 0700/0600.
+      - path: internal/(db|director|eval|index|provider/replay|testutil|workspace)/
+        linters:
+          - gosec
+        text: "G30[126]:"
 
 issues:
   max-issues-per-linter: 0

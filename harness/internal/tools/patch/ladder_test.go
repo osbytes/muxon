@@ -9,12 +9,12 @@ func TestWhitespaceLadder(t *testing.T) {
 	if err == nil {
 		t.Fatal("exact should fail on whitespace mismatch")
 	}
-	out, strat, err := ApplySearchReplace(content, reps)
+	out, strategy, err := ApplySearchReplace(content, reps)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strat != "whitespace" {
-		t.Fatalf("strategy %q", strat)
+	if strategy != "whitespace" {
+		t.Fatalf("strategy %q", strategy)
 	}
 	if !contains(string(out), "baz") {
 		t.Fatalf("got %q", out)

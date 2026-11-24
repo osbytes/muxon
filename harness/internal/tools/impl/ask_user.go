@@ -16,6 +16,7 @@ const (
 
 type askUserTool struct{}
 
+// NewAskUser returns the ask_user tool.
 func NewAskUser() tools.Tool { return &askUserTool{} }
 
 func (askUserTool) Name() string { return "ask_user" }

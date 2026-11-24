@@ -14,6 +14,7 @@ type Provider interface {
 // ResponseFormatKind selects structured output mode.
 type ResponseFormatKind string
 
+// Response format kinds a request can ask the provider for.
 const (
 	FormatNone       ResponseFormatKind = "none"
 	FormatJSONObject ResponseFormatKind = "json_object"
@@ -90,6 +91,7 @@ type Stream interface {
 // APIErrorKind classifies provider errors.
 type APIErrorKind string
 
+// APIError kinds classify provider rejections for repair and escalation.
 const (
 	APIErrorToolsRejected      APIErrorKind = "tools_rejected"
 	APIErrorConstraintRejected APIErrorKind = "constraint_rejected"

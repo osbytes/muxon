@@ -12,6 +12,7 @@ import (
 
 type patchTool struct{}
 
+// NewPatch returns the patch tool.
 func NewPatch() tools.Tool { return &patchTool{} }
 
 func (patchTool) Name() string { return "patch" }

@@ -11,7 +11,7 @@ const verifyFailureMarker = "verify failed"
 // CompactHistory elides tool results outside the recent tail once history
 // passes half of budgetTokens, and folds that older span when the remainder
 // is still over the budget. The recent tail and verify failures stay verbatim.
-func CompactHistory(msgs []provider.Message, budgetTokens, contextWindow int, est *Estimator) []provider.Message {
+func CompactHistory(msgs []provider.Message, budgetTokens, contextWindow int, est *Estimator) []provider.Message { //nolint:gocyclo // one pass over history with per-role rules
 	if budgetTokens <= 0 || len(msgs) == 0 {
 		return msgs
 	}

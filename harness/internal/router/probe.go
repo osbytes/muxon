@@ -115,12 +115,12 @@ func WriteSnippet(snippet ProbeSnippet) error {
 		md.Capabilities.ToolProtocol = snippet.ToolProtocol
 		cat.Models = append(cat.Models, md)
 	}
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 		return err
 	}
 	b, err := json.MarshalIndent(cat, "", "  ")
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, append(b, '\n'), 0o644)
+	return os.WriteFile(path, append(b, '\n'), 0o600)
 }

@@ -28,7 +28,7 @@ func FromEnv() (*Provider, error) {
 	if path == "" {
 		return nil, fmt.Errorf("THEE_SCRIPTED_PROVIDER_FILE not set")
 	}
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(path) //nolint:gosec // G703: test-only provider; path is set by the developer running the harness
 	if err != nil {
 		return nil, err
 	}

@@ -161,14 +161,14 @@ func RememberProvider(id, baseURL, keyEnv string) error {
 		cur.APIKeyEnv = keyEnv
 	}
 	cat.Providers[id] = cur
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 		return err
 	}
 	b, err := json.MarshalIndent(cat, "", "  ")
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, append(b, '\n'), 0o644)
+	return os.WriteFile(path, append(b, '\n'), 0o600)
 }
 
 func mergeCaps(base, over Capabilities) Capabilities {

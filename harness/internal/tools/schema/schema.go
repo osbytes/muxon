@@ -9,7 +9,7 @@ import (
 // FromStruct builds a JSON Schema object for a struct type.
 func FromStruct(v interface{}) json.RawMessage {
 	t := reflect.TypeOf(v)
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 	obj := map[string]interface{}{

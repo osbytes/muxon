@@ -44,14 +44,14 @@ func SaveTrust(s TrustStore) error {
 	if err != nil {
 		return err
 	}
-	if err := os.MkdirAll(home, 0o755); err != nil {
+	if err := os.MkdirAll(home, 0o700); err != nil {
 		return err
 	}
 	b, err := json.Marshal(s)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(filepath.Join(home, "trust.json"), b, 0o644)
+	return os.WriteFile(filepath.Join(home, "trust.json"), b, 0o600)
 }
 
 // AddRoot adds a workspace root if missing.

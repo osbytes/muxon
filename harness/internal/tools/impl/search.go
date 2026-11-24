@@ -16,6 +16,7 @@ const maxPreviewChars = 200
 
 type searchTool struct{}
 
+// NewSearch returns the search tool.
 func NewSearch() tools.Tool { return &searchTool{} }
 
 func (searchTool) Name() string { return "search" }

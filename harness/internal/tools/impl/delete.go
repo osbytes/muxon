@@ -11,6 +11,7 @@ import (
 
 type deleteTool struct{}
 
+// NewDelete returns the delete tool.
 func NewDelete() tools.Tool { return &deleteTool{} }
 
 func (deleteTool) Name() string { return "delete" }

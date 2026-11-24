@@ -15,6 +15,7 @@ const maxListEntries = 200
 
 type listTool struct{}
 
+// NewList returns the list tool.
 func NewList() tools.Tool { return &listTool{} }
 
 func (listTool) Name() string { return "list" }

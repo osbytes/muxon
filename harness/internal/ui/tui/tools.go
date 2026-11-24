@@ -58,7 +58,7 @@ func (tc *toolCall) finish(act director.ToolActivity) {
 	tc.output = act.Output
 }
 
-func (tc *toolCall) title() string {
+func (tc *toolCall) title() string { //nolint:gocyclo // one title format per tool name
 	a := tc.args
 	switch tc.name {
 	case "read":

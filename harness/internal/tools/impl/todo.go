@@ -12,6 +12,7 @@ const maxOpenTodos = 30
 
 type todoTool struct{}
 
+// NewTodo returns the todo tool.
 func NewTodo() tools.Tool { return &todoTool{} }
 
 func (todoTool) Name() string { return "todo" }

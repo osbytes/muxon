@@ -9,6 +9,7 @@ import (
 	"github.com/PLACEHOLDER/thee/harness/internal/tools"
 )
 
+// Prompt variants selected by model capability.
 const (
 	VariantCompact  = "compact"
 	VariantStandard = "standard"
