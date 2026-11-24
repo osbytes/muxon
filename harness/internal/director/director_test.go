@@ -21,13 +21,13 @@ func TestDirectorScriptedFixture(t *testing.T) {
 	}
 	trace := filepath.Join(t.TempDir(), "trace.jsonl")
 	out, err := Run(context.Background(), Config{
-		Goal:        "fix the failing test",
-		Workspace:   dir,
-		Trusted:     true,
+		Goal:         "fix the failing test",
+		Workspace:    dir,
+		Trusted:      true,
 		MuxonVersion: "test",
-		Provider:    scripted.New(M0ScriptedResponses()),
-		Manifest:    manifest,
-		TracePath:   trace,
+		Provider:     scripted.New(M0ScriptedResponses()),
+		Manifest:     manifest,
+		TracePath:    trace,
 	})
 	if err != nil {
 		t.Fatal(err)

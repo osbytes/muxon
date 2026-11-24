@@ -33,7 +33,7 @@ type TrialOptions struct {
 	Timeout          time.Duration
 	SessionBudgetUSD float64
 	ResultsPath      string
-	MuxonVersion      string
+	MuxonVersion     string
 	Trusted          bool
 	TaskDir          string
 	FixtureRoots     []string
@@ -182,7 +182,7 @@ func trialConfig(task Task, opt TrialOptions, manifest *config.Manifest, work st
 		Goal:                goal,
 		Workspace:           work,
 		Trusted:             opt.Trusted,
-		MuxonVersion:         opt.MuxonVersion,
+		MuxonVersion:        opt.MuxonVersion,
 		Provider:            opt.Provider,
 		Manifest:            manifest,
 		SessionID:           session.NewID(),

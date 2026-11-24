@@ -100,7 +100,7 @@ var runCmd = &cobra.Command{
 			Goal:                prompt,
 			Workspace:           dir,
 			Trusted:             trust,
-			MuxonVersion:         version,
+			MuxonVersion:        version,
 			Provider:            prov,
 			Manifest:            manifest,
 			SessionID:           sid,

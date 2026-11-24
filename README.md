@@ -29,8 +29,8 @@ Monorepo for **muxon**: an open-source, CLI-first coding agent harness that runs
 ### Clone and build
 
 ```bash
-git clone git@github.com:adavila0703/thee-harness.git
-cd thee-harness
+git clone git@github.com:adavila0703/muxon-harness.git
+cd muxon-harness
 ```
 
 The repo uses a [Go workspace](go.work); harness code lives under `harness/`. You can stay at the **repo root** for most commands.
@@ -78,7 +78,7 @@ go test ./...
 | `MUXON_TRUST` | — | Set to `1` to trust the workspace (same as `--trust`) |
 | `DEEPINFRA_API_KEY` (etc.) | — | Provider keys per embedded `models.yaml` / `~/.muxon/catalog.json` |
 
-`thee` also reads the nearest `.env` at or above the current directory, stopping at the repo root. Shell variables win over the file. To set it up, copy [`.env.example`](.env.example) to `.env` and fill in your keys.
+`muxon` also reads the nearest `.env` at or above the current directory, stopping at the repo root. Shell variables win over the file. To set it up, copy [`.env.example`](.env.example) to `.env` and fill in your keys.
 
 ---
 

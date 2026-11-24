@@ -21,7 +21,7 @@ var bulkDirNames = map[string]bool{
 // IgnoreRules applies gitignore-style rules and bulk-dir skipping.
 type IgnoreRules struct {
 	git    *ignore.GitIgnore
-	muxon   *ignore.GitIgnore
+	muxon  *ignore.GitIgnore
 	root   string
 	policy *Policy
 }

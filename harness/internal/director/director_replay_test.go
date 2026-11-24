@@ -35,14 +35,14 @@ func TestDirectorReplayVerifyFailThenPass(t *testing.T) {
 		t.Fatal(err)
 	}
 	out, err := Run(context.Background(), Config{
-		Goal:        "fix test",
-		Workspace:   dir,
-		Trusted:     true,
+		Goal:         "fix test",
+		Workspace:    dir,
+		Trusted:      true,
 		MuxonVersion: "test",
-		Provider:    scripted.New(script),
-		Manifest:    manifest,
-		TracePath:   filepath.Join(t.TempDir(), "trace.jsonl"),
-		MaxRounds:   30,
+		Provider:     scripted.New(script),
+		Manifest:     manifest,
+		TracePath:    filepath.Join(t.TempDir(), "trace.jsonl"),
+		MaxRounds:    30,
 	})
 	if err != nil {
 		t.Fatal(err)

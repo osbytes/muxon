@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
 )
 
 var rootCmd = &cobra.Command{

@@ -56,16 +56,16 @@ var evalRunCmd = &cobra.Command{
 		ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 		res, err := eval.RunTrial(ctx, prepared.Task, eval.TrialOptions{
-			ModelID:     modelID,
-			Provider:    prov,
-			Manifest:    manifest,
-			Trial:       1,
-			RunID:       runID,
-			Timeout:     timeout,
-			ResultsPath: filepath.Join(outDir, "runs", runID, "results.jsonl"),
+			ModelID:      modelID,
+			Provider:     prov,
+			Manifest:     manifest,
+			Trial:        1,
+			RunID:        runID,
+			Timeout:      timeout,
+			ResultsPath:  filepath.Join(outDir, "runs", runID, "results.jsonl"),
 			MuxonVersion: version,
-			Trusted:     trust,
-			TaskDir:     prepared.TaskDir,
+			Trusted:      trust,
+			TaskDir:      prepared.TaskDir,
 		})
 		if err != nil && res.Row.TaskID == "" {
 			progress.Error(idx, prepared.Task.ID, modelID, 1, err)
@@ -120,14 +120,14 @@ var evalBasketCmd = &cobra.Command{
 		ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 		header, rows, err := eval.RunBasket(ctx, tasks, models, eval.BasketOptions{
-			Trials:      trials,
-			Concurrency: conc,
-			BudgetUSD:   budget,
-			OutputDir:   outDir,
+			Trials:       trials,
+			Concurrency:  conc,
+			BudgetUSD:    budget,
+			OutputDir:    outDir,
 			MuxonVersion: version,
-			Trusted:     trust,
-			Manifest:    manifest,
-			Progress:    eval.NewTrialProgress(cmd.ErrOrStderr()),
+			Trusted:      trust,
+			Manifest:     manifest,
+			Progress:     eval.NewTrialProgress(cmd.ErrOrStderr()),
 			ProviderFor: func(modelID string) (provider.Provider, error) {
 				p, _, err := loadRunProvider(manifest, modelID)
 				return p, err

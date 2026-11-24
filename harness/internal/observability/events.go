@@ -11,7 +11,7 @@ type Event struct {
 	Type string `json:"type"`
 
 	SchemaVersion string `json:"schema_version,omitempty"`
-	MuxonVersion   string `json:"muxon_version,omitempty"`
+	MuxonVersion  string `json:"muxon_version,omitempty"`
 	Workspace     string `json:"workspace,omitempty"`
 
 	Outcome string `json:"outcome,omitempty"`
@@ -74,7 +74,7 @@ func SessionStartEvent(muxonVersion, workspace string) Event {
 	return Event{
 		Type:          "session.start",
 		SchemaVersion: SchemaVersion,
-		MuxonVersion:   muxonVersion,
+		MuxonVersion:  muxonVersion,
 		Workspace:     workspace,
 	}
 }

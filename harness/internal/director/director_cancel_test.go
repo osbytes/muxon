@@ -30,12 +30,12 @@ func TestDirectorCancelExit130(t *testing.T) {
 	cancel()
 	manifest, _ := config.LoadEmbeddedManifest()
 	out, err := Run(ctx, Config{
-		Goal:        "fix",
-		Workspace:   t.TempDir(),
-		Trusted:     true,
+		Goal:         "fix",
+		Workspace:    t.TempDir(),
+		Trusted:      true,
 		MuxonVersion: "test",
-		Provider:    blockingProvider{},
-		Manifest:    manifest,
+		Provider:     blockingProvider{},
+		Manifest:     manifest,
 	})
 	if err != nil {
 		t.Fatal(err)

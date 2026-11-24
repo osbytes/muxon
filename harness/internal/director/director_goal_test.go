@@ -18,14 +18,14 @@ func TestDirectorQuestionGoalClassification(t *testing.T) {
 	tracePath := filepath.Join(t.TempDir(), "trace.jsonl")
 	manifest, _ := config.LoadEmbeddedManifest()
 	_, err := Run(context.Background(), Config{
-		Goal:        "where is sum configured?",
-		Workspace:   dir,
-		Trusted:     true,
+		Goal:         "where is sum configured?",
+		Workspace:    dir,
+		Trusted:      true,
 		MuxonVersion: "test",
-		Provider:    scripted.New(M0ScriptedResponses()),
-		Manifest:    manifest,
-		TracePath:   tracePath,
-		MaxRounds:   5,
+		Provider:     scripted.New(M0ScriptedResponses()),
+		Manifest:     manifest,
+		TracePath:    tracePath,
+		MaxRounds:    5,
 	})
 	if err != nil {
 		t.Fatal(err)

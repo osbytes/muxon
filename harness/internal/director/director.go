@@ -40,7 +40,7 @@ type Config struct {
 	Goal                string
 	Workspace           string
 	Trusted             bool
-	MuxonVersion         string
+	MuxonVersion        string
 	Provider            provider.Provider
 	Manifest            *config.Manifest
 	MaxRounds           int

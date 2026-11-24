@@ -51,11 +51,11 @@ func writeFile(t *testing.T, path, body string) {
 }
 
 func TestLoadDotEnvWalksUpToRepoRoot(t *testing.T) {
-	unsetForTest(t, "THEE_DOTENV_A", "THEE_DOTENV_B")
+	unsetForTest(t, "MUXON_DOTENV_A", "MUXON_DOTENV_B")
 	root := t.TempDir()
 	writeFile(t, filepath.Join(root, ".git", "HEAD"), "ref: refs/heads/main\n")
-	writeFile(t, filepath.Join(root, ".env"), "THEE_DOTENV_A=from-file\nTHEE_DOTENV_B=from-file\n")
-	t.Setenv("THEE_DOTENV_B", "from-env")
+	writeFile(t, filepath.Join(root, ".env"), "MUXON_DOTENV_A=from-file\nMUXON_DOTENV_B=from-file\n")
+	t.Setenv("MUXON_DOTENV_B", "from-env")
 	sub := filepath.Join(root, "harness", "cmd")
 	if err := os.MkdirAll(sub, 0o750); err != nil {
 		t.Fatal(err)
@@ -67,17 +67,17 @@ func TestLoadDotEnvWalksUpToRepoRoot(t *testing.T) {
 	if path != filepath.Join(root, ".env") {
 		t.Errorf("LoadDotEnv: got path %q", path)
 	}
-	if got := os.Getenv("THEE_DOTENV_A"); got != "from-file" {
-		t.Errorf("THEE_DOTENV_A: got %q, want from-file", got)
+	if got := os.Getenv("MUXON_DOTENV_A"); got != "from-file" {
+		t.Errorf("MUXON_DOTENV_A: got %q, want from-file", got)
 	}
-	if got := os.Getenv("THEE_DOTENV_B"); got != "from-env" {
-		t.Errorf("THEE_DOTENV_B: got %q, want from-env", got)
+	if got := os.Getenv("MUXON_DOTENV_B"); got != "from-env" {
+		t.Errorf("MUXON_DOTENV_B: got %q, want from-env", got)
 	}
 }
 
 func TestFindDotEnvStopsAtRepoRoot(t *testing.T) {
 	outer := t.TempDir()
-	writeFile(t, filepath.Join(outer, ".env"), "THEE_DOTENV_OUTER=1\n")
+	writeFile(t, filepath.Join(outer, ".env"), "MUXON_DOTENV_OUTER=1\n")
 	repo := filepath.Join(outer, "repo")
 	writeFile(t, filepath.Join(repo, ".git"), "gitdir: elsewhere\n")
 	path, err := FindDotEnv(repo)

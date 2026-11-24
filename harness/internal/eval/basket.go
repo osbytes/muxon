@@ -35,7 +35,7 @@ type BasketOptions struct {
 	Concurrency    int
 	BudgetUSD      float64
 	OutputDir      string
-	MuxonVersion    string
+	MuxonVersion   string
 	Trusted        bool
 	Dataset        string
 	DatasetVersion string
@@ -288,7 +288,7 @@ func (s *basketState) runJob(ctx context.Context, j basketJob, remain float64) (
 		Overrides:        j.model.Overrides,
 		Timeout:          time.Duration(j.task.Task.TimeoutS) * time.Second,
 		SessionBudgetUSD: remain,
-		MuxonVersion:      s.opt.MuxonVersion,
+		MuxonVersion:     s.opt.MuxonVersion,
 		Trusted:          s.opt.Trusted,
 		TaskDir:          j.task.TaskDir,
 		HarnessSHA:       s.header.HarnessSHA,

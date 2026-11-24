@@ -41,14 +41,14 @@ func TestDirectorVerifyFailEmitsEscalate(t *testing.T) {
 	tracePath := filepath.Join(t.TempDir(), "trace.jsonl")
 	manifest := escalateTestManifest()
 	_, err := Run(context.Background(), Config{
-		Goal:        "fix test",
-		Workspace:   dir,
-		Trusted:     true,
+		Goal:         "fix test",
+		Workspace:    dir,
+		Trusted:      true,
 		MuxonVersion: "test",
-		Provider:    scripted.New(script),
-		Manifest:    manifest,
-		TracePath:   tracePath,
-		MaxRounds:   30,
+		Provider:     scripted.New(script),
+		Manifest:     manifest,
+		TracePath:    tracePath,
+		MaxRounds:    30,
 		Caps: SessionCaps{
 			MaxToolRounds:            30,
 			MaxVerifyAttempts:        6,

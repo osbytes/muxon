@@ -470,7 +470,7 @@ func (m *Model) startGoal(goal string, force bool) tea.Cmd {
 			Goal:             goal,
 			Workspace:        opt.Workspace,
 			Trusted:          trusted,
-			MuxonVersion:      opt.Version,
+			MuxonVersion:     opt.Version,
 			Provider:         opt.Provider,
 			Manifest:         opt.Manifest,
 			SessionID:        opt.SessionID,
