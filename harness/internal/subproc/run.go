@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"syscall"
 	"time"
 )
 
@@ -19,24 +18,29 @@ func Run(ctx context.Context, dir string, argv []string, scrubKeys []string) (st
 	cmd := exec.CommandContext(ctx, argv[0], argv[1:]...)
 	cmd.Dir = dir
 	cmd.Env = scrubEnv(os.Environ(), scrubKeys)
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	setProcessGroup(cmd)
+	cmd.Cancel = func() error { return killProcessTree(cmd.Process) }
+	cmd.WaitDelay = waitDelay
 	var buf bytes.Buffer
 	cmd.Stdout = &buf
 	cmd.Stderr = &buf
 	runErr := cmd.Run()
+	if ctx.Err() != nil {
+		return buf.Bytes(), -1, ctx.Err()
+	}
 	code := 0
 	if runErr != nil {
 		if ee, ok := runErr.(*exec.ExitError); ok {
 			code = ee.ExitCode()
-		} else if ctx.Err() != nil {
-			killProcessGroup(cmd.Process)
-			return buf.Bytes(), -1, ctx.Err()
 		} else {
 			return nil, 0, runErr
 		}
 	}
 	return buf.Bytes(), code, nil
 }
+
+// waitDelay bounds how long Run waits for output pipes after the process tree is killed.
+const waitDelay = time.Second
 
 func validateArgv(argv []string) error {
 	if len(argv) == 0 {
@@ -86,13 +90,6 @@ func scrubEnv(env []string, extraKeys []string) []string {
 		out = append(out, e)
 	}
 	return out
-}
-
-func killProcessGroup(p *os.Process) {
-	if p == nil {
-		return
-	}
-	_ = syscall.Kill(-p.Pid, syscall.SIGKILL)
 }
 
 // RunWithTimeout runs argv with a deadline.

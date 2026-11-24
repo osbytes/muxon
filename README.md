@@ -31,7 +31,16 @@ cd thee-harness
 
 The repo uses a [Go workspace](go.work); harness code lives under `harness/`. You can stay at the **repo root** for most commands.
 
-**Make shortcuts** (optional):
+**Task shortcuts** (optional, works on Windows, macOS, and Linux; install from [taskfile.dev](https://taskfile.dev/installation/)):
+
+```bash
+task                # list tasks
+task build          # → harness/thee (harness/thee.exe on Windows)
+task thee -- version
+task test
+```
+
+**Make shortcuts** (optional, Unix only):
 
 ```bash
 make help

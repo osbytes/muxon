@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -68,7 +69,11 @@ func latestTrace(fixtureDir string) (string, error) {
 
 func buildThee(t *testing.T) string {
 	dir := t.TempDir()
-	out := filepath.Join(dir, "thee")
+	name := "thee"
+	if runtime.GOOS == "windows" {
+		name += ".exe"
+	}
+	out := filepath.Join(dir, name)
 	cmd := exec.Command("go", "build", "-o", out, ".")
 	cmd.Dir = filepath.Join("..", "..", "cmd", "thee")
 	if outCombined, err := cmd.CombinedOutput(); err != nil {

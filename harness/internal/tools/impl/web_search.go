@@ -23,10 +23,10 @@ const (
 )
 
 var (
-	webSearchAnchorRE   = regexp.MustCompile(`(?is)<a\b([^>]*)>(.*?)</a\s*>`)
-	webSearchAttrRE     = regexp.MustCompile(`(?is)([a-zA-Z_:][a-zA-Z0-9_:.-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))`)
-	webSearchSnippetRE  = regexp.MustCompile(`(?is)<a\b([^>]*)>(.*?)</a\s*>`)
-	webSearchTagRE      = regexp.MustCompile(`(?s)<[^>]*>`)
+	webSearchAnchorRE      = regexp.MustCompile(`(?is)<a\b([^>]*)>(.*?)</a\s*>`)
+	webSearchAttrRE        = regexp.MustCompile(`(?is)([a-zA-Z_:][a-zA-Z0-9_:.-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))`)
+	webSearchSnippetRE     = regexp.MustCompile(`(?is)<a\b([^>]*)>(.*?)</a\s*>`)
+	webSearchTagRE         = regexp.MustCompile(`(?s)<[^>]*>`)
 	webSearchPunctuationRE = regexp.MustCompile(`\s+([.,!?;:])`)
 )
 

@@ -9,10 +9,11 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     defaults:
       run:
+        shell: bash
         working-directory: harness
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +27,8 @@ jobs:
             sudo apt-get update && sudo apt-get install -y ripgrep
           elif command -v brew >/dev/null 2>&1; then
             brew install ripgrep
+          elif command -v choco >/dev/null 2>&1; then
+            choco install ripgrep -y --no-progress
           fi
       - run: go mod download
       - run: gofmt -s -l . | tee /tmp/gofmt.out && test ! -s /tmp/gofmt.out

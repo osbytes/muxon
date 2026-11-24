@@ -1,0 +1,49 @@
+# Cross-platform task runner (https://taskfile.dev). Run from repo root: `task <name>`.
+version: "3"
+
+vars:
+  HARNESS: ./harness
+  THEE: ./harness/cmd/thee
+
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  build:
+    desc: Build harness/thee binary
+    cmds:
+      - go build -o harness/thee{{exeExt}} {{.THEE}}
+
+  thee:
+    desc: go run thee CLI (pass args after --, e.g. task thee -- run -p "hi")
+    cmds:
+      - go run {{.THEE}} {{.CLI_ARGS}}
+
+  test:
+    desc: go test ./harness/...
+    cmds:
+      - go test ./harness/...
+
+  vet:
+    desc: go vet ./harness/...
+    cmds:
+      - go vet ./harness/...
+
+  fmt:
+    desc: gofmt harness/
+    cmds:
+      - gofmt -w {{.HARNESS}}
+
+  lint:
+    desc: golangci-lint run (in harness/)
+    dir: harness
+    cmds:
+      - golangci-lint run
+
+  eval:
+    desc: OpenCode Go basket
+    dir: harness
+    cmds:
+      - go run ./cmd/thee eval basket --matrix testdata/eval/matrix-opencode.yaml --tasks 'testdata/eval/*.json' --trials 1 --concurrency 2 --budget-usd 5 --trust
