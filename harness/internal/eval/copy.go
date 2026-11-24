@@ -115,6 +115,8 @@ func fixtureCandidates(name string, extra []string) []string {
 	wd, _ := os.Getwd()
 	bases = append(bases,
 		wd,
+		filepath.Join(wd, "evals", "fixtures"),
+		filepath.Join(wd, "..", "evals", "fixtures"),
 		filepath.Join(wd, "testdata", "fixtures"),
 		filepath.Join(wd, "harness", "testdata", "fixtures"),
 		filepath.Join(wd, "..", "testdata", "fixtures"),

@@ -249,8 +249,8 @@ func evalRunID(cmd *cobra.Command) string {
 
 func defaultTaskGlob() string {
 	candidates := []string{
-		filepath.Join("testdata", "eval", "*.json"),
-		filepath.Join("harness", "testdata", "eval", "*.json"),
+		filepath.Join("evals", "tasks", "*.json"),
+		filepath.Join("..", "evals", "tasks", "*.json"),
 	}
 	for _, c := range candidates {
 		matches, _ := filepath.Glob(c)
@@ -258,7 +258,7 @@ func defaultTaskGlob() string {
 			return c
 		}
 	}
-	return filepath.Join("testdata", "eval", "*.json")
+	return candidates[0]
 }
 
 func resolveResults(outDir, arg string) (string, error) {

@@ -665,7 +665,7 @@ Files: `cmd/muxon/trust.go` (complete)
 
 Depends on: 7.1  
 Read: [benchmarks](../benchmarks.md), [observability § Eval](./observability.md#eval-integration)  
-Files: `internal/eval/task.go`, `cmd/muxon/eval.go`, `testdata/eval/fix-test.json`  
+Files: `internal/eval/task.go`, `cmd/muxon/eval.go`, `evals/tasks/fix-test.json`  
 Done when: **Milestone A** documented in repo README.
 
 ---
@@ -735,7 +735,7 @@ Files: `internal/tools/impl/test.go`, `git.go`
 ### Step 9.5 — Eval basket × matrix
 
 Depends on: 7.7  
-Files: `testdata/eval/*.json`, nightly workflow optional  
+Files: `evals/tasks/*.json`, nightly workflow optional  
 Done when: **Milestone C** `results.jsonl` + report stub.
 
 ### Step 9.6 — resume

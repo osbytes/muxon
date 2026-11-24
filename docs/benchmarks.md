@@ -126,14 +126,14 @@ The task file is JSON. `check.files` is copied into the workspace only after the
 Commands:
 
 ```text
-muxon eval basket --matrix harness/testdata/eval/matrix.yaml --trials 3 --budget-usd 20
+muxon eval basket --matrix evals/matrices/default.yaml --trials 3 --budget-usd 20
 make eval
 muxon eval report <run-id>
 muxon eval compare <run-a> <run-b>
 muxon eval export-swebench --instance repo__repo-1 --model muxon+qwen3-32b -o predictions.jsonl
 ```
 
-Each run lives in `.muxon/eval/runs/<run-id>/` (`run.json` plus `results.jsonl`). Rows also carry `run_id`, `provider`, `harness_sha`, `manifest_hash`, `salvaged_tool_calls`, `timeout_hit`, `reason`, and `overrides`. Prices in `models.yaml` are pinned 2026-10-14 (DeepInfra Qwen3.5-9B and Qwen3-32B, OpenAI gpt-5). `matrix-opencode.yaml` uses the OpenCode Go key: `OPENCODE_API_KEY`, or `~/.local/share/opencode/auth.json` under provider `opencode-go`. Its prices are the short-context rates from the OpenCode Go docs (Kimi K2.7 Code, GPT 6 Luna).
+Each run lives in `.muxon/eval/runs/<run-id>/` (`run.json` plus `results.jsonl`). Rows also carry `run_id`, `provider`, `harness_sha`, `manifest_hash`, `salvaged_tool_calls`, `timeout_hit`, `reason`, and `overrides`. Prices in `models.yaml` are pinned 2026-10-14 (DeepInfra Qwen3.5-9B and Qwen3-32B, OpenAI gpt-5). `evals/matrices/opencode.yaml` uses the OpenCode Go key: `OPENCODE_API_KEY`, or `~/.local/share/opencode/auth.json` under provider `opencode-go`. Its prices are the short-context rates from the OpenCode Go docs (Kimi K2.7 Code, GPT 6 Luna).
 
 `muxon eval compare` is the gate for a new tool or harness flag: same tasks, one override flipped, and the McNemar result says whether the outcomes actually moved.
 

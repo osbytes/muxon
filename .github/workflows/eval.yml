@@ -25,8 +25,8 @@ jobs:
           DEEPINFRA_API_KEY: ${{ secrets.DEEPINFRA_API_KEY }}
         run: |
           ./muxon eval basket \
-            --matrix testdata/eval/matrix-ci.yaml \
-            --tasks 'testdata/eval/*.json' \
+            --matrix ../evals/matrices/ci.yaml \
+            --tasks '../evals/tasks/*.json' \
             --trials 1 \
             --concurrency 2 \
             --budget-usd 5 \
