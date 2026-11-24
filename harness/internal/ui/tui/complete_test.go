@@ -85,6 +85,18 @@ func TestSuggestionEscSendsTypedText(t *testing.T) {
 		t.Fatalf("sent %q, want the typed text", m.transcriptText())
 	}
 	m.cancelRun()
+	waitRun(t, m)
+}
+
+// waitRun drains the goal's events until the run goroutine closes them, so it stops writing to
+// the workspace before t.TempDir is removed.
+func waitRun(t *testing.T, m Model) {
+	t.Helper()
+	if m.events == nil {
+		t.Fatal("no goal started")
+	}
+	for range m.events {
+	}
 }
 
 func labels(list []suggestion) []string {

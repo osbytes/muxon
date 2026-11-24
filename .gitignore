@@ -21,3 +21,6 @@
 # Env / secrets
 .env
 .env.*
+
+# Release tooling (changesets)
+node_modules/
