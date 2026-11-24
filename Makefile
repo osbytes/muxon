@@ -33,4 +33,4 @@ lint:
 	cd harness && golangci-lint run
 
 eval:
-	cd harness && go run ./cmd/muxon eval basket --matrix testdata/eval/matrix-opencode.yaml --tasks 'testdata/eval/*.json' --trials 1 --concurrency 2 --budget-usd 5 --trust
+	cd harness && go run ./cmd/muxon eval basket --matrix ../evals/matrices/opencode.yaml --tasks '../evals/tasks/*.json' --trials 1 --concurrency 2 --budget-usd 5 --trust

@@ -76,7 +76,7 @@ Session: 4.2M in (3.1M cached) / 180k out (40k reasoning)  ~$1.14  (worker 92%, 
 ## Eval integration
 
 - `muxon eval run task.json` copies the fixture into a fresh temp workspace, runs the director, then runs the task's hidden `check` (files copied in only after the agent exits). Reward is 1 only when that check exits 0. A timeout is reward 0 with `timeout_hit`.
-- `muxon eval basket --matrix testdata/eval/matrix.yaml --trials 3` writes `.muxon/eval/runs/<run-id>/results.jsonl` and `run.json`. `--budget-usd` stops scheduling once spent cost reaches the cap.
+- `muxon eval basket --matrix evals/matrices/default.yaml --trials 3` writes `.muxon/eval/runs/<run-id>/results.jsonl` and `run.json`. `--budget-usd` stops scheduling once spent cost reaches the cap.
 - `muxon eval report <run-id>` groups by model and capability overrides and prints a task-clustered 95% bootstrap interval. `muxon eval compare <run-a> <run-b>` pairs tasks and prints an exact McNemar p-value.
 - `muxon run --eval tasks/fix-test-001.json` still appends one row to the workspace `.muxon/eval/results.jsonl` from `session.end`. That path is not the hidden grader.
 - Weekly workflow (`.github/workflows/eval.yml`) runs the DeepInfra slice. The frontier row is manual. A harness change that helps the frontier row while hurting the 9B row is a regression.

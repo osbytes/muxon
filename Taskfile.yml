@@ -46,4 +46,4 @@ tasks:
     desc: OpenCode Go basket
     dir: harness
     cmds:
-      - go run ./cmd/muxon eval basket --matrix testdata/eval/matrix-opencode.yaml --tasks 'testdata/eval/*.json' --trials 1 --concurrency 2 --budget-usd 5 --trust
+      - go run ./cmd/muxon eval basket --matrix ../evals/matrices/opencode.yaml --tasks '../evals/tasks/*.json' --trials 1 --concurrency 2 --budget-usd 5 --trust
