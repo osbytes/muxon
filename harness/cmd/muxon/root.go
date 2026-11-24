@@ -5,12 +5,22 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+
+	"github.com/PLACEHOLDER/thee/harness/internal/config"
 )
 
 var rootCmd = &cobra.Command{
 	Use:          "muxon",
 	Short:        "muxon coding agent harness",
 	SilenceUsage: true,
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		wd, err := os.Getwd()
+		if err != nil {
+			return err
+		}
+		_, err = config.LoadDotEnv(wd)
+		return err
+	},
 }
 
 func execute() error {

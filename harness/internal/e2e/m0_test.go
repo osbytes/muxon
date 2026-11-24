@@ -27,6 +27,7 @@ func TestM0RunE2E(t *testing.T) {
 	}
 	bin := buildMuxon(t)
 	cmd := exec.Command(bin, "run", "-p", "fix the failing test", "--trust", "--directory", fixtureDir)
+	cmd.Dir = fixtureDir
 	cmd.Env = append(os.Environ(),
 		"MUXON_HOME="+home,
 		"MUXON_SCRIPTED_PROVIDER_FILE="+scriptPath,

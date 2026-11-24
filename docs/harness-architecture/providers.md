@@ -18,7 +18,7 @@ The harness lets users bring their own key. Our own inference is the provider we
 
 ### Credential resolution order
 
-1. Per-provider `api_key_env` in `models.yaml` or `catalog.json` (e.g. `DEEPINFRA_API_KEY`).
+1. Per-provider `api_key_env` in `models.yaml` or `catalog.json` (e.g. `DEEPINFRA_API_KEY`). At startup `thee` loads the nearest `.env` at or above the current directory (stopping at the directory that holds `.git`). It never overrides variables already set in the environment.
 2. Generic fallbacks where documented (e.g. `OPENAI_API_KEY` for OpenAI-compatible base URLs)—explicit in config, not magic.
 3. OS keychain entries via `muxon auth login <provider>`.
 4. **(team)** CI/org secret injection—same env-based contract.
