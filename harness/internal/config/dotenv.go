@@ -50,7 +50,7 @@ func LoadDotEnv(dir string) (string, error) {
 	if err != nil || path == "" {
 		return "", err
 	}
-	b, err := os.ReadFile(path)
+	b, err := os.ReadFile(path) //nolint:gosec // G304: path is always <dir>/.env from FindDotEnv
 	if err != nil {
 		return "", err
 	}
