@@ -13,7 +13,7 @@ type CheckpointStore struct {
 	seq       int
 }
 
-// NewCheckpointStore creates a store under .thee/sessions.
+// NewCheckpointStore creates a store under .muxon/sessions.
 func NewCheckpointStore(root, sessionID string) *CheckpointStore {
 	return &CheckpointStore{root: root, sessionID: sessionID}
 }
@@ -25,7 +25,7 @@ func (c *CheckpointStore) Save(relPath string) error {
 		return err
 	}
 	c.seq++
-	destDir := filepath.Join(c.root, ".thee", "sessions", c.sessionID, "snapshots", "cp", itoa(c.seq))
+	destDir := filepath.Join(c.root, ".muxon", "sessions", c.sessionID, "snapshots", "cp", itoa(c.seq))
 	if err := os.MkdirAll(destDir, 0o755); err != nil {
 		return err
 	}
@@ -36,7 +36,7 @@ func (c *CheckpointStore) Save(relPath string) error {
 // RestoreNewest copies the newest on-disk snapshot for relPath back into the workspace.
 func RestoreNewest(root, sessionID, relPath string) error {
 	base := filepath.Base(relPath)
-	cpRoot := filepath.Join(root, ".thee", "sessions", sessionID, "snapshots", "cp")
+	cpRoot := filepath.Join(root, ".muxon", "sessions", sessionID, "snapshots", "cp")
 	entries, err := os.ReadDir(cpRoot)
 	if err != nil {
 		return err
@@ -79,7 +79,7 @@ func (c *CheckpointStore) RestoreLatest(relPath string) error {
 		return os.ErrNotExist
 	}
 	dest := filepath.Join(c.root, relPath)
-	src := filepath.Join(c.root, ".thee", "sessions", c.sessionID, "snapshots", "cp", itoa(c.seq), filepath.Base(relPath))
+	src := filepath.Join(c.root, ".muxon", "sessions", c.sessionID, "snapshots", "cp", itoa(c.seq), filepath.Base(relPath))
 	return copyFile(src, dest)
 }
 

@@ -10,7 +10,7 @@ import (
 
 const gcAge = 14 * 24 * time.Hour
 
-// GC removes session directories older than 14 days and shadow refs under refs/thee/sessions.
+// GC removes session directories older than 14 days and shadow refs under refs/muxon/sessions.
 func GC(workspace string, now time.Time) (int, error) {
 	n, err := gcSessions(workspace, now, gcAge)
 	if err != nil {
@@ -21,7 +21,7 @@ func GC(workspace string, now time.Time) (int, error) {
 }
 
 func gcSessions(workspace string, now time.Time, olderThan time.Duration) (int, error) {
-	dir := filepath.Join(workspace, ".thee", "sessions")
+	dir := filepath.Join(workspace, ".muxon", "sessions")
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -53,7 +53,7 @@ func gcShadowRefs(workspace string) (int, error) {
 	if _, err := os.Stat(filepath.Join(workspace, ".git")); err != nil {
 		return 0, nil
 	}
-	cmd := exec.Command("git", "for-each-ref", "--format=%(refname)", "refs/thee/sessions")
+	cmd := exec.Command("git", "for-each-ref", "--format=%(refname)", "refs/muxon/sessions")
 	cmd.Dir = workspace
 	out, err := cmd.Output()
 	if err != nil {
@@ -62,7 +62,7 @@ func gcShadowRefs(workspace string) (int, error) {
 	removed := 0
 	for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
 		ref := strings.TrimSpace(line)
-		if ref == "" || !strings.HasPrefix(ref, "refs/thee/sessions/") {
+		if ref == "" || !strings.HasPrefix(ref, "refs/muxon/sessions/") {
 			continue
 		}
 		del := exec.Command("git", "update-ref", "-d", ref)

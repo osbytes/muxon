@@ -1,6 +1,6 @@
 # Tech stack
 
-**Decision:** The thee-harness **core** is implemented in **Go** as a single CLI binary (`thee`). Our hosted API lives in a separate repo; BYOK direct mode does not depend on it.
+**Decision:** The muxon **core** is implemented in **Go** as a single CLI binary (`muxon`). Our hosted API lives in a separate repo; BYOK direct mode does not depend on it.
 
 **Go version:** **1.24+** (pin current stable in `go.mod` at implementation time).
 
@@ -36,9 +36,9 @@ Rust/Python references (Ante, Aider, Tau) inform design; the harness is **Go onl
 ## Repository layout
 
 ```text
-thee-harness/           # monorepo root (docs, go.work)
-├── harness/            # OSS thee CLI module
-│   ├── cmd/thee/
+muxon/           # monorepo root (docs, go.work)
+├── harness/            # OSS muxon CLI module
+│   ├── cmd/muxon/
 │   ├── internal/
 │   ├── testdata/
 │   ├── go.mod
@@ -48,7 +48,7 @@ thee-harness/           # monorepo root (docs, go.work)
 └── go.work
 ```
 
-Package names under `internal/` follow [README.md](./README.md) (director, context, router, provider, …). **This doc does not define package behavior**—only that we use a standard Go module layout with `internal/` boundaries so `thee serve` can reuse them in a long-lived process (ADR-002).
+Package names under `internal/` follow [README.md](./README.md) (director, context, router, provider, …). **This doc does not define package behavior**—only that we use a standard Go module layout with `internal/` boundaries so `muxon serve` can reuse them in a long-lived process (ADR-002).
 
 ---
 
@@ -59,7 +59,7 @@ Package names under `internal/` follow [README.md](./README.md) (director, conte
 | Commands and headless output | [spf13/cobra](https://github.com/spf13/cobra) or std `flag`; stdout/stderr; optional `--json` |
 | Formatting | [charmbracelet/lipgloss](https://github.com/charmbracelet/lipgloss) |
 | TUI | [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea) |
-| `thee serve` | JSONL over stdio or WebSocket ([session-director.md](./session-director.md#surfaces)) |
+| `muxon serve` | JSONL over stdio or WebSocket ([session-director.md](./session-director.md#surfaces)) |
 
 ---
 
@@ -67,7 +67,7 @@ Package names under `internal/` follow [README.md](./README.md) (director, conte
 
 | Data | Format | Library |
 |------|--------|---------|
-| `thee.toml` | TOML | [BurntSushi/toml](https://github.com/BurntSushi/toml) or [pelletier/go-toml](https://github.com/pelletier/go-toml) |
+| `muxon.toml` | TOML | [BurntSushi/toml](https://github.com/BurntSushi/toml) or [pelletier/go-toml](https://github.com/pelletier/go-toml) |
 | `models.yaml` | YAML | [gopkg.in/yaml.v3](https://gopkg.in/yaml.v3) |
 | `catalog.json` | JSON | `encoding/json` |
 | Secrets | Env / OS keychain | `os.Getenv`, keychain via [zalando/go-keyring](https://github.com/zalando/go-keyring); no secrets in repo |
@@ -125,9 +125,9 @@ Three adapters behind one interface ([providers.md](./providers.md#adapters)): `
 
 | Item | Choice |
 |------|--------|
-| Module path | TBD (e.g. `github.com/<org>/thee-harness`) |
+| Module path | TBD (e.g. `github.com/<org>/muxon`) |
 | Artifacts | `goreleaser` or manual `GOOS`/`GOARCH` matrix |
-| Distribution | GitHub Releases (single `thee` binary per platform) |
+| Distribution | GitHub Releases (single `muxon` binary per platform) |
 
 ---
 

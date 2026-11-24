@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 type blockingProvider struct{}
@@ -25,7 +25,7 @@ func (blockingProvider) Stream(ctx context.Context, req provider.Request) (provi
 }
 
 func TestDirectorCancelExit130(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	manifest, _ := config.LoadEmbeddedManifest()
@@ -33,7 +33,7 @@ func TestDirectorCancelExit130(t *testing.T) {
 		Goal:        "fix",
 		Workspace:   t.TempDir(),
 		Trusted:     true,
-		TheeVersion: "test",
+		MuxonVersion: "test",
 		Provider:    blockingProvider{},
 		Manifest:    manifest,
 	})

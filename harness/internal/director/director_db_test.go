@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/db"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/db"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 
 	_ "modernc.org/sqlite"
 )
 
 func TestRejectedPatchIsStored(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -33,7 +33,7 @@ func TestRejectedPatchIsStored(t *testing.T) {
 		}},
 	})
 	out, err := Run(context.Background(), Config{
-		Goal: "fix the sum", Workspace: dir, Trusted: true, Interactive: true, TheeVersion: "t",
+		Goal: "fix the sum", Workspace: dir, Trusted: true, Interactive: true, MuxonVersion: "t",
 		Provider: scripted.New([]provider.Response{
 			{
 				ToolCalls:    []provider.ToolCall{{ID: "call_patch", Name: "patch", Arguments: patchArgs}},
@@ -87,14 +87,14 @@ func TestRejectedPatchIsStored(t *testing.T) {
 }
 
 func TestToolParseFailureIsLogged(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
 		t.Fatal(err)
 	}
 	out, err := Run(context.Background(), Config{
-		Goal: "fix the sum", Workspace: dir, Trusted: true, TheeVersion: "t",
+		Goal: "fix the sum", Workspace: dir, Trusted: true, MuxonVersion: "t",
 		Provider: scripted.New([]provider.Response{
 			{Text: "I will describe the fix instead of calling a tool."},
 			{Text: "still no tool call"},
@@ -143,7 +143,7 @@ func TestToolParseFailureIsLogged(t *testing.T) {
 }
 
 func TestToolRoundsExhaustedIsLogged(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -155,7 +155,7 @@ func TestToolRoundsExhaustedIsLogged(t *testing.T) {
 		FinishReason: "tool_calls",
 	}
 	out, err := Run(context.Background(), Config{
-		Goal: "explain sum.go", Workspace: dir, Trusted: true, TheeVersion: "t",
+		Goal: "explain sum.go", Workspace: dir, Trusted: true, MuxonVersion: "t",
 		Provider:  scripted.New([]provider.Response{read, read, read}),
 		Manifest:  manifest,
 		TracePath: filepath.Join(t.TempDir(), "t.jsonl"),
@@ -172,7 +172,7 @@ func TestToolRoundsExhaustedIsLogged(t *testing.T) {
 }
 
 func TestVerifyFailureIsLogged(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -192,7 +192,7 @@ func TestVerifyFailureIsLogged(t *testing.T) {
 		FinishReason: "tool_calls",
 	}
 	out, err := Run(context.Background(), Config{
-		Goal: "fix the sum", Workspace: dir, Trusted: true, TheeVersion: "t",
+		Goal: "fix the sum", Workspace: dir, Trusted: true, MuxonVersion: "t",
 		Provider:  scripted.New([]provider.Response{patch, finish, finish}),
 		Manifest:  manifest,
 		TracePath: filepath.Join(t.TempDir(), "t.jsonl"),

@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
 )
 
 func TestModelsList(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	var buf bytes.Buffer
 	modelsListCmd.SetOut(&buf)
 	modelsListCmd.SetErr(&buf)

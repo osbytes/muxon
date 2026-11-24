@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
-	"github.com/PLACEHOLDER/thee/harness/internal/verifier"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/verifier"
 )
 
 func TestDirectorScriptedFixture(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -24,7 +24,7 @@ func TestDirectorScriptedFixture(t *testing.T) {
 		Goal:        "fix the failing test",
 		Workspace:   dir,
 		Trusted:     true,
-		TheeVersion: "test",
+		MuxonVersion: "test",
 		Provider:    scripted.New(M0ScriptedResponses()),
 		Manifest:    manifest,
 		TracePath:   trace,

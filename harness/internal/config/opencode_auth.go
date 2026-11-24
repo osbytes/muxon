@@ -12,9 +12,9 @@ type openCodeCredential struct {
 }
 
 // OpenCodeAuthPath is the OpenCode credential file.
-// THEE_OPENCODE_AUTH overrides the default path.
+// MUXON_OPENCODE_AUTH overrides the default path.
 func OpenCodeAuthPath() string {
-	if p := os.Getenv("THEE_OPENCODE_AUTH"); p != "" {
+	if p := os.Getenv("MUXON_OPENCODE_AUTH"); p != "" {
 		return p
 	}
 	if xdg := os.Getenv("XDG_DATA_HOME"); xdg != "" {

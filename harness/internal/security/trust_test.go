@@ -7,7 +7,7 @@ import (
 
 func TestTrustAddList(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("THEE_HOME", home)
+	t.Setenv("MUXON_HOME", home)
 	dir := filepath.Join(home, "proj")
 	s := TrustStore{}
 	s.AddRoot(dir)

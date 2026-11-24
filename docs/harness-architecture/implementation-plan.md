@@ -1,12 +1,12 @@
 # Harness implementation plan
 
-**Scope:** Open-source `thee` CLI and libraries only. The closed [API](../api/README.md) is a separate Go module (`api/`) in this monorepo and is not part of this plan.
+**Scope:** Open-source `muxon` CLI and libraries only. The closed [API](../api/README.md) is a separate Go module (`api/`) in this monorepo and is not part of this plan.
 
-**Code root:** Step **Files** paths are relative to the `harness/` module (`harness/cmd/thee/...`, `harness/internal/...`).
+**Code root:** Step **Files** paths are relative to the `harness/` module (`harness/cmd/muxon/...`, `harness/internal/...`).
 
 **Spec:** Behavior is defined in this directory ([README](./README.md)). This document is the **build order**, package layout, milestones, and v1 cut line. When a step says “per spec”, the linked section wins over this plan.
 
-**North star:** Headless `thee run` fixes a failing unit test in a fixture repo using a **small-model profile** (`two_step`, `compact` prompt), **verify-gated** `finish`, JSONL trace, exit code `0`. TUI and eval reuse the same `internal/` loop.
+**North star:** Headless `muxon run` fixes a failing unit test in a fixture repo using a **small-model profile** (`two_step`, `compact` prompt), **verify-gated** `finish`, JSONL trace, exit code `0`. TUI and eval reuse the same `internal/` loop.
 
 **Two pillars** (v1, not bolted on later): [smart context](./context-engine.md#smart-context-vs-context-dump) and [reliable tool calling](./tools/README.md#tool-calling-on-small-models). See [README § Small-model strategy](./README.md#small-model-strategy-two-pillars).
 
@@ -29,11 +29,11 @@ Work proceeds in **ten parts**, in order. **Part 1 is a thin end-to-end loop** (
 1. Read only the **Read** links on the current step plus [§ Contracts](#contracts) below.
 2. Create only the **Files** listed; extra files should be tests or `testdata` for that step.
 3. Do not invent behavior; spec wins. If stuck, pick the simplest behavior that satisfies **Tests** and note it in the PR.
-4. Tests: `t.TempDir()`, `t.Setenv("THEE_HOME", ...)`, `testutil.CopyFixture`; never mutate `testdata/fixtures` in place; no network in unit tests.
+4. Tests: `t.TempDir()`, `t.Setenv("MUXON_HOME", ...)`, `testutil.CopyFixture`; never mutate `testdata/fixtures` in place; no network in unit tests.
 5. Before PR: `gofmt`, `go vet ./...`, `go test ./...`, `golangci-lint run`.
 6. Prompt changes under `internal/assets/prompts/` require golden/`prefix_hash` updates in the same PR.
 7. Allowed deps only (see [§ Contracts](#contracts)); no vendor LLM SDKs, testify, or heavy frameworks.
-8. `cmd/thee` wires flags and exit codes only; no HTTP, tools, or prompt assembly in `cmd/`.
+8. `cmd/muxon` wires flags and exit codes only; no HTTP, tools, or prompt assembly in `cmd/`.
 
 ### Step template
 
@@ -53,7 +53,7 @@ Done when: …
 
 | ID | Decision |
 |----|----------|
-| D1 | Module `github.com/<org>/thee-harness`; human supplies `<org>` in step 1.1. |
+| D1 | Module `github.com/<org>/muxon`; human supplies `<org>` in step 1.1. |
 | D2 | `go:embed` only in `internal/assets/` (models.yaml, prompts). |
 | D3 | Package `internal/contextengine` (not `context`). |
 | D4 | **No OS sandbox in v1.** `shell`/`process`/`browser`/`mcp`/`subagent` return “not available in this build”. Verify/`test` trust-gated. argv-only exec, env scrub, process groups, path checks always on. |
@@ -64,9 +64,9 @@ Done when: …
 | D9 | Patch ladder in Go (udiff + search_replace); no `git` binary required for apply. |
 | D10 | Compaction v1: elision + truncate only (ADR-003 open; no summarizer until eval proves need). |
 | D11 | No `planning` state in v1; registry still has planning-phase tools for later. |
-| D12 | Repo-map v1: in-memory Go symbols + path list; cache `.thee/index/repomap.json`. SQLite optional Part 9. |
+| D12 | Repo-map v1: in-memory Go symbols + path list; cache `.muxon/index/repomap.json`. SQLite optional Part 9. |
 | D13 | Classification: router JSON when `router` role set; else `change` + goal-text tags. Finish gate uses workspace changed, not label. |
-| D14 | `THEE_HOME` (default `~/.thee`); tests always set it. |
+| D14 | `MUXON_HOME` (default `~/.muxon`); tests always set it. |
 | D15 | HTTP retry: in-house, 3× backoff from 1s. |
 | D16 | Director tests use `provider/scripted` until Part 9 `replay` traces exist. |
 | D17 | **Salvage lives in `internal/toolcall`**, not `tools/runtime`. Runtime only executes validated `tools.Call`. |
@@ -78,9 +78,9 @@ Done when: …
 
 | ID | Criteria | Part |
 |----|----------|------|
-| **M0** | `thee run -p "fix the failing test" --trust` on `testdata/fixtures/go-failing-test` passes with scripted provider; trace has `verify.run` pass + `session.end` `done`. | 1 |
+| **M0** | `muxon run -p "fix the failing test" --trust` on `testdata/fixtures/go-failing-test` passes with scripted provider; trace has `verify.run` pass + `session.end` `done`. | 1 |
 | **M1** | Same task live on `two_step`/`compact` (≤~30B); record `malformed_call_rate`, `salvage_rate`, `model_calls_per_tool`. | 4 |
-| **A** | Full `thee run` flags, exit 0–3/130, `doctor`, `cost`, `trust`, `eval run`. | 7 |
+| **A** | Full `muxon run` flags, exit 0–3/130, `doctor`, `cost`, `trust`, `eval run`. | 7 |
 | **B** | TUI completes same fixture. | 8 |
 | **C** | Eval basket × model matrix per [benchmarks](../benchmarks.md). | 9 |
 | **D** | Goreleaser, auth, docs, no P0 spec gaps. | 10 |
@@ -99,17 +99,17 @@ Hosted API (optional provider only) · full `serve` · MCP/browser/subagent/proc
 
 ### Module and dependencies
 
-- Go **1.24+**; binary `thee` from `cmd/thee`.
+- Go **1.24+**; binary `muxon` from `cmd/muxon`.
 - Allowed: `cobra`, `yaml.v3`, `BurntSushi/toml`, `go-cmp`, `go-gitignore`, `bubbletea`/`lipgloss`/`bubbles`, `go-keyring`, optional `tiktoken-go`/`modernc.org/sqlite` in Part 9.
 - Stdlib first: `context`, `net/http`, `encoding/json`, `log/slog`, `embed`, `os/exec`.
 
 ### Repository layout
 
 ```text
-cmd/thee/
+cmd/muxon/
 internal/
   assets/          # embed models.yaml + prompts/
-  config/          # THEE_HOME, manifest, catalog, toml, credentials
+  config/          # MUXON_HOME, manifest, catalog, toml, credentials
   observability/   # JSONL trace, event types
   provider/        # Request/Response; openai/, scripted/, replay/
   security/        # deny/ignore, redaction, tiers, trust, env scrub
@@ -127,18 +127,18 @@ internal/
 testdata/fixtures/, testdata/traces/, testdata/provider/
 ```
 
-**Import rule:** `cmd/thee` → `internal/*` (not `e2e`/`testutil`). `director` may import all core packages except `ui/*`. `toolcall` imports `provider`, `tools`, `config`; not `director`.
+**Import rule:** `cmd/muxon` → `internal/*` (not `e2e`/`testutil`). `director` may import all core packages except `ui/*`. `toolcall` imports `provider`, `tools`, `config`; not `director`.
 
 ### On-disk
 
 | Path | Purpose |
 |------|---------|
-| `$THEE_HOME/config.toml`, `catalog.json`, `trust.json` | User config |
-| `<ws>/.thee/sessions/<id>/trace.jsonl` | Trace |
-| `<ws>/.thee/sessions/<id>/verify-<n>.log` | Verify log |
-| `refs/thee/sessions/<id>/base`, `cp-<n>` | Shadow git refs (user index untouched) |
+| `$MUXON_HOME/config.toml`, `catalog.json`, `trust.json` | User config |
+| `<ws>/.muxon/sessions/<id>/trace.jsonl` | Trace |
+| `<ws>/.muxon/sessions/<id>/verify-<n>.log` | Verify log |
+| `refs/muxon/sessions/<id>/base`, `cp-<n>` | Shadow git refs (user index untouched) |
 
-Session id: `YYYYMMDDTHHMMSSZ-xxxxxx`. `.thee/` excluded from tools; append to `.git/info/exclude` on first session if needed.
+Session id: `YYYYMMDDTHHMMSSZ-xxxxxx`. `.muxon/` excluded from tools; append to `.git/info/exclude` on first session if needed.
 
 ### Core interfaces (names are stable)
 
@@ -170,9 +170,9 @@ Goal: fake or real provider → tool call → patch → `finish` → harness `go
 
 Depends on: —
 Read: [tech-stack](./tech-stack.md), ADR-001/002  
-Files: `go.mod`, `cmd/thee/main.go`, `cmd/thee/version.go`, `.github/workflows/ci.yml`, `.golangci.yml`  
-Build: Cobra root; `thee version`; CI `go test`, `vet`, `lint`, `build ./...` on linux+darwin; install `rg` in CI.  
-Tests: `go test ./cmd/thee/...`  
+Files: `go.mod`, `cmd/muxon/main.go`, `cmd/muxon/version.go`, `.github/workflows/ci.yml`, `.golangci.yml`  
+Build: Cobra root; `muxon version`; CI `go test`, `vet`, `lint`, `build ./...` on linux+darwin; install `rg` in CI.  
+Tests: `go test ./cmd/muxon/...`  
 Done when: green CI on empty packages.
 
 ### Step 1.2 — Embedded manifest
@@ -184,12 +184,12 @@ Build: Embed yaml; parse `providers`, `models`, `roles`; `ApplyDefaults` on capa
 Tests: load embedded manifest; worker role resolves.  
 Done when: unit test loads manifest.
 
-### Step 1.3 — THEE_HOME and credentials
+### Step 1.3 — MUXON_HOME and credentials
 
 Depends on: 1.2  
 Read: [providers § Credential resolution](./providers.md#credential-resolution-order)  
 Files: `internal/config/paths.go`, `internal/config/credential.go`  
-Build: `THEE_HOME`; resolve `api_key_env` → env (never log value).  
+Build: `MUXON_HOME`; resolve `api_key_env` → env (never log value).  
 Tests: missing key error; present key found.  
 Done when: credential tests pass.
 
@@ -283,11 +283,11 @@ Build: states `acting` → `tooling` → `verifying` → `done`; max rounds cap;
 Tests: scripted run → `done`, workspace fixed.  
 Done when: director test on copied fixture.
 
-### Step 1.14 — thee run
+### Step 1.14 — muxon run
 
 Depends on: 1.13, 1.3  
-Read: [cli § thee run](./cli.md#thee-run-flags-headless)  
-Files: `cmd/thee/run.go`  
+Read: [cli § muxon run](./cli.md#muxon-run-flags-headless)  
+Files: `cmd/muxon/run.go`  
 Build: `-p`, `--trust`, `--directory`; map `Outcome` to exit codes.  
 Tests: `e2e` or `os/exec` run binary with scripted provider env hook (inject scripted in test only).  
 Done when: **M0** e2e green in CI.
@@ -309,7 +309,7 @@ Done when: documented one manual run attempted.
 Depends on: 1.7  
 Read: [security § Ignore rules](./security-and-policy.md#ignore-rules-and-secret-paths)  
 Files: `internal/security/policy.go`, `internal/security/ignore.go`  
-Build: deny list; `.theeignore`; bulk dirs.  
+Build: deny list; `.muxonignore`; bulk dirs.  
 Tests: `.env` read denied; `node_modules` collapsed in list.
 
 ### Step 2.2 — Result caps + redaction + wrappers
@@ -511,10 +511,10 @@ Tests: `tool_rounds_exhausted`, `budget_exhausted`.
 
 Depends on: 2.1  
 Read: [security § Workspace trust](./security-and-policy.md#workspace-trust)  
-Files: `internal/security/trust.go`, `cmd/thee/trust.go`  
+Files: `internal/security/trust.go`, `cmd/muxon/trust.go`  
 Tests: untrusted headless verify → exit 3.
 
-### Step 5.4 — config.toml / thee.toml precedence
+### Step 5.4 — config.toml / muxon.toml precedence
 
 Depends on: 1.3  
 Read: [security § Config precedence](./security-and-policy.md#config-precedence)  
@@ -553,7 +553,7 @@ Tests: `*_test.go` edit flagged.
 Depends on: 1.7  
 Read: [session-director § Workspace state](./session-director.md#workspace-state-at-start), [checkpoint](./tools/checkpoint.md)  
 Files: `internal/workspace/snapshot.go`  
-Build: dirty tree → `refs/thee/sessions/<id>/base` without touching user index.
+Build: dirty tree → `refs/muxon/sessions/<id>/base` without touching user index.
 
 ### Step 5.10 — Checkpoints + undo
 
@@ -627,8 +627,8 @@ Tests: question goal → `task_type` question; patch still requires verify if ch
 ### Step 7.1 — All run flags
 
 Depends on: 5.x, 6.x  
-Read: [cli § run flags](./cli.md#thee-run-flags-headless)  
-Files: `cmd/thee/run.go`  
+Read: [cli § run flags](./cli.md#muxon-run-flags-headless)  
+Files: `cmd/muxon/run.go`  
 Build: `--verify-cmd`, `--permission`, `--yolo`, budgets, `--model`, `--no-plan`, `--eval`.
 
 ### Step 7.2 — Presenters (--json, -q)
@@ -647,25 +647,25 @@ Tests: cancel mid-run.
 
 Depends on: 6.1, 2.3  
 Read: [cli § doctor](./cli.md#first-run-and-doctor)  
-Files: `cmd/thee/doctor.go`  
+Files: `cmd/muxon/doctor.go`  
 Tests: missing key reported, not printed.
 
 ### Step 7.5 — cost
 
 Depends on: 1.4  
-Files: `cmd/thee/cost.go`  
+Files: `cmd/muxon/cost.go`  
 Tests: read last trace totals.
 
 ### Step 7.6 — trust subcommands
 
 Depends on: 5.3  
-Files: `cmd/thee/trust.go` (complete)
+Files: `cmd/muxon/trust.go` (complete)
 
 ### Step 7.7 — eval run
 
 Depends on: 7.1  
 Read: [benchmarks](../benchmarks.md), [observability § Eval](./observability.md#eval-integration)  
-Files: `internal/eval/task.go`, `cmd/thee/eval.go`, `testdata/eval/fix-test.json`  
+Files: `internal/eval/task.go`, `cmd/muxon/eval.go`, `testdata/eval/fix-test.json`  
 Done when: **Milestone A** documented in repo README.
 
 ---
@@ -676,7 +676,7 @@ Done when: **Milestone A** documented in repo README.
 
 Depends on: 5.13  
 Read: [cli § wireframe](./cli.md#interactive-layout-wireframe)  
-Files: `internal/ui/tui/app.go`, `cmd/thee/chat.go`  
+Files: `internal/ui/tui/app.go`, `cmd/muxon/chat.go`  
 Build: header, transcript, status, input regions.
 
 ### Step 8.2 — Streaming + tool lines
@@ -711,13 +711,13 @@ Done when: **Milestone B** same fixture as A.
 
 Depends on: 5.13  
 Read: [observability § Trace replay](./observability.md#trace-replay-harness-self-tests)  
-Files: `internal/provider/replay/replay.go`, `cmd/thee/trace.go`  
+Files: `internal/provider/replay/replay.go`, `cmd/muxon/trace.go`  
 Tests: hash mismatch fails with diff (D18).
 
 ### Step 9.2 — models list / show
 
 Depends on: 6.1  
-Files: `cmd/thee/models.go`
+Files: `cmd/muxon/models.go`
 
 ### Step 9.3 — models probe (thresholds TBD in doc only)
 
@@ -741,7 +741,7 @@ Done when: **Milestone C** `results.jsonl` + report stub.
 ### Step 9.6 — resume
 
 Depends on: 5.10, 8.1  
-Files: `cmd/thee/resume.go`
+Files: `cmd/muxon/resume.go`
 
 ### Step 9.7 — Optional anthropic adapter
 
@@ -756,22 +756,22 @@ Files: `internal/provider/anthropic/` (if time).
 ### Step 10.1 — auth login (keyring)
 
 Depends on: 1.3  
-Files: `cmd/thee/auth.go`
+Files: `cmd/muxon/auth.go`
 
 ### Step 10.2 — trace export
 
 Depends on: 9.1  
-Files: `cmd/thee/trace.go` export subcommand
+Files: `cmd/muxon/trace.go` export subcommand
 
 ### Step 10.3 — gc, completion
 
 Depends on: 5.10  
-Files: `cmd/thee/gc.go`, `completion.go`
+Files: `cmd/muxon/gc.go`, `completion.go`
 
 ### Step 10.4 — serve stub
 
 Depends on: 1.1  
-Files: `cmd/thee/serve.go` → exit 3 message.
+Files: `cmd/muxon/serve.go` → exit 3 message.
 
 ### Step 10.5 — goreleaser + README + adrs checklist
 

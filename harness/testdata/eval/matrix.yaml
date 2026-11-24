@@ -1,4 +1,4 @@
-# Model matrix for thee eval basket. Prices are pinned in models.yaml (2026-10-14).
+# Model matrix for muxon eval basket. Prices are pinned in models.yaml (2026-10-14).
 models:
   - model_id: qwen3-9b
     overrides:

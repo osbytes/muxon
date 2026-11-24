@@ -18,7 +18,7 @@ func NewPolicy() *Policy {
 	return &Policy{}
 }
 
-// WithDenyRead adds user-configured deny patterns (from thee.toml later).
+// WithDenyRead adds user-configured deny patterns (from muxon.toml later).
 func (p *Policy) WithDenyRead(patterns []string) *Policy {
 	p.extraDeny = append(p.extraDeny, patterns...)
 	return p

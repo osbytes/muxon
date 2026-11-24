@@ -13,9 +13,9 @@ type Catalog struct {
 	Models    []ModelDef             `json:"models"`
 }
 
-// CatalogPath returns the catalog file path from user config or THEE_HOME default.
+// CatalogPath returns the catalog file path from user config or MUXON_HOME default.
 func CatalogPath() (string, error) {
-	home, err := TheeHome()
+	home, err := MuxonHome()
 	if err != nil {
 		return "", err
 	}

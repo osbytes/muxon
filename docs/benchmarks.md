@@ -1,6 +1,6 @@
 # Benchmarks
 
-How coding-harness scores are actually produced, and how thee can report them from this repo.
+How coding-harness scores are actually produced, and how muxon can report them from this repo.
 
 A published score is a **harness–model pair** on a **pinned dataset**, graded by a program that runs after the agent exits. The model does not grade itself. The harness does not get to decide that a task passed. Holding the model fixed and swapping the harness moves the score, sometimes by more than swapping a nearby model. That is the measurement this product needs.
 
@@ -56,21 +56,21 @@ Two known holes in the number:
 
 Verified is the set people quote. It is also contaminated by now, and some instances have brittle tests (a Django loader bug zeroed correct fixes). Treat Verified as a comparison set with the grader version pinned, not as a clean measure of “can this model code.”
 
-The prediction file thee would emit is JSONL, one object per task:
+The prediction file muxon would emit is JSONL, one object per task:
 
 ```json
-{"instance_id": "sympy__sympy-20590", "model_name_or_path": "thee+Qwen/Qwen3-Coder", "model_patch": "diff --git a/..."}
+{"instance_id": "sympy__sympy-20590", "model_name_or_path": "muxon+Qwen/Qwen3-Coder", "model_patch": "diff --git a/..."}
 ```
 
 ## What changes when the harness changes
 
-Most leaderboards vary the model and leave the agent unstated. The useful experiment for thee is the opposite.
+Most leaderboards vary the model and leave the agent unstated. The useful experiment for muxon is the opposite.
 
 Ante ran one model (`deepseek/deepseek-v4-flash-0731`), the same ten Terminal-Bench 2.1 tasks, one trial, and the same Daytona sandbox through Ante, Ante with a short prompt, Pi 0.73.1, OpenCode 1.18.4, and Hermes ([How much does the agent harness matter?](https://antigma.ai/blog/2026/08/04/harness-matter), 4 Aug 2026). Pass counts were 10, 9, 7, 7, and 7. They priced every harness on one token table so a provider’s markup would not look like a harness cost. On that table, Pi’s invoice was about ten times the reference price of the same tokens. OpenCode’s reported cost missed reasoning tokens. Ten tasks move ten points when one task flips, so Ante correctly calls this a probe, not a ranking.
 
 A later write-up ran GLM-5.2 through four harnesses on all 89 tasks, five trials, and reported a 13 point gap between the best and worst harness on that model ([kimchi.dev](https://kimchi.dev/blog/same-model-different-harness-terminal-bench)).
 
-The scaffold-effect paper measured three harnesses, two models, and 50 Terminal-Bench Pro tasks (300 trials). Pass-rate gaps stayed inside 0–8 points. Tokens per solved task differed by about 40×. The Terminal-Bench paper’s own Claude Opus 4.5 pair was 52.1% on one harness and 57.8% on another, at 256.9M versus 3.9M input tokens ([paper PDF](https://kdd-eval-workshop.github.io/agenticai-evaluation-kdd2026/assets/papers/74_The_Scaffold_Effect_in_Codi.pdf)). A small accuracy gain can hide a large bill. thee’s report has to show both.
+The scaffold-effect paper measured three harnesses, two models, and 50 Terminal-Bench Pro tasks (300 trials). Pass-rate gaps stayed inside 0–8 points. Tokens per solved task differed by about 40×. The Terminal-Bench paper’s own Claude Opus 4.5 pair was 52.1% on one harness and 57.8% on another, at 256.9M versus 3.9M input tokens ([paper PDF](https://kdd-eval-workshop.github.io/agenticai-evaluation-kdd2026/assets/papers/74_The_Scaffold_Effect_in_Codi.pdf)). A small accuracy gain can hide a large bill. muxon’s report has to show both.
 
 ## Can this live in the repo?
 
@@ -78,13 +78,13 @@ Yes. The grader stays a separate program. The repo owns the runner, the adapter,
 
 Three layers, in the order they should be built.
 
-### 1. A basket thee grades itself
+### 1. A basket muxon grades itself
 
 This is the number we can run on every change. It matches the eval hook already sketched in [observability](./harness-architecture/observability.md).
 
-A task file names a fixture repo, an instruction, and a verify command. `thee eval` runs the session headless, then runs that command. Exit 0 writes reward 1. The agent does not see the verify command’s source and cannot write the result file.
+A task file names a fixture repo, an instruction, and a verify command. `muxon eval` runs the session headless, then runs that command. Exit 0 writes reward 1. The agent does not see the verify command’s source and cannot write the result file.
 
-Each row in `.thee/eval/results.jsonl` carries:
+Each row in `.muxon/eval/results.jsonl` carries:
 
 | Field | Why |
 |-------|-----|
@@ -126,16 +126,16 @@ The task file is JSON. `check.files` is copied into the workspace only after the
 Commands:
 
 ```text
-thee eval basket --matrix harness/testdata/eval/matrix.yaml --trials 3 --budget-usd 20
+muxon eval basket --matrix harness/testdata/eval/matrix.yaml --trials 3 --budget-usd 20
 make eval
-thee eval report <run-id>
-thee eval compare <run-a> <run-b>
-thee eval export-swebench --instance repo__repo-1 --model thee+qwen3-32b -o predictions.jsonl
+muxon eval report <run-id>
+muxon eval compare <run-a> <run-b>
+muxon eval export-swebench --instance repo__repo-1 --model muxon+qwen3-32b -o predictions.jsonl
 ```
 
-Each run lives in `.thee/eval/runs/<run-id>/` (`run.json` plus `results.jsonl`). Rows also carry `run_id`, `provider`, `harness_sha`, `manifest_hash`, `salvaged_tool_calls`, `timeout_hit`, `reason`, and `overrides`. Prices in `models.yaml` are pinned 2026-10-14 (DeepInfra Qwen3.5-9B and Qwen3-32B, OpenAI gpt-5). `matrix-opencode.yaml` uses the OpenCode Go key: `OPENCODE_API_KEY`, or `~/.local/share/opencode/auth.json` under provider `opencode-go`. Its prices are the short-context rates from the OpenCode Go docs (Kimi K2.7 Code, GPT 6 Luna).
+Each run lives in `.muxon/eval/runs/<run-id>/` (`run.json` plus `results.jsonl`). Rows also carry `run_id`, `provider`, `harness_sha`, `manifest_hash`, `salvaged_tool_calls`, `timeout_hit`, `reason`, and `overrides`. Prices in `models.yaml` are pinned 2026-10-14 (DeepInfra Qwen3.5-9B and Qwen3-32B, OpenAI gpt-5). `matrix-opencode.yaml` uses the OpenCode Go key: `OPENCODE_API_KEY`, or `~/.local/share/opencode/auth.json` under provider `opencode-go`. Its prices are the short-context rates from the OpenCode Go docs (Kimi K2.7 Code, GPT 6 Luna).
 
-`thee eval compare` is the gate for a new tool or harness flag: same tasks, one override flipped, and the McNemar result says whether the outcomes actually moved.
+`muxon eval compare` is the gate for a new tool or harness flag: same tasks, one override flipped, and the McNemar result says whether the outcomes actually moved.
 
 Compare against one fat-context frontier run on the same tasks, with the same price table. That is the 3× cost claim, and it only counts when pass rate stays in the same band.
 
@@ -143,7 +143,7 @@ Compare against one fat-context frontier run on the same tasks, with the same pr
 
 Do not re-grade SWE-bench inside Go.
 
-**SWE-bench.** Headless thee writes `predictions.jsonl`. Then:
+**SWE-bench.** Headless muxon writes `predictions.jsonl`. Then:
 
 ```text
 python -m swebench.harness.run_evaluation \
@@ -152,15 +152,15 @@ python -m swebench.harness.run_evaluation \
   --run_id <new id>
 ```
 
-`thee eval export-swebench` writes that predictions line from `git diff HEAD` (including new files). Lite (300) is the iteration set. Verified (500) is what a public claim has to name, with the grader commit pinned. Full 2,294 is optional. Docker is required. A fresh `run_id` is required whenever the patch changes.
+`muxon eval export-swebench` writes that predictions line from `git diff HEAD` (including new files). Lite (300) is the iteration set. Verified (500) is what a public claim has to name, with the grader commit pinned. Full 2,294 is optional. Docker is required. A fresh `run_id` is required whenever the patch changes.
 
 Traces stay on the machine. A published job lists task ids, rewards, token counts, and durations. Prompt and completion bodies stay in the local JSONL unless someone explicitly exports them.
 
-## What a thee report contains
+## What a muxon report contains
 
 One block, every time:
 
-- Dataset and version (`SWE-bench_Lite` or `thee-basket`).
+- Dataset and version (`SWE-bench_Lite` or `muxon-basket`).
 - Harness git SHA and model id. The score is the pair.
 - Tasks, trials, and the formula (`mean reward`, not pass@k).
 - Pass rate and an interval. For public sets, bootstrap by task.

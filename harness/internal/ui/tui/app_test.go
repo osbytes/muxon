@@ -12,12 +12,12 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/director"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/director"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func sessionModel(dir string) Model {
@@ -135,14 +135,14 @@ type fakeOpenCode struct {
 func setupOpenCode(t *testing.T, fake *fakeOpenCode, secret string) (home string) {
 	t.Helper()
 	home = t.TempDir()
-	t.Setenv("THEE_HOME", home)
+	t.Setenv("MUXON_HOME", home)
 	t.Setenv("OPENCODE_API_KEY", "")
 	t.Setenv("DEEPINFRA_API_KEY", "")
 	auth := filepath.Join(t.TempDir(), "auth.json")
 	if err := os.WriteFile(auth, []byte(`{"opencode-go":{"type":"api","key":"`+secret+`"}}`), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("THEE_OPENCODE_AUTH", auth)
+	t.Setenv("MUXON_OPENCODE_AUTH", auth)
 	config.SetSecretStore(config.NewMemoryKeyring())
 	t.Cleanup(func() { config.SetSecretStore(nil) })
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -325,8 +325,8 @@ func TestTrustModalKeys(t *testing.T) {
 
 func untrustedFixture(t *testing.T) Model {
 	t.Helper()
-	t.Setenv("THEE_HOME", t.TempDir())
-	t.Setenv("THEE_TRUST", "")
+	t.Setenv("MUXON_HOME", t.TempDir())
+	t.Setenv("MUXON_TRUST", "")
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -396,7 +396,7 @@ func TestInterruptSecondCancels(t *testing.T) {
 }
 
 func TestScriptedFixtureDone(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -442,7 +442,7 @@ func TestScriptedFixtureDone(t *testing.T) {
 func TestAskUserShowsQuestionAndSendsAnswer(t *testing.T) {
 	askArgs, _ := json.Marshal(map[string]any{"question": "Which file?", "choices": []string{"sum.go", "main.go"}})
 	finishArgs, _ := json.Marshal(map[string]string{"summary": "picked sum.go"})
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
 		t.Fatal(err)
@@ -503,7 +503,7 @@ func TestPausedOutcomeOffersContinue(t *testing.T) {
 }
 
 func TestContinueAfterPauseKeepsHistory(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {

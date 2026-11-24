@@ -14,7 +14,7 @@ The harness starts the server for the project’s languages. If none is installe
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | Definition, references, and diagnostics, capped at 30 locations, when a server exists. |  |
+| **muxon** | Definition, references, and diagnostics, capped at 30 locations, when a server exists. |  |
 | **OpenCode** | LSP is loaded automatically and is part of the main tool set. | closest |
 | **Aider** | No LSP. The repo map is the index. |  |
 | **Ante** | Not a required part of the daemon. |  |

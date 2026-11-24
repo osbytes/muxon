@@ -2,13 +2,13 @@
 
 Vendored via [skills CLI](https://github.com/vercel-labs/skills). Cursor discovers these from `.agents/skills/` automatically.
 
-**Precedence:** For thee-harness layout, godoc-only comments, and `internal/` boundaries, **`.agents/rules/` and this repo’s architecture docs win** if a skill suggests a different structure (e.g. `pkg/`, heavy layering).
+**Precedence:** For muxon layout, godoc-only comments, and `internal/` boundaries, **`.agents/rules/` and this repo’s architecture docs win** if a skill suggests a different structure (e.g. `pkg/`, heavy layering).
 
 ## spf13/go-skills
 
 | Skill | Use |
 |-------|-----|
-| `cobra-viper` | `cmd/thee` — Cobra wiring, config, CLI tests |
+| `cobra-viper` | `cmd/muxon` — Cobra wiring, config, CLI tests |
 | `go` | Idiomatic Go, flat packages, stdlib-first |
 | `go-spec-reviewer` | Review design/spec before large implementations |
 | `go-release` | GoReleaser, versioning, release hygiene |

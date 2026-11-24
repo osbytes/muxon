@@ -8,8 +8,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:          "thee",
-	Short:        "thee coding agent harness",
+	Use:          "muxon",
+	Short:        "muxon coding agent harness",
 	SilenceUsage: true,
 }
 

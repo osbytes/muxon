@@ -21,8 +21,8 @@ func TestExportSWEBenchPatch(t *testing.T) {
 		}
 	}
 	run("init")
-	run("config", "user.email", "eval@thee.local")
-	run("config", "user.name", "thee eval")
+	run("config", "user.email", "eval@muxon.local")
+	run("config", "user.name", "muxon eval")
 	if err := os.WriteFile(filepath.Join(dir, "a.go"), []byte("package p\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
@@ -32,7 +32,7 @@ func TestExportSWEBenchPatch(t *testing.T) {
 		t.Fatal(err)
 	}
 	out := filepath.Join(t.TempDir(), "predictions.jsonl")
-	if err := ExportSWEBench(dir, "repo__repo-1", "thee+qwen3-32b", out); err != nil {
+	if err := ExportSWEBench(dir, "repo__repo-1", "muxon+qwen3-32b", out); err != nil {
 		t.Fatal(err)
 	}
 	b, err := os.ReadFile(out)

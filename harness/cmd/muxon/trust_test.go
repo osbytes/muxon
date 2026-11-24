@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
 )
 
 func TestTrustAddListRm(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("THEE_HOME", home)
+	t.Setenv("MUXON_HOME", home)
 	root := filepath.Join(home, "ws")
 	if err := os.MkdirAll(root, 0o755); err != nil {
 		t.Fatal(err)

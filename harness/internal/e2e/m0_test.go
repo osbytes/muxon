@@ -9,13 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/director"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/director"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func TestM0RunE2E(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("THEE_HOME", home)
+	t.Setenv("MUXON_HOME", home)
 	fixtureDir := testutil.CopyFixture(t, "go-failing-test")
 	scriptPath := filepath.Join(home, "script.json")
 	b, err := json.Marshal(director.M0ScriptedResponses())
@@ -25,11 +25,11 @@ func TestM0RunE2E(t *testing.T) {
 	if err := os.WriteFile(scriptPath, b, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	bin := buildThee(t)
+	bin := buildMuxon(t)
 	cmd := exec.Command(bin, "run", "-p", "fix the failing test", "--trust", "--directory", fixtureDir)
 	cmd.Env = append(os.Environ(),
-		"THEE_HOME="+home,
-		"THEE_SCRIPTED_PROVIDER_FILE="+scriptPath,
+		"MUXON_HOME="+home,
+		"MUXON_SCRIPTED_PROVIDER_FILE="+scriptPath,
 	)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -50,7 +50,7 @@ func TestM0RunE2E(t *testing.T) {
 }
 
 func latestTrace(fixtureDir string) (string, error) {
-	sessionsDir := filepath.Join(fixtureDir, ".thee", "sessions")
+	sessionsDir := filepath.Join(fixtureDir, ".muxon", "sessions")
 	entries, err := os.ReadDir(sessionsDir)
 	if err != nil {
 		return "", err
@@ -67,17 +67,17 @@ func latestTrace(fixtureDir string) (string, error) {
 	return filepath.Join(sessionsDir, latest, "trace.jsonl"), nil
 }
 
-func buildThee(t *testing.T) string {
+func buildMuxon(t *testing.T) string {
 	dir := t.TempDir()
-	name := "thee"
+	name := "muxon"
 	if runtime.GOOS == "windows" {
 		name += ".exe"
 	}
 	out := filepath.Join(dir, name)
 	cmd := exec.Command("go", "build", "-o", out, ".")
-	cmd.Dir = filepath.Join("..", "..", "cmd", "thee")
+	cmd.Dir = filepath.Join("..", "..", "cmd", "muxon")
 	if outCombined, err := cmd.CombinedOutput(); err != nil {
-		t.Fatalf("build thee: %v\n%s", err, outCombined)
+		t.Fatalf("build muxon: %v\n%s", err, outCombined)
 	}
 	return out
 }

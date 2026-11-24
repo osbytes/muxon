@@ -14,7 +14,7 @@ A session task list. The model adds items, marks them done, and the director put
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | A capped list, re-injected each turn. Finish waits while required work is open. |  |
+| **muxon** | A capped list, re-injected each turn. Finish waits while required work is open. |  |
 | **OpenCode** | Task lists show up in OpenCode-style harnesses and their todo tools. | closest |
 | **Aider** | No todo tool. The chat is the list. |  |
 | **Ante** | A profile could add one. It is not the default loop. |  |

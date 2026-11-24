@@ -15,7 +15,7 @@
 | **Is it the cheapest?** | For many **identical open-weight SKUs**, DeepInfra is often **among the lowest** (frequently cited as lowest mainstream host in independent comparisons). **Novita** sometimes undercuts on specific models (~5–15%). **Groq/Cerebras** optimize **latency**, not $/token. **OpenRouter** is passthrough + ~5.5% credit fee, but can route to the cheapest endpoint. |
 | **Serverless?** | **Yes** for default API: you call HTTPS; they schedule on shared fleet (queue, autoscale). You do **not** manage pods. |
 | **Stateless for you?** | **Yes** at the API boundary: each request is independent unless **you** send conversation history or use **prompt cache keys / retention**. |
-| **Good fit for thee-harness?** | **Strong** as default upstream for **cheap coder models** + **prompt caching** + **flex tier** for background jobs + **fail_fast** multi-provider failover. **Weak** as a standalone “wholesale” business (thin margin, no public reseller tier). |
+| **Good fit for muxon?** | **Strong** as default upstream for **cheap coder models** + **prompt caching** + **flex tier** for background jobs + **fail_fast** multi-provider failover. **Weak** as a standalone “wholesale” business (thin margin, no public reseller tier). |
 
 ---
 
@@ -112,7 +112,7 @@ From [sandboxes overview](https://docs.deepinfra.com/sandboxes/overview):
 
 ### 2.10 Hosted agents
 
-Docs list managed **OpenClaw**, **Hermes-Agent**, etc., billed hourly, pre-wired to DeepInfra inference — relevant as **competitive reference**, not core to thee-harness unless you offer a hosted tier later.
+Docs list managed **OpenClaw**, **Hermes-Agent**, etc., billed hourly, pre-wired to DeepInfra inference — relevant as **competitive reference**, not core to muxon unless you offer a hosted tier later.
 
 ---
 
@@ -176,7 +176,7 @@ From [data privacy](https://docs.deepinfra.com/account/data-privacy):
 
 **Trust center:** SOC 2 / ISO 27001 cited on privacy policy; see [trust.deepinfra.com](https://trust.deepinfra.com/resources).
 
-**Product guidance for thee-harness:**
+**Product guidance for muxon:**
 
 - Prefer **open models on DeepInfra** for maximum alignment with “we don’t warehouse your code.”
 - **Disclose** that closed models on the same API may forward to Google/Anthropic.
@@ -274,7 +274,7 @@ Official integration docs include **Pi**, **Hermes Agent**, **LangChain**, **Ver
 
 ---
 
-## 8. Suggested model tiers for thee-harness (initial)
+## 8. Suggested model tiers for muxon (initial)
 
 | Role | Example DeepInfra models | Rationale |
 |------|--------------------------|-----------|

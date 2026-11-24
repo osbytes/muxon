@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
 
 	_ "modernc.org/sqlite"
 )
@@ -24,7 +24,7 @@ const schemaVersion = 2
 
 // File is the database path for a workspace.
 func File(workspace string) string {
-	return filepath.Join(workspace, ".thee", "thee.sqlite")
+	return filepath.Join(workspace, ".muxon", "muxon.sqlite")
 }
 
 // DB is the open workspace database.

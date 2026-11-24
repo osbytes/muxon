@@ -83,7 +83,7 @@ func (w *Workspace) WriteFile(rel string, data []byte) error {
 		return err
 	}
 	dir := filepath.Dir(abs)
-	tmp, err := os.CreateTemp(dir, ".thee-write-*")
+	tmp, err := os.CreateTemp(dir, ".muxon-write-*")
 	if err != nil {
 		return err
 	}

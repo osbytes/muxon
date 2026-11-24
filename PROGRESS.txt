@@ -1,4 +1,4 @@
-thee harness — implementation progress
+muxon harness — implementation progress
 ======================================
 Spec / build order: docs/harness-architecture/implementation-plan.md
 Code module: harness/
@@ -11,11 +11,11 @@ Milestone M0: PASS
 Milestone M1: pending (4.10 skipped — no API key)
 Milestone A: PASS
 Milestone B: PASS (scripted TUI fixture reaches done)
-Milestone C: PASS (local basket files, results.jsonl, thee eval report). Live model matrix not run.
+Milestone C: PASS (local basket files, results.jsonl, muxon eval report). Live model matrix not run.
 Milestone D: PASS as stubs (goreleaser config, auth, export, gc, completion, serve). No tag published.
 
 Monorepo layout: DONE
-Module path: github.com/PLACEHOLDER/thee/harness (replace PLACEHOLDER before publish)
+Module path: github.com/PLACEHOLDER/muxon/harness (replace PLACEHOLDER before publish)
 
 
 Parts (plan order)

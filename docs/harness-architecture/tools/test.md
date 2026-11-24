@@ -14,7 +14,7 @@ The filter is checked against a path or test-id pattern and passed as one argv e
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | The project's own test command with one filter. No free-form command. Never sets the verified flag. |  |
+| **muxon** | The project's own test command with one filter. No free-form command. Never sets the verified flag. |  |
 | **OpenCode** | The model runs tests through shell. |  |
 | **Aider** | `/test` runs the configured command; failures go into the next turn. | closest |
 | **Ante** | Tests are a shell call the daemon confirms. |  |

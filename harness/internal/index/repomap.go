@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
 )
 
 // Symbol is one indexed name in a file.
@@ -29,7 +29,7 @@ type RepoMap struct {
 
 // CachePath returns the workspace cache file path.
 func CachePath(workspaceRoot string) string {
-	return filepath.Join(workspaceRoot, ".thee", "index", "repomap.json")
+	return filepath.Join(workspaceRoot, ".muxon", "index", "repomap.json")
 }
 
 // LoadOrBuild returns ranked symbols, using JSON cache when fresh enough.

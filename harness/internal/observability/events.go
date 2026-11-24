@@ -1,7 +1,7 @@
 package observability
 
 import (
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 const SchemaVersion = "1.0.0"
@@ -11,7 +11,7 @@ type Event struct {
 	Type string `json:"type"`
 
 	SchemaVersion string `json:"schema_version,omitempty"`
-	TheeVersion   string `json:"thee_version,omitempty"`
+	MuxonVersion   string `json:"muxon_version,omitempty"`
 	Workspace     string `json:"workspace,omitempty"`
 
 	Outcome string `json:"outcome,omitempty"`
@@ -70,11 +70,11 @@ func (t *UsageTotals) Add(u provider.Usage, costUSD float64) {
 	}
 }
 
-func SessionStartEvent(theeVersion, workspace string) Event {
+func SessionStartEvent(muxonVersion, workspace string) Event {
 	return Event{
 		Type:          "session.start",
 		SchemaVersion: SchemaVersion,
-		TheeVersion:   theeVersion,
+		MuxonVersion:   muxonVersion,
 		Workspace:     workspace,
 	}
 }

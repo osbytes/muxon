@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/index"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/index"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 const wrapUpNudge = "You are near the tool round limit. Finish the current change, then call finish with a summary of what is done and what remains."
@@ -55,7 +55,7 @@ func BuildTurn(in TurnInput) TurnOutput {
 	}
 	rendered, err := RenderVariant(variant, in.ToolSpecs, in.Parallel)
 	if err != nil {
-		rendered = RenderedPrompt{SystemRules: "You are thee.", ToolCatalog: "Tools available."}
+		rendered = RenderedPrompt{SystemRules: "You are muxon.", ToolCatalog: "Tools available."}
 	}
 
 	instructions, _ := LoadProjectInstructions(in.WorkspaceRoot, in.Trusted)

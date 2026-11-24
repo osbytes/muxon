@@ -9,16 +9,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 func runInteractive(t *testing.T, script []provider.Response, ask func(context.Context, string, []string) (string, error)) (Outcome, []string) {
 	t.Helper()
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -26,7 +26,7 @@ func runInteractive(t *testing.T, script []provider.Response, ask func(context.C
 	}
 	var said []string
 	out, err := Run(context.Background(), Config{
-		Goal: "hello", Workspace: dir, Trusted: true, Interactive: true, RegisterAllTools: true, TheeVersion: "t",
+		Goal: "hello", Workspace: dir, Trusted: true, Interactive: true, RegisterAllTools: true, MuxonVersion: "t",
 		Provider: scripted.New(script), Manifest: manifest,
 		TracePath:   filepath.Join(t.TempDir(), "t.jsonl"),
 		MaxRounds:   10,
@@ -40,14 +40,14 @@ func runInteractive(t *testing.T, script []provider.Response, ask func(context.C
 }
 
 func TestProviderErrorIsReturned(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
 		t.Fatal(err)
 	}
 	out, err := Run(context.Background(), Config{
-		Goal: "hello", Workspace: dir, Trusted: true, Interactive: true, TheeVersion: "t",
+		Goal: "hello", Workspace: dir, Trusted: true, Interactive: true, MuxonVersion: "t",
 		Provider: scripted.New(nil), Manifest: manifest,
 		TracePath: filepath.Join(t.TempDir(), "t.jsonl"),
 	})
@@ -84,7 +84,7 @@ func TestFollowUpKeepsPriorTurn(t *testing.T) {
 
 func runInteractiveGoal(t *testing.T, goal string, history []provider.Message, script []provider.Response) (Outcome, []string) {
 	t.Helper()
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -92,7 +92,7 @@ func runInteractiveGoal(t *testing.T, goal string, history []provider.Message, s
 	}
 	var said []string
 	out, err := Run(context.Background(), Config{
-		Goal: goal, Workspace: dir, Trusted: true, Interactive: true, RegisterAllTools: true, TheeVersion: "t",
+		Goal: goal, Workspace: dir, Trusted: true, Interactive: true, RegisterAllTools: true, MuxonVersion: "t",
 		Provider: scripted.New(script), Manifest: manifest, History: history,
 		TracePath:   filepath.Join(t.TempDir(), "t.jsonl"),
 		MaxRounds:   10,
@@ -149,7 +149,7 @@ func TestRejectedToolCallStaysPaired(t *testing.T) {
 }
 
 func TestToolRunErrorKeepsResult(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -158,7 +158,7 @@ func TestToolRunErrorKeepsResult(t *testing.T) {
 	readArgs, _ := json.Marshal(map[string]any{"path": "sum.go", "start_line": 1, "end_line": 5})
 	out, err := Run(context.Background(), Config{
 		Goal: "read the file", Workspace: dir, Trusted: true, Interactive: true,
-		RegisterAllTools: true, TheeVersion: "t",
+		RegisterAllTools: true, MuxonVersion: "t",
 		Provider: scripted.New([]provider.Response{{
 			ToolCalls:    []provider.ToolCall{{ID: "call_read", Name: "read", Arguments: readArgs}},
 			FinishReason: "tool_calls",

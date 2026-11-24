@@ -15,12 +15,12 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/director"
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/session"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/director"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/session"
 )
 
 // Options configures an interactive session.
@@ -141,7 +141,7 @@ func NewModel(opt Options) Model {
 		opt.ProviderID = "deepinfra"
 	}
 	ti := textarea.New()
-	ti.Placeholder = "Ask thee to change something  (/help for commands)"
+	ti.Placeholder = "Ask muxon to change something  (/help for commands)"
 	ti.Prompt = ""
 	ti.ShowLineNumbers = false
 	ti.KeyMap.InsertNewline = key.NewBinding(key.WithKeys("alt+enter", "shift+enter"))
@@ -336,7 +336,7 @@ func (m *Model) applyModal() tea.Cmd {
 		root := m.opt.Workspace
 		s, err := security.LoadTrust()
 		if err == nil {
-			s.AddRootWithConfigHash(root, security.HashTheeToml(root))
+			s.AddRootWithConfigHash(root, security.HashMuxonToml(root))
 			err = security.SaveTrust(s)
 		}
 		m.opt.Trusted = true
@@ -470,7 +470,7 @@ func (m *Model) startGoal(goal string, force bool) tea.Cmd {
 			Goal:             goal,
 			Workspace:        opt.Workspace,
 			Trusted:          trusted,
-			TheeVersion:      opt.Version,
+			MuxonVersion:      opt.Version,
 			Provider:         opt.Provider,
 			Manifest:         opt.Manifest,
 			SessionID:        opt.SessionID,
@@ -750,7 +750,7 @@ func (m Model) inputView(width int) string {
 }
 
 func (m Model) footerView(width int) string {
-	brand := accentStyle.Bold(true).Render("thee") + " " + mutedStyle.Render(displayVersion(m.opt.Version)) + "  "
+	brand := accentStyle.Bold(true).Render("muxon") + " " + mutedStyle.Render(displayVersion(m.opt.Version)) + "  "
 	model := m.opt.WorkerModel
 	if model == "" {
 		model = "no model"

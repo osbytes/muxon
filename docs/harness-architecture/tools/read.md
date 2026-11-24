@@ -14,7 +14,7 @@ Paths must stay inside the workspace. A miss returns an error, not a guess. Path
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | One file, one line range, 400 lines max. The model chooses the range. |  |
+| **muxon** | One file, one line range, 400 lines max. The model chooses the range. |  |
 | **OpenCode** | Reads files and can pull symbols through the LSP. |  |
 | **Aider** | You name the files. It reads those. |  |
 | **Ante** | File read is a profile tool. Caps depend on the profile. |  |

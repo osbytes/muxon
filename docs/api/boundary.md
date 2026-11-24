@@ -13,7 +13,7 @@ They share **no internal packages**. The contract is HTTP.
 
 - `POST /v1/chat/completions` with streaming
 - `GET /v1/models`
-- Bearer thee API key
+- Bearer muxon API key
 - OpenAI-style `usage` on the final stream chunk (prompt, completion, cached, and reasoning tokens)
 - Request fields passed through unchanged: `tools`, `tool_choice`, `response_format` (including `json_schema`), `prompt_cache_key`, sampling parameters, `stop`, and reasoning parameters
 - Response fields passed through unchanged: `tool_calls`, `reasoning_content`, `finish_reason`
@@ -35,12 +35,12 @@ If the private API changes a field, it keeps the OpenAI shape so the public clie
 - System prompts, skills, compaction
 - A requirement that users must use our API
 
-A documented `thee` provider in the public manifest is fine. Hard-coding a private URL with an embedded secret is not.
+A documented `muxon` provider in the public manifest is fine. Hard-coding a private URL with an embedded secret is not.
 
 ## Default user experience
 
 1. Install the public CLI.
-2. Either `thee auth login` (thee API key) or set a BYOK key in `catalog.json`.
+2. Either `muxon auth login` (muxon API key) or set a BYOK key in `catalog.json`.
 3. The loop is the same either way.
 
 ## Related

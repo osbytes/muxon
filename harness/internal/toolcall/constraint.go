@@ -3,7 +3,7 @@ package toolcall
 import (
 	"encoding/json"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 // Step1Schema returns JSON schema for tool name selection.

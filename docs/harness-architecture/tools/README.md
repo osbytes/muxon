@@ -1,6 +1,6 @@
 # Tools
 
-The model does not edit the repo by talking. It calls tools. How they run, and which permission tier they need, is [../tool-runtime.md](../tool-runtime.md). Each comparison lists thee beside the other harnesses. **Closer to** says `closest` on one of them and is blank everywhere else.
+The model does not edit the repo by talking. It calls tools. How they run, and which permission tier they need, is [../tool-runtime.md](../tool-runtime.md). Each comparison lists muxon beside the other harnesses. **Closer to** says `closest` on one of them and is blank everywhere else.
 
 ## Tool calling on small models
 
@@ -24,9 +24,9 @@ How a call is made is a property of the bound model (`tool_protocol` in its [cap
 | `two_step` | Small or unprofiled models (default when unknown) | 1. The prompt lists tools by name and one line; the model names **one**. 2. The next request carries that tool's flat schema and one example; the model fills the arguments. |
 | `fenced` | Models whose native tool calling is broken | Same two steps, but each reply is one fenced block with the same fields. The runtime parses the block. |
 
-When `parallel_tool_calls` is set, one native reply may contain up to 8 calls. thee runs them in order and counts the batch as one tool round. A successful `finish` ends the batch; later calls in that reply are not run. Calls that depend on an earlier result belong in a later turn. `two_step` and `fenced` stay one call per reply. Native models connected through `/providers` default the flag on. Manifest models and unknown models stay off unless the profile sets it.
+When `parallel_tool_calls` is set, one native reply may contain up to 8 calls. muxon runs them in order and counts the batch as one tool round. A successful `finish` ends the batch; later calls in that reply are not run. Calls that depend on an earlier result belong in a later turn. `two_step` and `fenced` stay one call per reply. Native models connected through `/providers` default the flag on. Manifest models and unknown models stay off unless the profile sets it.
 
-`two_step` costs about two model calls per tool. That is the price of reliability on small models, and it is why it is not the default for models that do not need it. Observability tracks `model_calls_per_tool` and malformed-call rate per model so the profile can be tuned (`thee models probe`).
+`two_step` costs about two model calls per tool. That is the price of reliability on small models, and it is why it is not the default for models that do not need it. Observability tracks `model_calls_per_tool` and malformed-call rate per model so the profile can be tuned (`muxon models probe`).
 
 In every protocol the file is written by `patch` or `write`. Assistant text is never saved to disk.
 
@@ -74,7 +74,7 @@ Results stay shaped and capped: a hit list, a diff stat, an exit code and the la
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | The session state picks a few tools. The protocol follows the model: native calls for capable models, name-then-schema for small ones, a fenced block when native calling is broken. Decoding is constrained to the schema where the backend allows it, in-text calls are salvaged, then one repair, then escalate. |  |
+| **muxon** | The session state picks a few tools. The protocol follows the model: native calls for capable models, name-then-schema for small ones, a fenced block when native calling is broken. Decoding is constrained to the schema where the backend allows it, in-text calls are salvaged, then one repair, then escalate. |  |
 | **OpenCode** | Every tool schema is in the prompt. The model can return several native calls in one reply. The loop is aimed at frontier models. |  |
 | **Aider** | The model returns a diff. The harness parses and applies it. A cheaper model can be the editor. |  |
 | **Ante** | A profile chooses which tools are exposed, a handful or a full set. The daemon runs the call. Local models are a supported path. | closest |

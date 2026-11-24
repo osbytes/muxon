@@ -5,11 +5,11 @@ import (
 	"path/filepath"
 )
 
-const defaultHome = ".thee"
+const defaultHome = ".muxon"
 
-// TheeHome returns THEE_HOME or ~/.thee.
-func TheeHome() (string, error) {
-	if v := os.Getenv("THEE_HOME"); v != "" {
+// MuxonHome returns MUXON_HOME or ~/.muxon.
+func MuxonHome() (string, error) {
+	if v := os.Getenv("MUXON_HOME"); v != "" {
 		return v, nil
 	}
 	home, err := os.UserHomeDir()

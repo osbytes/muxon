@@ -1,6 +1,6 @@
 # Coding-agent harness landscape — research brief
 
-**Purpose:** Map the **agent harness** ecosystem (CLI-first), compare philosophies (frontier-default vs model-agnostic), and extract **design patterns** for **thee-harness**: a frugal, tool-native, ZDR-aligned engineering agent starting as a **CLI**.
+**Purpose:** Map the **agent harness** ecosystem (CLI-first), compare philosophies (frontier-default vs model-agnostic), and extract **design patterns** for **muxon**: a frugal, tool-native, ZDR-aligned engineering agent starting as a **CLI**.
 
 **Status:** High-level survey (Oct 2026). Star counts and names drift quickly — use linked repos for ground truth.
 
@@ -14,7 +14,7 @@
 
 ---
 
-## 1a. thee-harness product requirements (evaluation lens)
+## 1a. muxon product requirements (evaluation lens)
 
 Everything in this landscape is filtered against what you described building:
 
@@ -28,7 +28,7 @@ Everything in this landscape is filtered against what you described building:
 | **Escalation** | Cheap path for 80–90% of steps; larger model only on evidence (tests fail, planner stuck). |
 | **Cost visibility** | Per-turn and per-task **tokens + $** — rare in the awesome list; core differentiator. |
 
-**What “frontier harnesses” usually optimize for:** subscription UX, long chat history, browser/MCP breadth, multi-agent spectacle — often **one model class** and **high token burn**. thee-harness optimizes **engineering tasks per dollar** with similar **merge/test outcomes**.
+**What “frontier harnesses” usually optimize for:** subscription UX, long chat history, browser/MCP breadth, multi-agent spectacle — often **one model class** and **high token burn**. muxon optimizes **engineering tasks per dollar** with similar **merge/test outcomes**.
 
 ---
 
@@ -61,7 +61,7 @@ A **harness** is everything **around** the model that makes coding agents reliab
 
 **Framework** (LangGraph, CrewAI) = general orchestration. **Coding harness** = opinionated loop optimized for repos.
 
-**Thesis alignment:** Winners for thee-harness are harnesses that treat **model as interchangeable** and **tokens as cost**, not products that assume one frontier model.
+**Thesis alignment:** Winners for muxon are harnesses that treat **model as interchangeable** and **tokens as cost**, not products that assume one frontier model.
 
 ---
 
@@ -86,7 +86,7 @@ flowchart TB
   agents --> infra
 ```
 
-| Category | Examples | Relevance to thee-harness |
+| Category | Examples | Relevance to muxon |
 |----------|----------|---------------------------|
 | **Model-agnostic OSS CLI** | Ante, OpenCode, Aider, Goose, Pi, Nanocoder, Codewhale | **Primary design references** |
 | **Frontier-tuned vendor CLI** | Claude Code, Codex CLI, Cursor CLI, Copilot CLI | UX + safety patterns; weak on cheap-model default |
@@ -106,7 +106,7 @@ flowchart TB
 | **Universal** | BYO key, OpenAI-compatible, local GGUF, catalog.json | **Ante**, Goose, Aider, Pi, OpenCode (general), Codewhale, Nanocoder |
 | **Hybrid** | Default cheap route + escalation | Codewhale fleets, Reasonix split planner/executor, OpenSquilla ML tier routing |
 
-**thee-harness target:** **Universal + hybrid routing + explicit $/turn metrics** — closer to **Ante** and **Aider** than to **Claude Code**.
+**muxon target:** **Universal + hybrid routing + explicit $/turn metrics** — closer to **Ante** and **Aider** than to **Claude Code**.
 
 ---
 
@@ -127,7 +127,7 @@ Many harnesses in the awesome list implement a **single loop**: append full tool
 | **Prompt cache layout** | Stable system + tools prefix | Waveloom + DeepInfra caching |
 | **Verify gate** | Tests/linter before `finish` | zeroshot, SWE-agent, MartinLoop budgets |
 | **Bash-only action space** | Fewer tool tokens for capable models | arXiv:2609.20804 finding |
-| **Graph / batch tools** | Fewer round-trips | Tura (evaluate for thee-harness) |
+| **Graph / batch tools** | Fewer round-trips | Tura (evaluate for muxon) |
 
 **Academic / industry research to fold into architecture (see §3b):**
 
@@ -139,9 +139,9 @@ Many harnesses in the awesome list implement a **single loop**: append full tool
 
 ---
 
-## 3b. Mapping awesome-list clusters → thee-harness layers
+## 3b. Mapping awesome-list clusters → muxon layers
 
-| thee-harness layer | Best list references |
+| muxon layer | Best list references |
 |--------------------|----------------------|
 | Provider + catalog | Ante, Nanocoder, Continue, OpenCode config |
 | Edit / apply | Aider, Codewhale |
@@ -165,9 +165,9 @@ Many harnesses in the awesome list implement a **single loop**: append full tool
 - **Providers:** 12+ presets (Anthropic, OpenAI, Gemini, Grok, DeepSeek, OpenRouter, …) + **`~/.ante/catalog.json`** for any OpenAI-compatible endpoint (**DeepInfra fits here**).
 - **Local:** Embedded **llama.cpp** for **GGUF offline** — no API key.
 - **Profiles:** `--profile` swaps system prompt, tools, skills, memory — same binary, different agents.
-- **Benchmark narrative:** Terminal-Bench style comparisons holding **model constant** across harnesses — exactly the right methodology for thee-harness marketing.
+- **Benchmark narrative:** Terminal-Bench style comparisons holding **model constant** across harnesses — exactly the right methodology for muxon marketing.
 
-**Borrow for thee-harness:**
+**Borrow for muxon:**
 
 - Daemon + headless CLI separation (IDE later without rewriting loop)
 - `catalog.json` provider registry
@@ -341,17 +341,17 @@ Sorted roughly by relevance to **frugal universal CLI**, not just stars.
 
 ## 6. Orchestrators (intentionally out of v0 scope)
 
-Tools like **Orca**, **Multica**, **Agent Orchestrator**, **vibe-kanban** run **many** agent CLIs in parallel worktrees. Useful **after** thee-harness is a credible single-session CLI.
+Tools like **Orca**, **Multica**, **Agent Orchestrator**, **vibe-kanban** run **many** agent CLIs in parallel worktrees. Useful **after** muxon is a credible single-session CLI.
 
-**Future integration:** Expose JSONL/`serve` like Ante so orchestrators can drive thee-harness as a worker.
+**Future integration:** Expose JSONL/`serve` like Ante so orchestrators can drive muxon as a worker.
 
 ---
 
 ## 7. Harness engineering patterns (from awesome-harness-engineering)
 
-Cross-cutting practices worth baking into thee-harness v1:
+Cross-cutting practices worth baking into muxon v1:
 
-| Pattern | Source inspiration | thee-harness action |
+| Pattern | Source inspiration | muxon action |
 |---------|-------------------|---------------------|
 | **Verification gate** | Harness engineering (OpenAI), SWE-bench culture | No “done” without test/lint command |
 | **Tool design** | Anthropic “effective tools” | Few tools, strict schemas, small outputs |
@@ -376,7 +376,7 @@ Cross-cutting practices worth baking into thee-harness v1:
 | **Offline / local** | Ante llama.cpp | Ollama path in Nanocoder |
 | **Model routing** | Codewhale fleets | OpenSquilla tier router |
 | **Context compaction** | Keen Code, Waveloom | Claude Code compaction ideas |
-| **Cost visibility** | (gap in market) | **thee-harness differentiator** |
+| **Cost visibility** | (gap in market) | **muxon differentiator** |
 | **ZDR / no body logs** | OpenCode privacy copy + DeepInfra OSS models | DvalinCode audit chain for teams |
 | **Regression testing** | opencode-harness labs | SWE-agent tasks |
 | **Headless CI** | `codewhale exec`, Codex `-p` | Aider scripting |
@@ -392,7 +392,7 @@ Cross-cutting practices worth baking into thee-harness v1:
 | **Local inference** | Supported via providers | **First-class** embedded GGUF |
 | **Size / deps** | Larger ecosystem (TS/desktop) | Single Rust binary |
 | **DeepInfra** | Via OpenRouter or custom OpenAI base URL | Via `catalog.json` OpenAI-compatible entry |
-| **Best for thee-harness** | LSP + distribution ideas | **Core loop + provider abstraction + serve protocol** |
+| **Best for muxon** | LSP + distribution ideas | **Core loop + provider abstraction + serve protocol** |
 
 **Positioning line:** “Ante-grade model freedom + Aider-grade edits + OpenCode-grade LSP (roadmap) + **token/$ dashboard** DeepInfra defaults.”
 
@@ -401,7 +401,7 @@ Cross-cutting practices worth baking into thee-harness v1:
 ## 10. Recommended v0 CLI architecture (synthesis)
 
 ```
-thee-harness CLI
+muxon CLI
 ├── commands: chat | run -p "..." | doctor | cost-report
 ├── loop: plan (optional) → act → verify → escalate?
 ├── providers: deepinfra (default) | openrouter | ollama | catalog.json
@@ -437,7 +437,7 @@ Hold constant across harness comparisons (Ante methodology):
 
 Metrics: **success**, **wall time**, **input/output tokens**, **$ (DeepInfra list)**, **escalation rate**.
 
-Run baseline: “fat context + single frontier model” vs thee-harness routing.
+Run baseline: “fat context + single frontier model” vs muxon routing.
 
 ---
 

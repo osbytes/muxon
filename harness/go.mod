@@ -1,4 +1,4 @@
-module github.com/PLACEHOLDER/thee/harness
+module github.com/PLACEHOLDER/muxon/harness
 
 go 1.26.0
 

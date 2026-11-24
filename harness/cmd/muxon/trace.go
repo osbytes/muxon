@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/replay"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/replay"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
 )
 
 var traceCmd = &cobra.Command{
@@ -76,7 +76,7 @@ var traceExportCmd = &cobra.Command{
 		if dest == "" {
 			return fmt.Errorf("missing --output")
 		}
-		src := filepath.Join(dir, ".thee", "sessions", args[0], "trace.jsonl")
+		src := filepath.Join(dir, ".muxon", "sessions", args[0], "trace.jsonl")
 		return observability.ExportRedacted(src, dest)
 	},
 }

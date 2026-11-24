@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 // Step is one recorded model turn.

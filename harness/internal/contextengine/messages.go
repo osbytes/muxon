@@ -1,7 +1,7 @@
 package contextengine
 
 import (
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 // AppendToolResult adds a tool result user message.

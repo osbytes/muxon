@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"os"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
 )
 
 // ExportRedacted copies a trace, redacting secret-like strings.

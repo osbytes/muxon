@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 // TwoStepInput drives a name-then-args tool turn.

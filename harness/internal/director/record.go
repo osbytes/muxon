@@ -6,10 +6,10 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/contextengine"
-	"github.com/PLACEHOLDER/thee/harness/internal/db"
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/contextengine"
+	"github.com/PLACEHOLDER/muxon/harness/internal/db"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 func warnDB(err error) {

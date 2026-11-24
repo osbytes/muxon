@@ -16,7 +16,7 @@ The summary the user sees adds the diff stat against the session base and lists 
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | Finish is rejected until the verifier has passed, unless nothing was changed. |  |
+| **muxon** | Finish is rejected until the verifier has passed, unless nothing was changed. |  |
 | **OpenCode** | The model stops when it says it is done. Tests are optional. |  |
 | **Aider** | You end the turn. `/test` does not block a finish tool. |  |
 | **Ante** | The loop ends on the model or the user. |  |

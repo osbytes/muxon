@@ -1,4 +1,4 @@
-# Release: on a version tag (v1.2.3), build the thee binaries with goreleaser (.goreleaser.yml),
+# Release: on a version tag (v1.2.3), build the muxon binaries with goreleaser (.goreleaser.yml),
 # attest them, and publish the GitHub release. The body is this version's CHANGELOG.md section.
 name: release
 
@@ -61,7 +61,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # `gh attestation verify thee_linux_amd64.tar.gz --owner adavila0703` proves an archive came
+      # `gh attestation verify muxon_linux_amd64.tar.gz --owner adavila0703` proves an archive came
       # from this workflow in this repository
       - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         if: startsWith(github.ref, 'refs/tags/v')

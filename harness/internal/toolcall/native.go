@@ -3,7 +3,7 @@ package toolcall
 import (
 	"errors"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 // ErrNoToolCalls means the model replied with text and no tool call.

@@ -3,7 +3,7 @@ package tools
 import (
 	"fmt"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
 )
 
 // FormatResult wraps tool output for the model context.

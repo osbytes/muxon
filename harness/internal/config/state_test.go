@@ -3,7 +3,7 @@ package config
 import "testing"
 
 func TestSaveLastModelSurvivesProviderSave(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	if err := SaveLastProvider("opencode-go"); err != nil {
 		t.Fatal(err)
 	}

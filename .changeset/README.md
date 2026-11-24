@@ -1,10 +1,10 @@
 # Changesets
 
 Every pull request carries a changeset: a small markdown file here that names the bump and says,
-for someone using `thee`, what changed.
+for someone using `muxon`, what changed.
 
 ```bash
-pnpm changeset          # pick thee, pick patch or minor, write the note
+pnpm changeset          # pick muxon, pick patch or minor, write the note
 pnpm changeset --empty  # docs-only or internal change
 ```
 

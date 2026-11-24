@@ -25,9 +25,9 @@ type SessionCostSummary struct {
 	WellFormedPatches  int
 }
 
-// ReadLatestSessionCost reads the newest session trace under workspace/.thee/sessions.
+// ReadLatestSessionCost reads the newest session trace under workspace/.muxon/sessions.
 func ReadLatestSessionCost(workspaceRoot string) (SessionCostSummary, string, error) {
-	sessionsDir := filepath.Join(workspaceRoot, ".thee", "sessions")
+	sessionsDir := filepath.Join(workspaceRoot, ".muxon", "sessions")
 	entries, err := os.ReadDir(sessionsDir)
 	if err != nil {
 		return SessionCostSummary{}, "", err

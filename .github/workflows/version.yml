@@ -1,7 +1,7 @@
 # Release flow (changesets): every merged PR carries a .changeset/*.md file. This workflow keeps a
 # "Release" pull request open that bumps the version in package.json and writes CHANGELOG.md from
 # them. Merging that PR runs `pnpm release:tag`, which pushes the vX.Y.Z tag; release.yml then builds
-# the thee binaries with goreleaser and publishes the GitHub release.
+# the muxon binaries with goreleaser and publishes the GitHub release.
 #
 # Needs secrets.RELEASE_TOKEN: a fine-grained personal access token with contents: write and
 # pull-requests: write on this repo. Tags pushed with the default GITHUB_TOKEN never trigger other

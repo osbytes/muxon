@@ -1,5 +1,5 @@
 ---
-description: Go tests, testdata, and replay fixtures for thee-harness
+description: Go tests, testdata, and replay fixtures for muxon
 globs: "harness/**/*_test.go"
 alwaysApply: false
 ---

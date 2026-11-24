@@ -3,7 +3,7 @@
 **Local mirror:** `docs/research/_sources/awesome-cli-coding-agents` (shallow clone, README dated **2026-10-12**).  
 **Machine parse:** `docs/research/_sources/awesome-cli-coding-agents-parsed.json` (381 linked entries extracted from README bullets).
 
-This document catalogs what the list contains, classifies projects by **fit for thee-harness**, and records **what to steal** vs **what to avoid** (frontier-default loops).
+This document catalogs what the list contains, classifies projects by **fit for muxon**, and records **what to steal** vs **what to avoid** (frontier-default loops).
 
 ---
 
@@ -17,7 +17,7 @@ This document catalogs what the list contains, classifies projects by **fit for 
 
 ### 1.1 Top-level sections (entry counts from parse)
 
-| Section | ~Entries | Role relative to thee-harness |
+| Section | ~Entries | Role relative to muxon |
 |---------|----------|-------------------------------|
 | **Open Source** (terminal agents) | 106 | **Primary** — actual coding harnesses |
 | **OpenClaw ecosystem** | 12 | Personal-assistant runtime; skills/channels — peripheral |
@@ -28,7 +28,7 @@ This document catalogs what the list contains, classifies projects by **fit for 
 
 ---
 
-## 2. thee-harness goals (evaluation lens)
+## 2. muxon goals (evaluation lens)
 
 Use this checklist when scoring any project from the list:
 
@@ -51,7 +51,7 @@ quadrantChart
     title Harness positioning (conceptual)
     x-axis Low token discipline --> High token discipline
     y-axis Single-vendor frontier --> Multi-model / OSS
-    quadrant-1 thee-harness target
+    quadrant-1 muxon target
     quadrant-2 Ante, Aider, Codewhale
     quadrant-3 Claude Code, Codex CLI, Qwen Code
     quadrant-4 OpenCode general mode
@@ -69,7 +69,7 @@ quadrantChart
 
 ---
 
-## 4. Tier A — study deeply for thee-harness (curated)
+## 4. Tier A — study deeply for muxon (curated)
 
 Projects chosen for **overlap with frugal + universal + engineering**, not raw stars.
 
@@ -143,7 +143,7 @@ Large stars but **frontier-shaped** or scope too wide for v0:
 
 ## 6. Tier C — orchestration & infrastructure (from list tail)
 
-When thee-harness works, these wrap **your** CLI:
+When muxon works, these wrap **your** CLI:
 
 - **Session managers:** Orca, Paseo, Agent Orchestrator, taskpods, repomon  
 - **Cost observability:** Claudescope, iris, Tempest (token intelligence)  
@@ -169,9 +169,9 @@ Grouped for scanning; see README for full URLs and star counts.
 
 ---
 
-## 8. Compared to thee-harness — gap analysis
+## 8. Compared to muxon — gap analysis
 
-| Capability | Common in list | thee-harness intent |
+| Capability | Common in list | muxon intent |
 |------------|----------------|---------------------|
 | BYOM / OpenAI-compatible | Many OSS entries | **Default DeepInfra OSS manifest** |
 | Prompt caching layout | Rare (Waveloom called out) | **First-class** (stable prefix design) |

@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/session"
+	"github.com/PLACEHOLDER/muxon/harness/internal/session"
 )
 
 var gcCmd = &cobra.Command{

@@ -7,13 +7,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func TestDirectorQuestionGoalClassification(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	tracePath := filepath.Join(t.TempDir(), "trace.jsonl")
 	manifest, _ := config.LoadEmbeddedManifest()
@@ -21,7 +21,7 @@ func TestDirectorQuestionGoalClassification(t *testing.T) {
 		Goal:        "where is sum configured?",
 		Workspace:   dir,
 		Trusted:     true,
-		TheeVersion: "test",
+		MuxonVersion: "test",
 		Provider:    scripted.New(M0ScriptedResponses()),
 		Manifest:    manifest,
 		TracePath:   tracePath,

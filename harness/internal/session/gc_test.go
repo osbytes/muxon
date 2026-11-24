@@ -9,7 +9,7 @@ import (
 
 func TestGCRemovesOldSessions(t *testing.T) {
 	root := t.TempDir()
-	old := filepath.Join(root, ".thee", "sessions", "old")
+	old := filepath.Join(root, ".muxon", "sessions", "old")
 	if err := os.MkdirAll(old, 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -17,7 +17,7 @@ func TestGCRemovesOldSessions(t *testing.T) {
 	if err := os.Chtimes(old, past, past); err != nil {
 		t.Fatal(err)
 	}
-	fresh := filepath.Join(root, ".thee", "sessions", "fresh")
+	fresh := filepath.Join(root, ".muxon", "sessions", "fresh")
 	if err := os.MkdirAll(fresh, 0o755); err != nil {
 		t.Fatal(err)
 	}

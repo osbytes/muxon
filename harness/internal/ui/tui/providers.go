@@ -11,10 +11,10 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/openai"
-	"github.com/PLACEHOLDER/thee/harness/internal/router"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/openai"
+	"github.com/PLACEHOLDER/muxon/harness/internal/router"
 )
 
 var openCodeGoBaseURL = "https://opencode.ai/zen/go/v1"
@@ -201,7 +201,7 @@ func (m *Model) beginConnect(c ProviderChoice, secret string) tea.Cmd {
 		if client.Headers == nil {
 			client.Headers = map[string]string{}
 		}
-		client.Headers["User-Agent"] = "thee/" + displayVersion(m.opt.Version)
+		client.Headers["User-Agent"] = "muxon/" + displayVersion(m.opt.Version)
 		client.Headers["x-opencode-session"] = m.opt.SessionID
 	}
 	m.connecting = c.Title

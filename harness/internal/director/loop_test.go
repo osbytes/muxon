@@ -3,7 +3,7 @@ package director
 import (
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 func TestRepeatedCallAfterEarlierWrite(t *testing.T) {

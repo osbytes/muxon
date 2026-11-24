@@ -1,6 +1,6 @@
 # Agent instructions
 
-This repository is the **thee** monorepo. The open-source harness is the Go module under `harness/` (`thee` CLI). Before implementing behavior, read the matching doc under `docs/harness-architecture/` and the [implementation plan](docs/harness-architecture/implementation-plan.md).
+This repository is the **muxon** monorepo. The open-source harness is the Go module under `harness/` (`muxon` CLI). Before implementing behavior, read the matching doc under `docs/harness-architecture/` and the [implementation plan](docs/harness-architecture/implementation-plan.md).
 
 ## Go code
 
@@ -8,12 +8,12 @@ Follow project rules in `.agents/rules/`:
 
 | Rule | Topic |
 |------|--------|
-| `thee-harness-context.mdc` | Layout, deps, specs (always on) |
+| `muxon-context.mdc` | Layout, deps, specs (always on) |
 | `go-format-and-naming.mdc` | Naming, packages, receivers |
 | `go-errors-context-concurrency.mdc` | Errors, `context`, goroutines, slog |
 | `go-documentation.mdc` | Godoc only — no inline narration |
 | `go-project-structure.mdc` | `internal/` boundaries, interfaces |
-| `go-cli-thee.mdc` | Thin `cmd/thee` + Cobra |
+| `go-cli-muxon.mdc` | Thin `cmd/muxon` + Cobra |
 | `go-testing.mdc` | Tests, `testdata`, replay |
 
 ## Agent skills (`.agents/skills/`)

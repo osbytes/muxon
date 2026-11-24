@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
 )
 
 func TestNDJSONIncludesSessionEnd(t *testing.T) {

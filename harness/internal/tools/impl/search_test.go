@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
-	"github.com/PLACEHOLDER/thee/harness/internal/workspace"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/workspace"
 )
 
 func TestSearchFindsSum(t *testing.T) {

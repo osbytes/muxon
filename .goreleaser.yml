@@ -2,13 +2,13 @@
 # come from CHANGELOG.md (changesets), so goreleaser's own changelog stays off.
 version: 2
 
-project_name: thee
+project_name: muxon
 
 builds:
-  - id: thee
+  - id: muxon
     dir: harness
-    main: ./cmd/thee
-    binary: thee
+    main: ./cmd/muxon
+    binary: muxon
     env:
       - CGO_ENABLED=0
     flags:

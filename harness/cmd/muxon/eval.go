@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/eval"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/eval"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 var evalCmd = &cobra.Command{
@@ -63,7 +63,7 @@ var evalRunCmd = &cobra.Command{
 			RunID:       runID,
 			Timeout:     timeout,
 			ResultsPath: filepath.Join(outDir, "runs", runID, "results.jsonl"),
-			TheeVersion: version,
+			MuxonVersion: version,
 			Trusted:     trust,
 			TaskDir:     prepared.TaskDir,
 		})
@@ -124,7 +124,7 @@ var evalBasketCmd = &cobra.Command{
 			Concurrency: conc,
 			BudgetUSD:   budget,
 			OutputDir:   outDir,
-			TheeVersion: version,
+			MuxonVersion: version,
 			Trusted:     trust,
 			Manifest:    manifest,
 			Progress:    eval.NewTrialProgress(cmd.ErrOrStderr()),
@@ -214,7 +214,7 @@ func init() {
 	evalRunCmd.Flags().Bool("trust", false, "Trust workspace for verify")
 	evalRunCmd.Flags().String("model", "", "Worker model id")
 	evalRunCmd.Flags().Int("timeout", 0, "Trial timeout in seconds")
-	evalRunCmd.Flags().String("out", filepath.Join(".thee", "eval"), "Directory for run results")
+	evalRunCmd.Flags().String("out", filepath.Join(".muxon", "eval"), "Directory for run results")
 	evalRunCmd.Flags().String("run-id", "", "Run id (default: generated)")
 
 	evalBasketCmd.Flags().String("matrix", "", "Matrix YAML of model ids and capability overrides")
@@ -223,10 +223,10 @@ func init() {
 	evalBasketCmd.Flags().Int("concurrency", 1, "Trials to run at once")
 	evalBasketCmd.Flags().Float64("budget-usd", 0, "Stop scheduling once spent cost reaches this many dollars")
 	evalBasketCmd.Flags().Bool("trust", true, "Trust fixture workspaces")
-	evalBasketCmd.Flags().String("out", filepath.Join(".thee", "eval"), "Directory for run results")
+	evalBasketCmd.Flags().String("out", filepath.Join(".muxon", "eval"), "Directory for run results")
 
-	evalReportCmd.Flags().String("out", filepath.Join(".thee", "eval"), "Directory for run results")
-	evalCompareCmd.Flags().String("out", filepath.Join(".thee", "eval"), "Directory for run results")
+	evalReportCmd.Flags().String("out", filepath.Join(".muxon", "eval"), "Directory for run results")
+	evalCompareCmd.Flags().String("out", filepath.Join(".muxon", "eval"), "Directory for run results")
 
 	evalExportCmd.Flags().String("instance", "", "SWE-bench instance id")
 	evalExportCmd.Flags().String("model", "", "model_name_or_path written into the prediction")

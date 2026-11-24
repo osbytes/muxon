@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func TestDirectorReplayVerifyFailThenPass(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	wrongPatch, _ := json.Marshal(map[string]interface{}{
 		"path": "sum.go", "format": "search_replace",
@@ -38,7 +38,7 @@ func TestDirectorReplayVerifyFailThenPass(t *testing.T) {
 		Goal:        "fix test",
 		Workspace:   dir,
 		Trusted:     true,
-		TheeVersion: "test",
+		MuxonVersion: "test",
 		Provider:    scripted.New(script),
 		Manifest:    manifest,
 		TracePath:   filepath.Join(t.TempDir(), "trace.jsonl"),

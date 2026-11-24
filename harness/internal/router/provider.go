@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/openai"
-	"github.com/PLACEHOLDER/thee/harness/internal/session"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/openai"
+	"github.com/PLACEHOLDER/muxon/harness/internal/session"
 )
 
 // NewProvider builds a provider client for a binding.

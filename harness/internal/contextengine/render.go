@@ -5,8 +5,8 @@ import (
 	"io/fs"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/assets"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/assets"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 const (

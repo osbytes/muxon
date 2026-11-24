@@ -13,13 +13,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/director"
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/router"
-	"github.com/PLACEHOLDER/thee/harness/internal/session"
-	"github.com/PLACEHOLDER/thee/harness/internal/subproc"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/director"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/router"
+	"github.com/PLACEHOLDER/muxon/harness/internal/session"
+	"github.com/PLACEHOLDER/muxon/harness/internal/subproc"
 )
 
 // TrialOptions controls one eval trial.
@@ -33,7 +33,7 @@ type TrialOptions struct {
 	Timeout          time.Duration
 	SessionBudgetUSD float64
 	ResultsPath      string
-	TheeVersion      string
+	MuxonVersion      string
 	Trusted          bool
 	TaskDir          string
 	FixtureRoots     []string
@@ -182,7 +182,7 @@ func trialConfig(task Task, opt TrialOptions, manifest *config.Manifest, work st
 		Goal:                goal,
 		Workspace:           work,
 		Trusted:             opt.Trusted,
-		TheeVersion:         opt.TheeVersion,
+		MuxonVersion:         opt.MuxonVersion,
 		Provider:            opt.Provider,
 		Manifest:            manifest,
 		SessionID:           session.NewID(),
@@ -209,7 +209,7 @@ func finishTrial(res TrialResult, opt TrialOptions) (TrialResult, error) {
 }
 
 func prepareWorkspace(task Task, opt TrialOptions) (string, error) {
-	work, err := os.MkdirTemp("", "thee-eval-"+task.ID+"-")
+	work, err := os.MkdirTemp("", "muxon-eval-"+task.ID+"-")
 	if err != nil {
 		return "", err
 	}

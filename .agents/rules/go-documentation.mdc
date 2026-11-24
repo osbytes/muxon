@@ -12,7 +12,7 @@ alwaysApply: false
 
 - **Exported** types, funcs, consts, and vars: godoc comment immediately above the declaration.
 - **Non-trivial unexported** APIs: same godoc style when behavior isn't obvious from the name.
-- **Package** comment: full sentence adjacent to `package` (no blank line); `// Package foo ...` for libraries, `// Command thee ...` for `cmd/thee`.
+- **Package** comment: full sentence adjacent to `package` (no blank line); `// Package foo ...` for libraries, `// Command muxon ...` for `cmd/muxon`.
 - Doc style: complete sentence, starts with the name being documented, ends with a period.
 
 ```go

@@ -1,18 +1,18 @@
 # Releasing
 
-`thee` is one Go binary (`harness/cmd/thee`) shipped as archives for Linux, macOS and Windows,
+`muxon` is one Go binary (`harness/cmd/muxon`) shipped as archives for Linux, macOS and Windows,
 versioned with [changesets](https://github.com/changesets/changesets). The version lives in the
 root `package.json`, which exists only for the release tooling; nothing is published to npm
-(`"private": true`). goreleaser stamps it into the binary (`thee version`).
+(`"private": true`). goreleaser stamps it into the binary (`muxon version`).
 
 ## Every pull request
 
 1. Make the change. Run `go test ./harness/...`, `go vet ./harness/...` and `gofmt`.
-2. `pnpm install` once, then `pnpm changeset`: pick `thee`, pick the bump, write the note **as a
-   user reads it** ("`thee run` accepts `--budget-usd`", not "refactor director loop"). One
+2. `pnpm install` once, then `pnpm changeset`: pick `muxon`, pick the bump, write the note **as a
+   user reads it** ("`muxon run` accepts `--budget-usd`", not "refactor director loop"). One
    changeset per user-visible change; a PR can have several. Docs-only or internal PRs:
    `pnpm changeset --empty`.
-3. If the change needs anything from the user at upgrade time (a moved `~/.thee` file, a flag that
+3. If the change needs anything from the user at upgrade time (a moved `~/.muxon` file, a flag that
    changed meaning, a config key renamed, a trace schema bump), add an `**Upgrade:**` line to the
    changeset. It ends up in the changelog and the GitHub release.
 4. CI (`ci.yml`) tests and builds on all three platforms, and refuses a PR without a changeset.
@@ -35,7 +35,7 @@ root `package.json`, which exists only for the release tooling; nothing is publi
    with the archives and `checksums.txt`. The release notes are the changelog section
    (`scripts/release-notes.mjs`; maintainers' "Thanks @…!" credits are dropped, outside
    contributors' stay).
-3. Download one archive and check `thee version` prints the new version.
+3. Download one archive and check `muxon version` prints the new version.
 
 A manual run of `release.yml` (`workflow_dispatch`) builds a goreleaser snapshot and publishes
 nothing.

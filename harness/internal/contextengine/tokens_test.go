@@ -3,7 +3,7 @@ package contextengine
 import (
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 func TestEstimatorCorrectionRatio(t *testing.T) {

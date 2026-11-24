@@ -1,4 +1,4 @@
-# thee API (closed source)
+# muxon API (closed source)
 
 Go service module will live here (`api/go.mod`). Specs: [docs/api/README.md](../docs/api/README.md).
 

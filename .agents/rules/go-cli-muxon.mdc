@@ -1,21 +1,21 @@
 ---
-description: Cobra CLI patterns for cmd/thee
+description: Cobra CLI patterns for cmd/muxon
 globs: "harness/cmd/**/*.go"
 alwaysApply: false
 ---
 
-# thee CLI (`cmd/thee`)
+# muxon CLI (`cmd/muxon`)
 
 Specs: `docs/harness-architecture/cli.md`. Commands must match the documented tree (`run`, `chat`, `doctor`, `cost`, …).
 
 ## Thin command layer
 
-`cmd/thee` does only:
+`cmd/muxon` does only:
 
 1. Define `cobra.Command` (help, flags, args validation).
 2. Bind flags; load config via `internal/config`.
 3. Call `internal/...` with `cmd.Context()` (or `context` from `PersistentPreRunE`).
-4. Map errors to **stable exit codes** (headless `thee run` — see session-director doc).
+4. Map errors to **stable exit codes** (headless `muxon run` — see session-director doc).
 
 No business logic, no `net/http` calls, no tool execution in `cmd/`.
 

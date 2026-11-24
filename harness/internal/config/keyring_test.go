@@ -13,15 +13,15 @@ func TestKeyringAfterEnv(t *testing.T) {
 	if err := StoreProviderKey("deepinfra", "secret-value"); err != nil {
 		t.Fatal(err)
 	}
-	got, err := ResolveProviderKey("MISSING_THEE_KEY", "deepinfra")
+	got, err := ResolveProviderKey("MISSING_MUXON_KEY", "deepinfra")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if got != "secret-value" {
 		t.Fatal(got)
 	}
-	t.Setenv("MISSING_THEE_KEY", "from-env")
-	got, err = ResolveProviderKey("MISSING_THEE_KEY", "deepinfra")
+	t.Setenv("MISSING_MUXON_KEY", "from-env")
+	got, err = ResolveProviderKey("MISSING_MUXON_KEY", "deepinfra")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func TestResolveProviderKeyOpenCodeAuth(t *testing.T) {
 	if err := os.WriteFile(path, body, 0o600); err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("THEE_OPENCODE_AUTH", path)
+	t.Setenv("MUXON_OPENCODE_AUTH", path)
 	t.Setenv("OPENCODE_API_KEY", "")
 	got, err := ResolveProviderKey("OPENCODE_API_KEY", "opencode-go")
 	if err != nil {

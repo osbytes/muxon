@@ -68,7 +68,7 @@ func (m *Modal) View() string {
 	if m.Kind == "trust" {
 		return box.Render(textStyle.Bold(true).Render("Trust this workspace?") + "\n\n" +
 			accentStyle.Render(shortPath(m.Workspace)) + "\n\n" +
-			mutedStyle.Render("thee will read and edit files here and run its verify\ncommand and tools as you. Only trust code you know.") + "\n\n" +
+			mutedStyle.Render("muxon will read and edit files here and run its verify\ncommand and tools as you. Only trust code you know.") + "\n\n" +
 			key("t", "trust") + "   " + key("o", "this session only") + "   " + key("d", "don't trust"))
 	}
 	return box.Render(textStyle.Bold(true).Render("Approval required") + "\n\n" +

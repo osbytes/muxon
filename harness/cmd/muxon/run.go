@@ -10,15 +10,15 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/director"
-	"github.com/PLACEHOLDER/thee/harness/internal/eval"
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/router"
-	"github.com/PLACEHOLDER/thee/harness/internal/session"
-	"github.com/PLACEHOLDER/thee/harness/internal/ui/headless"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/director"
+	"github.com/PLACEHOLDER/muxon/harness/internal/eval"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/router"
+	"github.com/PLACEHOLDER/muxon/harness/internal/session"
+	"github.com/PLACEHOLDER/muxon/harness/internal/ui/headless"
 )
 
 type exitError struct {
@@ -35,7 +35,7 @@ var runCmd = &cobra.Command{
 		setupLogging()
 		prompt, _ := cmd.Flags().GetString("prompt")
 		trust, _ := cmd.Flags().GetBool("trust")
-		if os.Getenv("THEE_TRUST") == "1" {
+		if os.Getenv("MUXON_TRUST") == "1" {
 			trust = true
 		}
 		verifyCmd, _ := cmd.Flags().GetString("verify-cmd")
@@ -100,7 +100,7 @@ var runCmd = &cobra.Command{
 			Goal:                prompt,
 			Workspace:           dir,
 			Trusted:             trust,
-			TheeVersion:         version,
+			MuxonVersion:         version,
 			Provider:            prov,
 			Manifest:            manifest,
 			SessionID:           sid,
@@ -144,7 +144,7 @@ func init() {
 }
 
 func loadRunProvider(manifest *config.Manifest, modelOverride string) (provider.Provider, string, error) {
-	if path := os.Getenv("THEE_SCRIPTED_PROVIDER_FILE"); path != "" {
+	if path := os.Getenv("MUXON_SCRIPTED_PROVIDER_FILE"); path != "" {
 		p, err := scripted.FromEnv()
 		if err != nil {
 			return nil, "", err
@@ -182,7 +182,7 @@ func appendEvalRow(workspace, taskPath, modelID string, out director.Outcome, st
 	if out.State == director.StateDone {
 		reward = 1
 	}
-	return eval.AppendResult(filepath.Join(workspace, ".thee", "eval", "results.jsonl"), eval.ResultRow{
+	return eval.AppendResult(filepath.Join(workspace, ".muxon", "eval", "results.jsonl"), eval.ResultRow{
 		TaskID:             task.ID,
 		Trial:              1,
 		Reward:             reward,

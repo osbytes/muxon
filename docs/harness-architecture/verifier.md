@@ -15,7 +15,7 @@ Verification is run **by the harness**, not by the model. The harness spawns the
 
 ## Trust
 
-The verify command comes from the repo (`thee.toml`, `package.json` scripts, `Makefile`). Running it executes repo code as the user, outside the model's permission tier. So verify execution is gated by **workspace trust**, not by tier:
+The verify command comes from the repo (`muxon.toml`, `package.json` scripts, `Makefile`). Running it executes repo code as the user, outside the model's permission tier. So verify execution is gated by **workspace trust**, not by tier:
 
 - **Trusted workspace:** run the resolved command.
 - **Untrusted, interactive:** show the resolved command once and ask. Approval is remembered per workspace until the command string changes.
@@ -28,7 +28,7 @@ See [security-and-policy.md](./security-and-policy.md#workspace-trust).
 Project detection order (ADR-005):
 
 1. CLI `--verify-cmd`
-2. User or project `thee.toml` → `[verify] command = "..."`
+2. User or project `muxon.toml` → `[verify] command = "..."`
 3. `package.json` → `npm test` / `pnpm test` / `yarn test` (by lockfile)
 4. `Makefile` → `make test` if target exists
 5. Python → `pytest -q` if pytest config present
@@ -53,7 +53,7 @@ Verify is its own subprocess policy, not a special case of `shell`.
 | Environment | `CI=1`, `TERM=dumb`, no TTY, stdin closed | Stops watch modes and interactive prompts (jest/vitest watch, pagers). Provider API keys are scrubbed from the env. |
 | Kill | Whole process group; SIGTERM, SIGKILL after 5s | On timeout or interrupt. |
 | Sandbox | Same as `shell` when enabled | See [security-and-policy.md](./security-and-policy.md#sandboxing). |
-| Full log | `.thee/sessions/<id>/verify-<n>.log` | Stdout + stderr, redacted with the trace redaction patterns. |
+| Full log | `.muxon/sessions/<id>/verify-<n>.log` | Stdout + stderr, redacted with the trace redaction patterns. |
 
 The verify timeout counts against the session wall-clock budget, so `max_verify_attempts × timeout` cannot silently turn into an hour.
 
@@ -90,7 +90,7 @@ Strict verify invites passing by editing or deleting tests. Protected paths defa
 **/test/** **/tests/** **/__tests__/** **/spec/**
 *_test.go *.test.* *.spec.* test_*.py *_test.py conftest.py
 jest.config.* vitest.config.* pytest.ini tox.ini .github/workflows/**
-thee.toml (the [verify] table)
+muxon.toml (the [verify] table)
 ```
 
 | `test_edits` | Adding new test files | Modifying or deleting existing protected files |
@@ -134,7 +134,7 @@ verify_result {
   ],
   excerpt: "... up to model_max_lines / model_max_bytes of the most relevant output ...",
   baseline: "pass",            // pass | fail | unknown
-  log_path: ".thee/sessions/<id>/verify-3.log"
+  log_path: ".muxon/sessions/<id>/verify-3.log"
 }
 ```
 

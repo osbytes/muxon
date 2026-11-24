@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/subproc"
+	"github.com/PLACEHOLDER/muxon/harness/internal/subproc"
 )
 
 // Result is a verify run outcome.
