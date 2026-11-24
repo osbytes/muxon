@@ -1,0 +1,57 @@
+# Dependabot cannot write changesets, and CI requires one on every PR (.changeset/README.md). This
+# adds a patch changeset to a Dependabot PR that touches the harness's Go dependencies (action
+# and release-tooling bumps are not shipped in the binary, so their PRs get an empty one).
+#
+# pull_request_target runs with repository secrets, so nothing from the PR may run here: the job
+# never checks the PR out. It reads the PR's file list and writes the changeset through the GitHub
+# contents API, as github-actions[bot], using RELEASE_TOKEN so CI runs on the new commit (commits
+# made with GITHUB_TOKEN never trigger workflows). The only PR-controlled input is the title, which
+# goes into the file body as data.
+name: dependabot-changeset
+
+on:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] never checks the PR out; see above
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  changeset:
+    # the PR's author, not github.actor: a re-run or a comment by someone else changes the actor
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Add a changeset
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+          changed=$(gh api --paginate "repos/$REPO/pulls/$NUMBER/files" --jq '.[].filename')
+          # only files this PR adds count: main holds the changesets waiting for the next release
+          if grep -qE '^\.changeset/.+\.md$' <<<"$changed"; then
+            echo "the PR already carries a changeset"; exit 0
+          fi
+          path=".changeset/dependabot-$NUMBER.md"
+          # the title is data: written through printf into the file body, never evaluated
+          if grep -qE '^(harness/go\.(mod|sum)|go\.work(\.sum)?)$' <<<"$changed"; then
+            content=$(printf -- '---\n"thee": patch\n---\n\nDependencies: %s.\n' "$TITLE" | base64 -w0)
+          else
+            content=$(printf -- '---\n---\n' | base64 -w0)
+          fi
+          gh api --method PUT "repos/$REPO/contents/$path" \
+            --field branch="$BRANCH" \
+            --field message="Add a changeset for this dependency update" \
+            --field content="$content" \
+            --field 'committer[name]=github-actions[bot]' \
+            --field 'committer[email]=41898282+github-actions[bot]@users.noreply.github.com' \
+            --field 'author[name]=github-actions[bot]' \
+            --field 'author[email]=41898282+github-actions[bot]@users.noreply.github.com' \
+            --jq '.commit.sha'
