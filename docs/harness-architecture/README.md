@@ -4,7 +4,7 @@
 
 ## Purpose
 
-thee-harness is a **frugal, model-agnostic coding agent**: a CLI-first loop that gets engineering work done with **small open models** by default, **tight context**, **tool-native repo access**, and **verification gates**—not by sending huge context to frontier models every turn.
+thee-harness is a **frugal, model-agnostic coding agent**: one CLI-first loop that drives **any model from any surface** (frontier APIs, aggregators, our inference, local runtimes) from a single place. The loop is **optimized for the weakest supported model**: **tight context**, **tool-native repo access**, and **verification gates** that hold up on a small open model hold up on every model, so stronger models need no separate path. Small open models are the cheap default, not the only target.
 
 The same loop runs **any** model, from an 8B open model to a frontier model. What changes per model is read from its **capability profile** (tool-calling protocol, edit format, context window, tokenizer, caching), not hard-coded for one class. OpenCode is the reference for what we avoid: a loop tuned for frontier tool calling that degrades on small models. The design takes the pieces that work from Aider (edit formats, repo map, test-in-repair-loop), Ante (profiles, local models, catalog), SWE-agent and zeroshot (verifier-gated loops), and the harness-ablation research, and combines them.
 
