@@ -24,7 +24,7 @@ func killProcessTree(p *os.Process) error {
 	if root := os.Getenv("SystemRoot"); root != "" {
 		taskkill = filepath.Join(root, "System32", "taskkill.exe")
 	}
-	if err := exec.Command(taskkill, "/T", "/F", "/PID", strconv.Itoa(p.Pid)).Run(); err != nil {
+	if err := exec.Command(taskkill, "/T", "/F", "/PID", strconv.Itoa(p.Pid)).Run(); err != nil { //nolint:gosec // G204: system taskkill.exe with a numeric PID
 		return p.Kill()
 	}
 	return nil
