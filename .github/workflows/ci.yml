@@ -5,20 +5,53 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
+  changeset:
+    name: changeset
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: The PR adds a changeset
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD_REF: ${{ github.head_ref }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          # the Release PR consumes changesets; it never adds one
+          case "$HEAD_REF" in changeset-release/*) echo "release PR"; exit 0 ;; esac
+          added=$(git diff --name-only --diff-filter=A "$BASE"...HEAD -- .changeset)
+          if printf '%s\n' "$added" | grep -E '^\.changeset/.+\.md$' | grep -vqx '.changeset/README.md'; then
+            echo "changeset found"; exit 0
+          fi
+          if [ "$AUTHOR" = "dependabot[bot]" ]; then
+            echo "::error::no changeset yet; dependabot-changeset.yml adds one, re-run once it has"
+          else
+            echo "::error::this PR has no changeset. Run 'pnpm changeset' (or 'pnpm changeset --empty' for docs-only or internal changes). See docs/RELEASING.md."
+          fi
+          exit 1
+
   test:
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     defaults:
       run:
+        shell: bash
         working-directory: harness
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24.x"
+          go-version-file: harness/go.mod
           cache-dependency-path: harness/go.sum
       - name: Install ripgrep
         run: |
@@ -26,6 +59,8 @@ jobs:
             sudo apt-get update && sudo apt-get install -y ripgrep
           elif command -v brew >/dev/null 2>&1; then
             brew install ripgrep
+          elif command -v choco >/dev/null 2>&1; then
+            choco install ripgrep -y --no-progress
           fi
       - run: go mod download
       - run: gofmt -s -l . | tee /tmp/gofmt.out && test ! -s /tmp/gofmt.out
@@ -34,5 +69,6 @@ jobs:
       - run: go build ./...
       - uses: golangci/golangci-lint-action@v7
         with:
-          version: v2.1.6
+          version: v2.15.0
           working-directory: harness
+          only-new-issues: true

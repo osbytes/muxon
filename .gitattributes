@@ -1,0 +1,7 @@
+# Keep LF everywhere so gofmt, golden hashes, and embedded prompts match across OSes.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.zip binary

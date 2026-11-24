@@ -23,4 +23,4 @@ Stdlib first (`context`, `net/http`, `encoding/json`, `log/slog`, `embed`, `os/e
 
 ## When implementing
 
-Read the relevant architecture doc before coding behavior. ADRs in `docs/harness-architecture/adrs.md` are binding. Follow sibling `.cursor/rules/go-*.mdc` for idiomatic Go.
+Read the relevant architecture doc before coding behavior. ADRs in `docs/harness-architecture/adrs.md` are binding. Follow sibling `.agents/rules/go-*.mdc` for idiomatic Go.

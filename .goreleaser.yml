@@ -1,3 +1,5 @@
+# Built by .github/workflows/release.yml on a vX.Y.Z tag (see docs/RELEASING.md). The release notes
+# come from CHANGELOG.md (changesets), so goreleaser's own changelog stays off.
 version: 2
 
 project_name: thee
@@ -9,9 +11,14 @@ builds:
     binary: thee
     env:
       - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{.Version}}
     goos:
       - linux
       - darwin
+      - windows
     goarch:
       - amd64
       - arm64
@@ -19,6 +26,15 @@ builds:
 archives:
   - formats: [tar.gz]
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: checksums.txt
+
+release:
+  prerelease: auto
 
 changelog:
   disable: true
