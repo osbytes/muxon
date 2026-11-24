@@ -14,7 +14,7 @@ The map skips ignored, bulk, and secret paths. It is rebuilt when git HEAD or th
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | A ranked symbol map, always on. The model still reads the bodies it edits. |  |
+| **muxon** | A ranked symbol map, always on. The model still reads the bodies it edits. |  |
 | **OpenCode** | LSP and file tools, without Aider’s map as the index. |  |
 | **Aider** | The repo map is how the agent orients before editing. | closest |
 | **Ante** | A profile can skip it. |  |

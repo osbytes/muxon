@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 type deleteTool struct{}

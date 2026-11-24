@@ -11,15 +11,15 @@ import (
 func EnsureSessionBase(root, sessionID string) error {
 	git := filepath.Join(root, ".git")
 	if _, err := os.Stat(git); err == nil {
-		ref := fmt.Sprintf("refs/thee/sessions/%s/base", sessionID)
+		ref := fmt.Sprintf("refs/muxon/sessions/%s/base", sessionID)
 		return writeShadowRef(root, ref)
 	}
-	dest := filepath.Join(root, ".thee", "sessions", sessionID, "snapshots", "base")
+	dest := filepath.Join(root, ".muxon", "sessions", sessionID, "snapshots", "base")
 	return os.MkdirAll(dest, 0o755)
 }
 
 func writeShadowRef(root, ref string) error {
-	idx := filepath.Join(root, ".thee", "tmp-index")
+	idx := filepath.Join(root, ".muxon", "tmp-index")
 	_ = os.Remove(idx)
 	env := append(os.Environ(), "GIT_INDEX_FILE="+idx)
 	add := exec.Command("git", "add", "-A")
@@ -36,7 +36,7 @@ func writeShadowRef(root, ref string) error {
 		return err
 	}
 	treeHash := string(treeOut[:40])
-	commit := exec.Command("git", "commit-tree", treeHash, "-m", "thee session base")
+	commit := exec.Command("git", "commit-tree", treeHash, "-m", "muxon session base")
 	commit.Dir = root
 	commit.Env = env
 	commitOut, err := commit.Output()

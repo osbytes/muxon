@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 func TestStreamRecordedSSE(t *testing.T) {

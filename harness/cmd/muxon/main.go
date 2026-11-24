@@ -1,4 +1,4 @@
-// Command thee is the thee harness CLI entrypoint.
+// Command muxon is the muxon harness CLI entrypoint.
 package main
 
 import (

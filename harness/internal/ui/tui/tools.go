@@ -8,7 +8,7 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/director"
+	"github.com/PLACEHOLDER/muxon/harness/internal/director"
 )
 
 type toolCall struct {

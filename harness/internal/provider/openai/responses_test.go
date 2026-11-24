@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 func TestResponsesEndpointForOpenCodeGo(t *testing.T) {

@@ -8,7 +8,7 @@ import (
 
 func TestCatalogOverridesProviderBaseURL(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("THEE_HOME", home)
+	t.Setenv("MUXON_HOME", home)
 	catPath := filepath.Join(home, "catalog.json")
 	cat := `{
   "providers": {

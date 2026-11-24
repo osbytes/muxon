@@ -12,9 +12,9 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/session"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/session"
 )
 
 // ModelSpec is one row of the model matrix.
@@ -35,7 +35,7 @@ type BasketOptions struct {
 	Concurrency    int
 	BudgetUSD      float64
 	OutputDir      string
-	TheeVersion    string
+	MuxonVersion   string
 	Trusted        bool
 	Dataset        string
 	DatasetVersion string
@@ -153,7 +153,7 @@ func normalizeBasket(opt BasketOptions) BasketOptions {
 		opt.Concurrency = 1
 	}
 	if opt.Dataset == "" {
-		opt.Dataset = "thee-basket"
+		opt.Dataset = "muxon-basket"
 	}
 	if opt.DatasetVersion == "" {
 		opt.DatasetVersion = "1"
@@ -162,7 +162,7 @@ func normalizeBasket(opt BasketOptions) BasketOptions {
 		opt.RunID = session.NewID()
 	}
 	if opt.OutputDir == "" {
-		opt.OutputDir = filepath.Join(".thee", "eval")
+		opt.OutputDir = filepath.Join(".muxon", "eval")
 	}
 	return opt
 }
@@ -288,7 +288,7 @@ func (s *basketState) runJob(ctx context.Context, j basketJob, remain float64) (
 		Overrides:        j.model.Overrides,
 		Timeout:          time.Duration(j.task.Task.TimeoutS) * time.Second,
 		SessionBudgetUSD: remain,
-		TheeVersion:      s.opt.TheeVersion,
+		MuxonVersion:     s.opt.MuxonVersion,
 		Trusted:          s.opt.Trusted,
 		TaskDir:          j.task.TaskDir,
 		HarnessSHA:       s.header.HarnessSHA,

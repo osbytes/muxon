@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
 )
 
 var trustCmd = &cobra.Command{
@@ -41,7 +41,7 @@ var trustAddCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		s.AddRootWithConfigHash(root, security.HashTheeToml(root))
+		s.AddRootWithConfigHash(root, security.HashMuxonToml(root))
 		return security.SaveTrust(s)
 	},
 }

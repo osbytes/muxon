@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools/schema"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools/schema"
 )
 
 const maxReadLines = 400

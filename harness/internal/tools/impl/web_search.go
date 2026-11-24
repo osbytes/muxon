@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 const (
@@ -94,7 +94,7 @@ func (t *webSearchTool) Run(ctx context.Context, env *tools.Env, args json.RawMe
 		return tools.Fail(env, "web_search", "could not create search request"), nil
 	}
 	req.Header.Set("Accept", "text/html")
-	req.Header.Set("User-Agent", "thee-web-search/1.0")
+	req.Header.Set("User-Agent", "muxon-web-search/1.0")
 	resp, err := t.client.Do(req)
 	if err != nil {
 		return tools.Fail(env, "web_search", "web search request failed: "+err.Error()), nil

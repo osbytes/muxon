@@ -6,14 +6,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func TestRepairThenSucceeds(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	readArgs, _ := json.Marshal(map[string]interface{}{"path": "sum.go", "start_line": 1, "end_line": 10})
 	patchArgs, _ := json.Marshal(map[string]interface{}{
@@ -29,7 +29,7 @@ func TestRepairThenSucceeds(t *testing.T) {
 	}
 	manifest, _ := config.LoadEmbeddedManifest()
 	out, err := Run(context.Background(), Config{
-		Goal: "fix", Workspace: dir, Trusted: true, TheeVersion: "t",
+		Goal: "fix", Workspace: dir, Trusted: true, MuxonVersion: "t",
 		Provider: scripted.New(script), Manifest: manifest,
 		TracePath: filepath.Join(t.TempDir(), "t.jsonl"), MaxRounds: 20,
 	})

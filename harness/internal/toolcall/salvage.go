@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools/schema"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools/schema"
 )
 
 var fenceRE = regexp.MustCompile("(?s)```(?:json)?\\s*([\\s\\S]*?)```")

@@ -2,7 +2,7 @@
 
 The model router selects **which model role** and **which SKU** runs each inference call. It implements the product thesis: **cheap by default, expensive only with evidence**.
 
-It also adapts the loop to **what the bound model can do**. thee runs anything from an 8B open model to a frontier model, so the tool protocol, edit format, context budget, and batching are read from the model's **capability profile** instead of being hard-coded for one class of model. OpenCode is the counter-example: its loop assumes frontier-grade tool calling and a large window, and degrades badly on small models.
+It also adapts the loop to **what the bound model can do**. muxon runs anything from an 8B open model to a frontier model, so the tool protocol, edit format, context budget, and batching are read from the model's **capability profile** instead of being hard-coded for one class of model. OpenCode is the counter-example: its loop assumes frontier-grade tool calling and a large window, and degrades badly on small models.
 
 ## Roles
 
@@ -41,7 +41,7 @@ Unknown models get conservative defaults: `two_step`, `structured_output: none`,
 
 ### Probe
 
-`thee models probe <id>` calibrates a model against its real endpoint and writes a suggested profile to the user's catalog, so a new model can be tuned without a release. It runs, in order:
+`muxon models probe <id>` calibrates a model against its real endpoint and writes a suggested profile to the user's catalog, so a new model can be tuned without a release. It runs, in order:
 
 1. **Served context.** Sends a prompt with a marker near the start, at increasing lengths, and asks for the marker back. The largest length that round-trips is `served_context`. This catches local servers that silently truncate.
 2. **Structured output.** Sends one request with `response_format: json_schema`, then one with a grammar where the provider supports it. Whichever is accepted and obeyed sets `structured_output`.

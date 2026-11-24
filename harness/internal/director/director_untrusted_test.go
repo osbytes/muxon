@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func TestUntrustedHeadlessExit3(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, _ := config.LoadEmbeddedManifest()
 	out, err := Run(context.Background(), Config{

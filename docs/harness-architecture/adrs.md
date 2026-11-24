@@ -8,7 +8,7 @@ Each decision records what we chose, why, and what it costs. Resolve open ADRs b
 | **ADR-002** | Client–daemon split? | **Monolith CLI** · Ante-style daemon + headless client | **Decided** — monolith binary; `serve` reuses the same `internal/` packages |
 | **ADR-003** | Compaction strategy? | Elision + truncate only · + cheap summarizer · Cliff-style drop-only | **Open** (lean elision + truncate + optional summarize) |
 | **ADR-004** | Edit format? | Unified diff only · SEARCH/REPLACE only · **Per-model format + apply ladder** | **Decided** |
-| **ADR-005** | Default verify command? | **Auto-detect with override** · Require `thee.toml` | **Decided** — auto-detect; strict mode with nothing detected is a setup error, not a weak pass |
+| **ADR-005** | Default verify command? | **Auto-detect with override** · Require `muxon.toml` | **Decided** — auto-detect; strict mode with nothing detected is a setup error, not a weak pass |
 | **ADR-006** | Our API vs BYOK? | **BYOK always; our API optional** | **Decided** — BYOK is the required path; our API is never the only option |
 | **ADR-007** | Who runs verification? | Model via `shell` · **Harness subprocess** | **Decided** — harness subprocess, trust-gated |
 | **ADR-008** | Tool calling protocol? | One protocol for all models · **Per-model capability profile** | **Decided** — `native` / `two_step` / `fenced` from the manifest |
@@ -23,15 +23,15 @@ Each decision records what we chose, why, and what it costs. Resolve open ADRs b
 ### ADR-001 — Go implementation language
 
 - **Context:** Need a fast headless CLI, BYOK HTTP, subprocess tools, and a TUI; team prefers Go.
-- **Decision:** Implement harness in **Go 1.24+**; single `thee` binary; details in [tech-stack.md](./tech-stack.md).
+- **Decision:** Implement harness in **Go 1.24+**; single `muxon` binary; details in [tech-stack.md](./tech-stack.md).
 - **Consequences:** No Rust/Python core; cross-compile releases; Bubble Tea for the TUI.
 - **Date:** 2026-10-12
 
 ### ADR-002 — Monolith binary
 
 - **Context:** A daemon adds ops complexity before the loop is proven.
-- **Decision:** **Monolith** `cmd/thee`; packages under `internal/` mirror the architecture docs.
-- **Consequences:** `thee serve` reuses the same packages in a long-lived process instead of a separate daemon.
+- **Decision:** **Monolith** `cmd/muxon`; packages under `internal/` mirror the architecture docs.
+- **Consequences:** `muxon serve` reuses the same packages in a long-lived process instead of a separate daemon.
 - **Date:** 2026-10-12
 
 ### ADR-004 — Edit formats and apply ladder
@@ -58,14 +58,14 @@ Each decision records what we chose, why, and what it costs. Resolve open ADRs b
 ### ADR-008 — Capability-driven tool protocol
 
 - **Context:** The harness must run frontier models and 8B open models alike. A frontier-style loop (all schemas in every prompt, parallel native calls — OpenCode) breaks small models; a small-model loop (one tool per two calls) wastes latency on frontier models. Varying `tools[]` per state also broke prompt caching.
-- **Decision:** Each model's capability profile sets `tool_protocol` (`native`, `two_step`, `fenced`), `parallel_tool_calls`, `edit_format`, context window, tokenizer, and cache mode. Unknown models get conservative defaults; `thee models probe` calibrates. `tools[]` is either the full tier set, constant for the session, or omitted; phase restriction lives in the prompt tail and the runtime.
+- **Decision:** Each model's capability profile sets `tool_protocol` (`native`, `two_step`, `fenced`), `parallel_tool_calls`, `edit_format`, context window, tokenizer, and cache mode. Unknown models get conservative defaults; `muxon models probe` calibrates. `tools[]` is either the full tier set, constant for the session, or omitted; phase restriction lives in the prompt tail and the runtime.
 - **Consequences:** Manifest schema grows ([providers.md](./providers.md#capability-fields)). One loop serves every model class. Observability tracks parse failures and calls per tool per model so profiles can be tuned.
 - **Date:** 2026-10-13
 
 ### ADR-009 — Workspace trust
 
-- **Context:** `.thee/hooks/`, project `thee.toml`, skills, memory, and the verify command are repo-supplied. Without a gate, running `thee` in a cloned hostile repo is running its scripts.
-- **Decision:** Per-workspace trust stored in `~/.thee/trust.json` with a hash of trust-relevant files. Untrusted: no project hooks, skills, memory, or provider config; project security config may only tighten; verify command needs one approval (headless: `--trust`). Details in [security-and-policy.md](./security-and-policy.md#workspace-trust).
+- **Context:** `.muxon/hooks/`, project `muxon.toml`, skills, memory, and the verify command are repo-supplied. Without a gate, running `muxon` in a cloned hostile repo is running its scripts.
+- **Decision:** Per-workspace trust stored in `~/.muxon/trust.json` with a hash of trust-relevant files. Untrusted: no project hooks, skills, memory, or provider config; project security config may only tighten; verify command needs one approval (headless: `--trust`). Details in [security-and-policy.md](./security-and-policy.md#workspace-trust).
 - **Consequences:** One prompt on first open. CI passes `--trust`.
 - **Date:** 2026-10-13
 
@@ -131,7 +131,7 @@ What the spec still needs before code depends on it:
 - [ ] `compact` and `standard` prompt texts written
 - [ ] Probe pass thresholds per step
 - [ ] Loop-detector thresholds checked against recorded traces
-- [ ] Eval basket run across the model matrix: baseline vs thee-harness on same SKUs. The runner is `thee eval basket` (hidden checks, trials, DeepInfra + frontier matrix). This box stays open until that live matrix has been run.
+- [ ] Eval basket run across the model matrix: baseline vs muxon on same SKUs. The runner is `muxon eval basket` (hidden checks, trials, DeepInfra + frontier matrix). This box stays open until that live matrix has been run.
 - [ ] ADR-003 finalized
 - [x] Go `internal/` package skeleton matching component docs ([implementation-plan.md](./implementation-plan.md#repository-layout-target))
 

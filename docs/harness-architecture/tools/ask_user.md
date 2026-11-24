@@ -16,7 +16,7 @@ The question should be answerable in one line. A question the model could answer
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | One question, optional choices, three per goal. Headless gets an answer to proceed on its assumption. |  |
+| **muxon** | One question, optional choices, three per goal. Headless gets an answer to proceed on its assumption. |  |
 | **OpenCode** | The model asks in plain text and the turn ends. |  |
 | **Aider** | The model asks in chat. |  |
 | **Ante** | The daemon can pause for input. | closest |

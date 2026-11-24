@@ -1,12 +1,12 @@
 # Product
 
-thee is one coding agent harness for every model. Open or frontier, hosted or local, from any provider: you use them all from a single place, with the same loop, the same tools, and the same bill.
+muxon is one coding agent harness for every model. Open or frontier, hosted or local, from any provider: you use them all from a single place, with the same loop, the same tools, and the same bill.
 
 It is a command-line harness. You point it at a repo, describe the change, and it searches, reads, patches, and runs your tests. Which model does the work is a setting, not a different product. Swap providers or model sizes without changing how you work.
 
 ## The goal
 
-Build the widest harness, not one tuned for a single model. thee should drive any model from any surface (frontier APIs like Anthropic and OpenAI, aggregators like OpenRouter and DeepInfra, our own inference, and models on your own machine) through one interface.
+Build the widest harness, not one tuned for a single model. muxon should drive any model from any surface (frontier APIs like Anthropic and OpenAI, aggregators like OpenRouter and DeepInfra, our own inference, and models on your own machine) through one interface.
 
 To make that work, the harness is **optimized for the weakest model it supports**. If the loop holds up on a small open model with a short context window and shaky tool calling, it holds up everywhere. Stronger models do not need a different harness; they just finish faster and fail less. Design for the worst case, and every model benefits:
 

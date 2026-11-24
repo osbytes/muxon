@@ -14,7 +14,7 @@ A process is killed when the session ends unless the user asked to leave it. Out
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | Named start, read, and stop. Log reads are capped. The session stops leftovers. Tests stay on shell. |  |
+| **muxon** | Named start, read, and stop. Log reads are capped. The session stops leftovers. Tests stay on shell. |  |
 | **OpenCode** | Long commands are usually a shell call. |  |
 | **Aider** | `/run` is one-shot. |  |
 | **Ante** | The daemon can hold a turn. Background processes are not the published model. |  |

@@ -7,7 +7,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 type sseStream struct {

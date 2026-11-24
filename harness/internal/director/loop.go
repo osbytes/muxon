@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 const (

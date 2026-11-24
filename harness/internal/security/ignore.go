@@ -21,16 +21,16 @@ var bulkDirNames = map[string]bool{
 // IgnoreRules applies gitignore-style rules and bulk-dir skipping.
 type IgnoreRules struct {
 	git    *ignore.GitIgnore
-	thee   *ignore.GitIgnore
+	muxon  *ignore.GitIgnore
 	root   string
 	policy *Policy
 }
 
-// LoadIgnore loads .gitignore and .theeignore from the workspace root.
+// LoadIgnore loads .gitignore and .muxonignore from the workspace root.
 func LoadIgnore(root string, policy *Policy) (*IgnoreRules, error) {
 	r := &IgnoreRules{root: root, policy: policy}
 	r.git = compileIgnoreFile(filepath.Join(root, ".gitignore"))
-	r.thee = compileIgnoreFile(filepath.Join(root, ".theeignore"))
+	r.muxon = compileIgnoreFile(filepath.Join(root, ".muxonignore"))
 	return r, nil
 }
 
@@ -73,7 +73,7 @@ func (r *IgnoreRules) matchesIgnore(rel string) bool {
 	if r.git != nil && r.git.MatchesPath(rel) {
 		return true
 	}
-	if r.thee != nil && r.thee.MatchesPath(rel) {
+	if r.muxon != nil && r.muxon.MatchesPath(rel) {
 		return true
 	}
 	return false

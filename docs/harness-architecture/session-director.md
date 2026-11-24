@@ -73,7 +73,7 @@ Any state can move to `failed` when a budget runs out, and to `cancelled` on a d
 
 ## Caps and budgets
 
-Configured in `thee.toml` under `[session]`. Defaults are tuned for small workers, which burn budget on retry loops; one structured failure beats another full-context resend.
+Configured in `muxon.toml` under `[session]`. Defaults are tuned for small workers, which burn budget on retry loops; one structured failure beats another full-context resend.
 
 ```toml
 [session]
@@ -121,7 +121,7 @@ Thresholds are in `[session.loop]`. Each firing is a `loop.detected` event so pe
 
 ## Headless behavior
 
-`thee run -p` has no human, so anything that would be `blocked` becomes a terminal outcome.
+`muxon run -p` has no human, so anything that would be `blocked` becomes a terminal outcome.
 
 | Situation | Headless outcome |
 |-----------|------------------|
@@ -141,12 +141,12 @@ Thresholds are in `[session.loop]`. Each firing is a `loop.detected` event so pe
 | `3` | Setup error — no provider key, untrusted workspace, no verify command, bad config |
 | `130` | `cancelled` (SIGINT) |
 
-`session.end` in JSONL always carries `outcome`, `reason`, `verify_attempts`, `escalation_generation`, `tool_rounds`, totals, and `workspace_changed`. That is the same shape `thee eval` and benchmark runners consume. See [observability.md](./observability.md).
+`session.end` in JSONL always carries `outcome`, `reason`, `verify_attempts`, `escalation_generation`, `tool_rounds`, totals, and `workspace_changed`. That is the same shape `muxon eval` and benchmark runners consume. See [observability.md](./observability.md).
 
 ## Workspace state at start
 
 - **Git repo, clean tree.** Record `HEAD` as the session base.
-- **Git repo, dirty tree.** Allowed. The director snapshots the current tree (including untracked, non-ignored files) into a shadow ref `refs/thee/sessions/<id>/base` without touching the user's index, branch, or stash. The user's uncommitted work is never stashed or reset. Interactive mode prints one line noting the dirty files.
+- **Git repo, dirty tree.** Allowed. The director snapshots the current tree (including untracked, non-ignored files) into a shadow ref `refs/muxon/sessions/<id>/base` without touching the user's index, branch, or stash. The user's uncommitted work is never stashed or reset. Interactive mode prints one line noting the dirty files.
 - **Not a git repo.** Allowed. Checkpoints fall back to file snapshots (see [checkpoint](./tools/checkpoint.md)). Verify baselines still work.
 
 The diff the user reviews at the end is always `base → current`, so pre-existing edits are not attributed to the agent.

@@ -21,7 +21,7 @@ The child's context does not consume the parent's context window. The child's to
 
 ## Merge back (`write` children)
 
-1. The child works in a worktree on branch `thee/<session>/<child>`, created from the parent's current tree.
+1. The child works in a worktree on branch `muxon/<session>/<child>`, created from the parent's current tree.
 2. The child must pass the verifier in its worktree before it can `finish`. A child that fails returns its failure summary and no diff.
 3. On success the parent receives the summary and the diff stat. The runtime applies `base..child` to the parent workspace as one patch batch with `git apply --3way`.
 4. Conflicts are returned to the parent as a failed tool result with the conflicting paths. Nothing is half-applied.
@@ -31,7 +31,7 @@ The child's context does not consume the parent's context window. The child's to
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | A child with its own context. Only the summary returns. Read-only children first; writing children get a worktree and must verify before their diff is merged. |  |
+| **muxon** | A child with its own context. Only the summary returns. Read-only children first; writing children get a worktree and must verify before their diff is merged. |  |
 | **OpenCode** | Subagents and parallel sessions are part of the product. | closest |
 | **Aider** | No subagent tool. |  |
 | **Ante** | The daemon can run a turn. Child agents are not the default. |  |

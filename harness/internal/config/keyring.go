@@ -8,7 +8,7 @@ import (
 	"github.com/zalando/go-keyring"
 )
 
-const keyringService = "thee"
+const keyringService = "muxon"
 
 // SecretStore saves provider keys outside the repo and traces.
 type SecretStore interface {

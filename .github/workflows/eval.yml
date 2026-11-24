@@ -19,21 +19,21 @@ jobs:
           cache-dependency-path: harness/go.sum
       - name: Install ripgrep
         run: sudo apt-get update && sudo apt-get install -y ripgrep
-      - run: go build -o thee ./cmd/thee
+      - run: go build -o muxon ./cmd/muxon
       - name: DeepInfra basket
         env:
           DEEPINFRA_API_KEY: ${{ secrets.DEEPINFRA_API_KEY }}
         run: |
-          ./thee eval basket \
+          ./muxon eval basket \
             --matrix testdata/eval/matrix-ci.yaml \
             --tasks 'testdata/eval/*.json' \
             --trials 1 \
             --concurrency 2 \
             --budget-usd 5 \
             --trust \
-            --out "$GITHUB_WORKSPACE/.thee/eval"
+            --out "$GITHUB_WORKSPACE/.muxon/eval"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: eval-runs
-          path: .thee/eval/runs
+          path: .muxon/eval/runs

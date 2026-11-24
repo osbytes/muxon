@@ -14,7 +14,7 @@ The tool returns the path and whether it was removed or renamed. It does not dum
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | A delete and a move, one path per call. |  |
+| **muxon** | A delete and a move, one path per call. |  |
 | **OpenCode** | File tools include remove and rename. | closest |
 | **Aider** | Removal is usually a diff that deletes every line, or a git command. |  |
 | **Ante** | A profile decides if delete exists. |  |

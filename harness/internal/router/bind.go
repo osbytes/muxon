@@ -3,7 +3,7 @@ package router
 import (
 	"fmt"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
 )
 
 // Binding is a resolved role with model and provider metadata.

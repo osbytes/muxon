@@ -1,7 +1,7 @@
 package director
 
 import (
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
 )
 
 const (

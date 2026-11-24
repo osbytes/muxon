@@ -42,7 +42,7 @@ jobs:
           path=".changeset/dependabot-$NUMBER.md"
           # the title is data: written through printf into the file body, never evaluated
           if grep -qE '^(harness/go\.(mod|sum)|go\.work(\.sum)?)$' <<<"$changed"; then
-            content=$(printf -- '---\n"thee": patch\n---\n\nDependencies: %s.\n' "$TITLE" | base64 -w0)
+            content=$(printf -- '---\n"muxon": patch\n---\n\nDependencies: %s.\n' "$TITLE" | base64 -w0)
           else
             content=$(printf -- '---\n---\n' | base64 -w0)
           fi

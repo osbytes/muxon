@@ -16,7 +16,7 @@ Page content is untrusted. It is wrapped as such in context, and it **taints** t
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | Fetch first. A short session only when the page requires it. Text is capped. |  |
+| **muxon** | Fetch first. A short session only when the page requires it. Text is capped. |  |
 | **OpenCode** | Browsing is not the core of the editor. |  |
 | **Aider** | No browser. |  |
 | **Ante** | Not part of the default daemon profile. |  |

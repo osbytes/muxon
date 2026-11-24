@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
 )
 
 var costCmd = &cobra.Command{

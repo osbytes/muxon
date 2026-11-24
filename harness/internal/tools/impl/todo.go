@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 const maxOpenTodos = 30

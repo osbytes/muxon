@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 func TestScriptedDrainsInOrder(t *testing.T) {

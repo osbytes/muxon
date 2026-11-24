@@ -1,10 +1,10 @@
-# thee-harness — architecture
+# muxon — architecture
 
 **Status:** Pre-implementation specification. It describes the whole harness, every piece it needs, not a sequence of releases.
 
 ## Purpose
 
-thee-harness is a **frugal, model-agnostic coding agent**: one CLI-first loop that drives **any model from any surface** (frontier APIs, aggregators, our inference, local runtimes) from a single place. The loop is **optimized for the weakest supported model**: **tight context**, **tool-native repo access**, and **verification gates** that hold up on a small open model hold up on every model, so stronger models need no separate path. Small open models are the cheap default, not the only target.
+muxon is a **frugal, model-agnostic coding agent**: one CLI-first loop that drives **any model from any surface** (frontier APIs, aggregators, our inference, local runtimes) from a single place. The loop is **optimized for the weakest supported model**: **tight context**, **tool-native repo access**, and **verification gates** that hold up on a small open model hold up on every model, so stronger models need no separate path. Small open models are the cheap default, not the only target.
 
 The same loop runs **any** model, from an 8B open model to a frontier model. What changes per model is read from its **capability profile** (tool-calling protocol, edit format, context window, tokenizer, caching), not hard-coded for one class. OpenCode is the reference for what we avoid: a loop tuned for frontier tool calling that degrades on small models. The design takes the pieces that work from Aider (edit formats, repo map, test-in-repair-loop), Ante (profiles, local models, catalog), SWE-agent and zeroshot (verifier-gated loops), and the harness-ablation research, and combines them.
 
@@ -18,7 +18,7 @@ The harness owns **tokens, routing, and trust**; providers own **inference**.
 |-----------|---------|
 | **BYOK** | User supplies API keys (env, keychain, or `catalog.json`). No account required to run the CLI against your own DeepInfra, OpenRouter, Anthropic, local Ollama, etc. |
 | **Model-agnostic** | Swappable providers via one adapter interface; default `models.yaml` is a curated starting point, fully overridable. |
-| **Capability-adaptive** | Tool protocol, output constraint, edit format, prompt wording, sampling, reasoning handling, and budgets follow the bound model's capability profile. Unknown models get safe defaults; `thee models probe` measures the rest. |
+| **Capability-adaptive** | Tool protocol, output constraint, edit format, prompt wording, sampling, reasoning handling, and budgets follow the bound model's capability profile. Unknown models get safe defaults; `muxon models probe` measures the rest. |
 | **Fail cheap, not loud** | A slip a small model makes (an in-text call, a trailing comma, a repeated read) is caught by the harness before it costs a model turn. |
 | **Token budget** | Per-session and per-task caps; compaction before “just use a bigger window.” |
 | **Verify before done** | No terminal success on a changed workspace without a harness-run evidence step (tests, lint, or manual approval). Exhausted budgets and caps end as `failed`, never `done`. |
@@ -29,9 +29,9 @@ The harness owns **tokens, routing, and trust**; providers own **inference**.
 
 ## Small-model strategy: two pillars
 
-Most failures on 8B–32B workers are not “the model can’t code” — they are **(1) too much or wrong context** and **(2) invalid or wrong tool calls**. Frontier harnesses (e.g. OpenCode) often assume both are easy: wide tool schemas in every prompt, LSP dumps, and several native calls per turn. thee inverts that: **the harness gathers and shapes context; the model requests more with tools.**
+Most failures on 8B–32B workers are not “the model can’t code” — they are **(1) too much or wrong context** and **(2) invalid or wrong tool calls**. Frontier harnesses (e.g. OpenCode) often assume both are easy: wide tool schemas in every prompt, LSP dumps, and several native calls per turn. muxon inverts that: **the harness gathers and shapes context; the model requests more with tools.**
 
-| Pillar | OpenCode-style failure | thee response | Spec |
+| Pillar | OpenCode-style failure | muxon response | Spec |
 |--------|------------------------|---------------|------|
 | **Smart context** | Whole-repo or huge tool/LSP payloads in history | Retrieve → rank → bounded `read`; prefix caps; compaction; no auto file paste | [context-engine.md](./context-engine.md#retrieval-pipeline), [repo-map](./tools/repo-map.md) |
 | **Reliable tool calling** | Full `tools[]` + parallel native calls | Phase-gated active tools; `two_step` / `fenced`; constrain → salvage → repair → escalate | [tools/README.md](./tools/README.md#tool-calling-on-small-models), ADR-008/010 |

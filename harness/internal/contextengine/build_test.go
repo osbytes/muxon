@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 func TestPrefixHashStableAcrossPhase(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
 )
 
 // Result is returned to the model from a tool.

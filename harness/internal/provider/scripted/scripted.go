@@ -7,7 +7,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 // Provider returns queued responses in order.
@@ -22,11 +22,11 @@ func New(responses []provider.Response) *Provider {
 	return &Provider{queue: responses}
 }
 
-// FromEnv loads responses from THEE_SCRIPTED_PROVIDER_FILE (JSON array).
+// FromEnv loads responses from MUXON_SCRIPTED_PROVIDER_FILE (JSON array).
 func FromEnv() (*Provider, error) {
-	path := os.Getenv("THEE_SCRIPTED_PROVIDER_FILE")
+	path := os.Getenv("MUXON_SCRIPTED_PROVIDER_FILE")
 	if path == "" {
-		return nil, fmt.Errorf("THEE_SCRIPTED_PROVIDER_FILE not set")
+		return nil, fmt.Errorf("MUXON_SCRIPTED_PROVIDER_FILE not set")
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {

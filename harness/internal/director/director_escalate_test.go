@@ -8,14 +8,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func TestDirectorVerifyFailEmitsEscalate(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	wrongPatch, _ := json.Marshal(map[string]interface{}{
 		"path": "sum.go", "format": "search_replace",
@@ -41,14 +41,14 @@ func TestDirectorVerifyFailEmitsEscalate(t *testing.T) {
 	tracePath := filepath.Join(t.TempDir(), "trace.jsonl")
 	manifest := escalateTestManifest()
 	_, err := Run(context.Background(), Config{
-		Goal:        "fix test",
-		Workspace:   dir,
-		Trusted:     true,
-		TheeVersion: "test",
-		Provider:    scripted.New(script),
-		Manifest:    manifest,
-		TracePath:   tracePath,
-		MaxRounds:   30,
+		Goal:         "fix test",
+		Workspace:    dir,
+		Trusted:      true,
+		MuxonVersion: "test",
+		Provider:     scripted.New(script),
+		Manifest:     manifest,
+		TracePath:    tracePath,
+		MaxRounds:    30,
 		Caps: SessionCaps{
 			MaxToolRounds:            30,
 			MaxVerifyAttempts:        6,

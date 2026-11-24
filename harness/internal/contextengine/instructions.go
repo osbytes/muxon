@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 var projectInstructionFiles = []string{
@@ -18,7 +18,7 @@ var projectInstructionFiles = []string{
 // LoadProjectInstructions loads root project guidance per spec precedence.
 func LoadProjectInstructions(workspaceRoot string, trusted bool) (string, error) {
 	var parts []string
-	home, err := config.TheeHome()
+	home, err := config.MuxonHome()
 	if err == nil {
 		user := filepath.Join(home, "AGENTS.md")
 		if b, err := os.ReadFile(user); err == nil {

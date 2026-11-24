@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/subproc"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/subproc"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 const maxSearchHits = 50

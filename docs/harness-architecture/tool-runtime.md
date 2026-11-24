@@ -22,16 +22,16 @@ The tool runtime executes every tool in [tools/README.md](./tools/README.md). It
 | `full` | + shell, process, browser, MCP servers that write or use the network |
 
 - `finish` is allowed in every tier. It requires a verifier pass whenever the session changed the workspace.
-- Writing user-global memory (`~/.thee/memory/`) needs approval in every tier. See [memory](./tools/memory.md).
+- Writing user-global memory (`~/.muxon/memory/`) needs approval in every tier. See [memory](./tools/memory.md).
 - `test` runs repo code, so like the verifier it also requires workspace trust.
 - Hooks run as the user and can deny a call before it starts. They only run in trusted workspaces.
 
-The user's `max_permission` in `~/.thee/config.toml` caps every session. Project config and flags can lower the tier; they cannot raise it above that cap. See [security-and-policy.md](./security-and-policy.md#config-precedence).
+The user's `max_permission` in `~/.muxon/config.toml` caps every session. Project config and flags can lower the tier; they cannot raise it above that cap. See [security-and-policy.md](./security-and-policy.md#config-precedence).
 
 ## Files
 
 - **Workspace root only.** Paths are resolved and symlinks followed before the check; anything outside the root is rejected.
-- **Ignore rules.** `search`, `list`, and `repo-map` skip `.gitignore` and `.theeignore` matches and bulk directories (`node_modules`, `vendor`, `dist`, `build`, `.git`). `read` of an ignored-but-not-secret path is allowed when named explicitly.
+- **Ignore rules.** `search`, `list`, and `repo-map` skip `.gitignore` and `.muxonignore` matches and bulk directories (`node_modules`, `vendor`, `dist`, `build`, `.git`). `read` of an ignored-but-not-secret path is allowed when named explicitly.
 - **Secret paths.** `read`, `search`, and `list` never return the contents of the secret deny list (`.env*` except `.env.example`, keys, credentials). Writes to those paths need approval. List in [security-and-policy.md](./security-and-policy.md#ignore-rules-and-secret-paths).
 - **Stale reads.** The runtime records a content hash per file when the model reads it. `patch` and `write` on a file whose current hash differs from the last one the model saw (the user edited it meanwhile) are rejected with "file changed since you read it; re-read lines X–Y." This turns silent patch failures into one clear repair step.
 - **Atomic writes.** Every write goes to a temp file in the same directory and is renamed into place.

@@ -25,11 +25,11 @@ func LoadEffective(workspaceRoot string) (EffectiveConfig, error) {
 		Permission:    "edit",
 		Baseline:      true,
 	}
-	home, err := TheeHome()
+	home, err := MuxonHome()
 	if err == nil {
 		mergeFile(&out, filepath.Join(home, "config.toml"), false)
 	}
-	mergeFile(&out, filepath.Join(workspaceRoot, "thee.toml"), true)
+	mergeFile(&out, filepath.Join(workspaceRoot, "muxon.toml"), true)
 	out.Permission = capPermission(out.Permission, out.MaxPermission)
 	return out, nil
 }
@@ -101,7 +101,7 @@ func normalizePerm(p string) string {
 
 // VerifyCommandFromEnv returns CLI/env override.
 func VerifyCommandFromEnv() string {
-	if v := os.Getenv("THEE_VERIFY_CMD"); v != "" {
+	if v := os.Getenv("MUXON_VERIFY_CMD"); v != "" {
 		return v
 	}
 	return ""

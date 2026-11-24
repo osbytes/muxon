@@ -12,7 +12,7 @@ type uiState struct {
 }
 
 func statePath() (string, error) {
-	home, err := TheeHome()
+	home, err := MuxonHome()
 	if err != nil {
 		return "", err
 	}

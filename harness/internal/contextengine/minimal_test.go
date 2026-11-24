@@ -3,7 +3,7 @@ package contextengine
 import (
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 func TestBuildTurnIncludesToolsWhenNative(t *testing.T) {

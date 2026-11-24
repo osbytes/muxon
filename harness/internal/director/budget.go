@@ -1,12 +1,12 @@
 package director
 
-import "github.com/PLACEHOLDER/thee/harness/internal/config"
+import "github.com/PLACEHOLDER/muxon/harness/internal/config"
 
 // DefaultInteractiveMaxToolRounds is the per-goal cap for an interactive
 // session when neither config nor a flag sets one.
 const DefaultInteractiveMaxToolRounds = 100
 
-// SessionCaps are per-goal limits from thee.toml defaults.
+// SessionCaps are per-goal limits from muxon.toml defaults.
 type SessionCaps struct {
 	MaxToolRounds            int
 	MaxVerifyAttempts        int

@@ -14,7 +14,7 @@ Status, diff, commit, and worktree. Day-to-day git does not go through a free-fo
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | Named actions. Status, diff, and log are read-only. Commit and worktree are edits. |  |
+| **muxon** | Named actions. Status, diff, and log are read-only. Commit and worktree are edits. |  |
 | **OpenCode** | Git happens through the shell and the editor. |  |
 | **Aider** | Git commits and diffs are the center of the edit loop. | closest |
 | **Ante** | A profile can allow shell git instead. |  |

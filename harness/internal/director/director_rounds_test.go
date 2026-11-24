@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func TestResolveCapsInteractiveDefault(t *testing.T) {
@@ -72,7 +72,7 @@ func TestHeadlessFailsAtToolRoundLimit(t *testing.T) {
 
 func runRoundLimit(t *testing.T, interactive bool, summary string) (Outcome, []string) {
 	t.Helper()
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	manifest, err := config.LoadEmbeddedManifest()
 	if err != nil {
@@ -88,7 +88,7 @@ func runRoundLimit(t *testing.T, interactive bool, summary string) (Outcome, []s
 	var said []string
 	out, err := Run(context.Background(), Config{
 		Goal: "explain sum.go", Workspace: dir, Trusted: true, Interactive: interactive,
-		RegisterAllTools: true, TheeVersion: "t",
+		RegisterAllTools: true, MuxonVersion: "t",
 		Provider: scripted.New([]provider.Response{
 			read("1"), read("2"), read("3"),
 			{Text: summary},

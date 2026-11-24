@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
 )
 
 func TestWebSearchReturnsSearchResults(t *testing.T) {

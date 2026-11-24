@@ -1,4 +1,4 @@
-# thee API
+# muxon API
 
 Closed-source **Go** service that sits between the open-source harness and inference (default upstream: [DeepInfra](../research/01-deepinfra.md)).
 
@@ -8,15 +8,15 @@ The harness stays public. This API does not.
 
 | Piece | License | Owns |
 |-------|---------|------|
-| **Harness** (`thee` CLI) | Open source | Loop, tools, context, routing policy, local traces |
+| **Harness** (`muxon` CLI) | Open source | Loop, tools, context, routing policy, local traces |
 | **API** (this service) | Closed source | Accounts, our upstream keys, metering, abuse limits |
 | **DeepInfra** | Vendor | Model execution |
 
 ```text
-thee CLI (OSS)
+muxon CLI (OSS)
     │  OpenAI-compatible chat + stream
     ├─ BYOK ──────────────► user's DeepInfra / OpenRouter / local
-    └─ thee API key ──────► api.thee… (closed, Go)
+    └─ muxon API key ──────► api.muxon… (closed, Go)
                                 │  our DeepInfra key
                                 └─► DeepInfra
 ```
@@ -29,7 +29,7 @@ A thin **OpenAI-compatible** proxy:
 
 - `POST /v1/chat/completions` (stream and non-stream)
 - `GET /v1/models` (the curated manifest we allow)
-- Auth with a **thee API key**, not a DeepInfra key
+- Auth with a **muxon API key**, not a DeepInfra key
 - Forward to DeepInfra with **our** key
 - Record **metadata only** (account, model, token counts, cost). No prompt or completion bodies.
 

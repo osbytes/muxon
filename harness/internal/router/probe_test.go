@@ -20,7 +20,7 @@ func TestProbeChatWritesAcceptedSettings(t *testing.T) {
 	if sn.StructuredOutput != "json_schema" || sn.ToolProtocol != "native" {
 		t.Fatalf("%+v", sn)
 	}
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	if err := WriteSnippet(sn); err != nil {
 		t.Fatal(err)
 	}

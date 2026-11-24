@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/director"
-	"github.com/PLACEHOLDER/thee/harness/internal/eval"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/director"
+	"github.com/PLACEHOLDER/muxon/harness/internal/eval"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
 )
 
 func TestEvalRunWritesReward(t *testing.T) {
 	home := t.TempDir()
-	t.Setenv("THEE_HOME", home)
+	t.Setenv("MUXON_HOME", home)
 	results := filepath.Join(t.TempDir(), "results.jsonl")
 	task := eval.Task{
 		ID:      "fix-test-001",

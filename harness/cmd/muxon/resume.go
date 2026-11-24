@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/session"
-	"github.com/PLACEHOLDER/thee/harness/internal/ui/tui"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/session"
+	"github.com/PLACEHOLDER/muxon/harness/internal/ui/tui"
 )
 
 var resumeCmd = &cobra.Command{
@@ -32,13 +32,13 @@ var resumeCmd = &cobra.Command{
 				return err
 			}
 		}
-		tracePath := filepath.Join(dir, ".thee", "sessions", id, "trace.jsonl")
+		tracePath := filepath.Join(dir, ".muxon", "sessions", id, "trace.jsonl")
 		major, err := session.MajorSchema(tracePath)
 		if err != nil {
 			return err
 		}
 		if major > 1 {
-			return exitError{code: 3, msg: fmt.Sprintf("trace schema %d needs a newer thee", major)}
+			return exitError{code: 3, msg: fmt.Sprintf("trace schema %d needs a newer muxon", major)}
 		}
 		manifest, err := config.LoadMergedManifest()
 		if err != nil {
@@ -70,7 +70,7 @@ var resumeCmd = &cobra.Command{
 }
 
 func newestSession(workspace string) (string, error) {
-	dir := filepath.Join(workspace, ".thee", "sessions")
+	dir := filepath.Join(workspace, ".muxon", "sessions")
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return "", err

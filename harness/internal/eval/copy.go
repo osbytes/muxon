@@ -69,8 +69,8 @@ func removePaths(paths []string) {
 func gitBaseline(dir string) {
 	cmds := [][]string{
 		{"git", "init"},
-		{"git", "config", "user.email", "eval@thee.local"},
-		{"git", "config", "user.name", "thee eval"},
+		{"git", "config", "user.email", "eval@muxon.local"},
+		{"git", "config", "user.name", "muxon eval"},
 		{"git", "add", "-A"},
 		{"git", "commit", "-m", "baseline", "--allow-empty"},
 	}

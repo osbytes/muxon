@@ -53,7 +53,7 @@ var commandDocs = []commandDoc{
 	{"/continue", "resume after the tool round limit"},
 	{"/undo", "revert the last patch"},
 	{"/abort", "cancel the running goal"},
-	{"/exit", "quit thee"},
+	{"/exit", "quit muxon"},
 }
 
 // commandAliases maps a canonical command to names that should complete to it.

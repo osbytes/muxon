@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
 )
 
 // TrustStore lists trusted workspace roots.
@@ -17,9 +17,9 @@ type TrustStore struct {
 	ConfigHashes map[string]string `json:"config_hashes,omitempty"`
 }
 
-// LoadTrust reads ~/.thee/trust.json.
+// LoadTrust reads ~/.muxon/trust.json.
 func LoadTrust() (TrustStore, error) {
-	home, err := config.TheeHome()
+	home, err := config.MuxonHome()
 	if err != nil {
 		return TrustStore{}, err
 	}
@@ -40,7 +40,7 @@ func LoadTrust() (TrustStore, error) {
 
 // SaveTrust writes the trust store.
 func SaveTrust(s TrustStore) error {
-	home, err := config.TheeHome()
+	home, err := config.MuxonHome()
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func (s *TrustStore) AddRoot(root string) {
 	s.Roots = append(s.Roots, root)
 }
 
-// AddRootWithConfigHash records trust and optional thee.toml hash.
+// AddRootWithConfigHash records trust and optional muxon.toml hash.
 func (s *TrustStore) AddRootWithConfigHash(root, hash string) {
 	s.AddRoot(root)
 	if hash == "" {
@@ -77,9 +77,9 @@ func (s *TrustStore) AddRootWithConfigHash(root, hash string) {
 	s.ConfigHashes[filepath.Clean(root)] = hash
 }
 
-// HashTheeToml returns sha256 of project thee.toml when present.
-func HashTheeToml(workspaceRoot string) string {
-	path := filepath.Join(workspaceRoot, "thee.toml")
+// HashMuxonToml returns sha256 of project muxon.toml when present.
+func HashMuxonToml(workspaceRoot string) string {
+	path := filepath.Join(workspaceRoot, "muxon.toml")
 	b, err := os.ReadFile(path)
 	if err != nil {
 		return ""
@@ -102,7 +102,7 @@ func (s *TrustStore) RemoveRoot(root string) {
 
 // IsTrustedRoot reports whether the workspace is trusted for verify.
 func IsTrustedRoot(workspaceRoot string) bool {
-	if os.Getenv("THEE_TRUST") == "1" {
+	if os.Getenv("MUXON_TRUST") == "1" {
 		return true
 	}
 	s, err := LoadTrust()

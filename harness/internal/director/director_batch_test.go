@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/scripted"
-	"github.com/PLACEHOLDER/thee/harness/internal/testutil"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/scripted"
+	"github.com/PLACEHOLDER/muxon/harness/internal/testutil"
 )
 
 func manifestWithParallel(t *testing.T, on bool) *config.Manifest {
@@ -36,12 +36,12 @@ func readCall(id, path string) provider.ToolCall {
 
 func runBatch(t *testing.T, parallel bool, allTools bool, script []provider.Response) (Outcome, string) {
 	t.Helper()
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	dir := testutil.CopyFixture(t, "go-failing-test")
 	trace := filepath.Join(t.TempDir(), "t.jsonl")
 	out, err := Run(context.Background(), Config{
 		Goal: "look around", Workspace: dir, Trusted: true, Interactive: true,
-		RegisterAllTools: allTools, TheeVersion: "t",
+		RegisterAllTools: allTools, MuxonVersion: "t",
 		Provider:  scripted.New(script),
 		Manifest:  manifestWithParallel(t, parallel),
 		TracePath: trace,

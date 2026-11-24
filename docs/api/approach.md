@@ -1,6 +1,6 @@
 # API approach
 
-Closed-source Go service. The open-source harness calls it with a thee API key. The service calls DeepInfra with our key.
+Closed-source Go service. The open-source harness calls it with a muxon API key. The service calls DeepInfra with our key.
 
 ## Role
 
@@ -20,7 +20,7 @@ The harness already speaks OpenAI-compatible chat. Pointing `base_url` at this A
 ```text
 1. CLI builds messages (local).
 2. POST /v1/chat/completions
-     Authorization: Bearer <thee_api_key>
+     Authorization: Bearer <muxon_api_key>
      body: model, messages, tools, stream, max_tokens
 3. API checks key, balance, model allow-list, rate limit.
 4. API forwards to DeepInfra with our key.
@@ -69,10 +69,10 @@ These are checked by a contract test that runs the harness probe against the API
 
 ## Auth
 
-- User creates a **thee API key** in the closed dashboard or with `POST /v1/keys`.
-- Harness stores it like any other BYOK secret (`THEE_API_KEY`).
+- User creates a **muxon API key** in the closed dashboard or with `POST /v1/keys`.
+- Harness stores it like any other BYOK secret (`MUXON_API_KEY`).
 - Keys are hashed at rest. The DeepInfra key exists only in this service's environment.
-- Revoke a thee key without rotating the upstream key.
+- Revoke a muxon key without rotating the upstream key.
 
 ## Models
 
@@ -80,8 +80,8 @@ The API exposes a **curated list**, not all of DeepInfra.
 
 - Public prices can be higher than DeepInfra list (our margin) or equal (subscription covers margin). Pick one before launch; the protocol is the same.
 - Unknown model ids return 404.
-- Router / worker / escalator ids in the OSS manifest map to these ids when the active provider is `thee`.
-- `GET /v1/models` returns each model's capability block (tool protocol, structured output, reasoning history, prompt variant, sampling, served context), produced by running `thee models probe` against our own endpoint. Harness users on our API get a tuned profile without configuring anything; local catalog values still win.
+- Router / worker / escalator ids in the OSS manifest map to these ids when the active provider is `muxon`.
+- `GET /v1/models` returns each model's capability block (tool protocol, structured output, reasoning history, prompt variant, sampling, served context), produced by running `muxon models probe` against our own endpoint. Harness users on our API get a tuned profile without configuring anything; local catalog values still win.
 
 ## Metering
 
@@ -114,7 +114,7 @@ DeepInfra stays the upstream until a second provider is worth the code. Add it b
 
 | Case | API behavior |
 |------|----------------|
-| Bad thee key | 401, no upstream call |
+| Bad muxon key | 401, no upstream call |
 | Over spend cap | 429, no upstream call |
 | Model not on allow-list | 404 |
 | DeepInfra 429 / overload | Pass status through, or one retry on our side |

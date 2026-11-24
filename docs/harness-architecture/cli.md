@@ -7,10 +7,10 @@
 | Goal | CLI implication |
 |------|-----------------|
 | **CLI-first** | One binary; default path is interactive in a repo. |
-| **Same loop everywhere** | `thee`, `thee run`, and `thee eval` all drive the same session director. |
-| **Cost visible** | Status line and `thee cost` show tokens and $ every session. |
-| **CI-friendly** | `thee run` has stable exit codes, `--json`, and no prompts when flags say so. |
-| **ZDR** | No upload; traces stay under `.thee/sessions/`. |
+| **Same loop everywhere** | `muxon`, `muxon run`, and `muxon eval` all drive the same session director. |
+| **Cost visible** | Status line and `muxon cost` show tokens and $ every session. |
+| **CI-friendly** | `muxon run` has stable exit codes, `--json`, and no prompts when flags say so. |
+| **ZDR** | No upload; traces stay under `.muxon/sessions/`. |
 
 Non-goals for v1 CLI: desktop app, plugin marketplace, multi-session dashboard (orchestrators come later).
 
@@ -20,10 +20,10 @@ Non-goals for v1 CLI: desktop app, plugin marketplace, multi-session dashboard (
 
 | Invocation | When | Behavior |
 |------------|------|----------|
-| **`thee`** | User in a repo (default) | Start or resume **interactive** session (TUI). Equivalent to `thee chat`. |
-| **`thee chat`** | Explicit REPL | Same as `thee`; optional `[path]` to set workspace root. |
-| **`thee run -p "…"`** | Scripts, CI, eval | **Headless** one goal; stdout is progress + final summary; trace on disk. |
-| **`thee <subcommand>`** | Setup, ops, debug | No agent loop (see command tree below). |
+| **`muxon`** | User in a repo (default) | Start or resume **interactive** session (TUI). Equivalent to `muxon chat`. |
+| **`muxon chat`** | Explicit REPL | Same as `muxon`; optional `[path]` to set workspace root. |
+| **`muxon run -p "…"`** | Scripts, CI, eval | **Headless** one goal; stdout is progress + final summary; trace on disk. |
+| **`muxon <subcommand>`** | Setup, ops, debug | No agent loop (see command tree below). |
 
 Global flags (all subcommands that touch a workspace):
 
@@ -34,41 +34,41 @@ Global flags (all subcommands that touch a workspace):
 | `-q`, `--quiet` | Errors and final outcome only. |
 | `-v`, `--verbose` | Extra harness logging (`slog` to stderr). |
 
-Environment mirrors flags where noted: `THEE_TRUST`, `THEE_*` per [security-and-policy.md](./security-and-policy.md#config-precedence).
+Environment mirrors flags where noted: `MUXON_TRUST`, `MUXON_*` per [security-and-policy.md](./security-and-policy.md#config-precedence).
 
 ---
 
 ## Command tree (v1)
 
 ```text
-thee                          # → chat (interactive)
-thee chat [path]
+muxon                          # → chat (interactive)
+muxon chat [path]
 
-thee run -p PROMPT [flags]    # headless goal
-thee resume [session-id]      # interactive; latest in cwd if id omitted
+muxon run -p PROMPT [flags]    # headless goal
+muxon resume [session-id]      # interactive; latest in cwd if id omitted
 
-thee doctor                   # keys, providers, rg, optional LSP, tool-parser hints
-thee cost [--last]            # session totals from trace
+muxon doctor                   # keys, providers, rg, optional LSP, tool-parser hints
+muxon cost [--last]            # session totals from trace
 
-thee auth login [provider]    # keychain / catalog; optional thee API key
-thee models list|show|probe   # manifest + catalog + probe → suggested profile
+muxon auth login [provider]    # keychain / catalog; optional muxon API key
+muxon models list|show|probe   # manifest + catalog + probe → suggested profile
 
-thee trust list|add|rm        # ~/.thee/trust.json
-thee memory list|show|rm|review
+muxon trust list|add|rm        # ~/.muxon/trust.json
+muxon memory list|show|rm|review
 
-thee trace export|record|replay
-thee eval run|basket|report|compare|export-swebench
-thee gc                       # prune old shadow refs / sessions
+muxon trace export|record|replay
+muxon eval run|basket|report|compare|export-swebench
+muxon gc                       # prune old shadow refs / sessions
 
-thee serve [flags]            # v1 stub or minimal JSONL; full protocol later
+muxon serve [flags]            # v1 stub or minimal JSONL; full protocol later
 
-thee version
-thee completion bash|zsh|fish
+muxon version
+muxon completion bash|zsh|fish
 ```
 
-**Naming:** Research drafts used `cost-report`; the product command is **`thee cost`** ([observability.md](./observability.md#cli-cost-report)).
+**Naming:** Research drafts used `cost-report`; the product command is **`muxon cost`** ([observability.md](./observability.md#cli-cost-report)).
 
-### `thee run` flags (headless)
+### `muxon run` flags (headless)
 
 | Flag | Effect |
 |------|--------|
@@ -79,12 +79,12 @@ thee completion bash|zsh|fish
 | `--yolo` | Auto-approve within tier up to `max_permission`; enables `shell` in `full`. |
 | `--model` | Force worker SKU (still uses router for classify unless `--no-router`). |
 | `--no-plan` | Skip planning phase. |
-| `--eval PATH` | Task file; append row to `.thee/eval/results.jsonl`. |
+| `--eval PATH` | Task file; append row to `.muxon/eval/results.jsonl`. |
 | `--max-tool-rounds`, `--cost-budget-usd`, … | Override `[session]` caps for this run. |
 
 Exit codes: [session-director.md](./session-director.md#exit-codes).
 
-Interactive session inherits the same caps from `thee.toml` and `~/.thee/config.toml`; headless denies anything that would enter `blocked` except where the table allows `ask_user` to continue.
+Interactive session inherits the same caps from `muxon.toml` and `~/.muxon/config.toml`; headless denies anything that would enter `blocked` except where the table allows `ask_user` to continue.
 
 ---
 
@@ -95,7 +95,7 @@ Bubble Tea TUI ([tech-stack.md](./tech-stack.md#cli--terminal-ui)). Not a pixel 
 ### Default session (transcript mode)
 
 ```text
-┌─ thee ─ workspace: ~/src/myapp ─ worker: qwen3-coder@deepinfra ─ edit ─ trusted ─┐
+┌─ muxon ─ workspace: ~/src/myapp ─ worker: qwen3-coder@deepinfra ─ edit ─ trusted ─┐
 │ fix the failing TestParse test                                                    │
 ├───────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                   │
@@ -106,7 +106,7 @@ Bubble Tea TUI ([tech-stack.md](./tech-stack.md#cli--terminal-ui)). Not a pixel 
 │  ▸ patch   pkg/parse.go  applied (exact)                                          │
 │                                                                                   │
 │  [harness] verify running: go test ./...                                        │
-│  [harness] verify failed (exit 1) — 1 failure, log: .thee/sessions/…/verify-2.log │
+│  [harness] verify failed (exit 1) — 1 failure, log: .muxon/sessions/…/verify-2.log │
 │                                                                                   │
 │  [assistant] …                                                                    │
 │                                                                                   │
@@ -127,7 +127,7 @@ Bubble Tea TUI ([tech-stack.md](./tech-stack.md#cli--terminal-ui)). Not a pixel 
 | **Status** | Director state, caps, cost, cache hint; keyboard hints. |
 | **Input** | Multiline; Enter submits; Shift+Enter newline (or meta configurable). |
 
-Tool lines use a fixed icon (`▸`) and never dump full file bodies — details live in trace + optional `thee trace export`.
+Tool lines use a fixed icon (`▸`) and never dump full file bodies — details live in trace + optional `muxon trace export`.
 
 ### Approval modal (`blocked`)
 
@@ -158,7 +158,7 @@ Parsed only in the input line (not passed to the model). Unknown `/foo` is sent 
 | `/help` | Short command list. |
 | `/model [id]` | Switch the worker model. With no argument, pick from the connected provider's model list. |
 | `/abort` | Cancel goal (`cancelled`). |
-| `/exit` | Quit thee. `/quit` is the same command. |
+| `/exit` | Quit muxon. `/quit` is the same command. |
 | `/undo` | Revert last applied patch batch ([session-director](./session-director.md#checkpoints--resume)). |
 | `/escalate` | Force worker → escalated if budget allows ([model-router](./model-router.md#escalation-triggers)). |
 | `/continue` | After `paused` or `failed`, resume the same history with a fresh tool-round budget. |
@@ -198,7 +198,7 @@ Interrupts: [session-director.md](./session-director.md#interrupts-and-steering)
 | **`--json`** | NDJSON on stdout: subset of trace events (`state.transition`, `tool.call`, `tool.result`, `verify.run`, `session.end`) for CI parsers. |
 | **Quiet** | Final line: `done` / `failed: verify_exhausted` + exit code. |
 
-`thee run --json` does not include prompt bodies in strict ZDR profile (same as trace export).
+`muxon run --json` does not include prompt bodies in strict ZDR profile (same as trace export).
 
 ---
 
@@ -206,10 +206,10 @@ Interrupts: [session-director.md](./session-director.md#interrupts-and-steering)
 
 Suggested flow:
 
-1. `thee doctor` — missing `DEEPINFRA_API_KEY` (or catalog provider), `rg` not on PATH, workspace not git (warning only).
-2. `thee auth login deepinfra` (or edit `~/.thee/catalog.json`).
-3. `cd myrepo && thee` — trust prompt if `.thee/hooks` or verify command present.
-4. Type goal or `thee run -p "…"` in CI with `--trust`.
+1. `muxon doctor` — missing `DEEPINFRA_API_KEY` (or catalog provider), `rg` not on PATH, workspace not git (warning only).
+2. `muxon auth login deepinfra` (or edit `~/.muxon/catalog.json`).
+3. `cd myrepo && muxon` — trust prompt if `.muxon/hooks` or verify command present.
+4. Type goal or `muxon run -p "…"` in CI with `--trust`.
 
 `doctor` never prints secret values; it prints provider id, base URL reachability, and manifest role resolution.
 

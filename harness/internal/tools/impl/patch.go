@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools/patch"
-	"github.com/PLACEHOLDER/thee/harness/internal/verifier"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools/patch"
+	"github.com/PLACEHOLDER/muxon/harness/internal/verifier"
 )
 
 type patchTool struct{}

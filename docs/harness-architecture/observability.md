@@ -11,20 +11,20 @@ Observability makes the harness **debuggable**, **cost-transparent**, and **regr
 
 ## Trace storage
 
-- Path: `.thee/sessions/<session-id>/trace.jsonl` (gitignored by default).
-- Verify logs: `.thee/sessions/<session-id>/verify-<n>.log`, redacted, referenced by path from `verify.run`.
+- Path: `.muxon/sessions/<session-id>/trace.jsonl` (gitignored by default).
+- Verify logs: `.muxon/sessions/<session-id>/verify-<n>.log`, redacted, referenced by path from `verify.run`.
 - **No remote upload** in ZDR mode.
-- Optional export: user runs `thee export-trace` for bug reports (redact secrets).
+- Optional export: user runs `muxon export-trace` for bug reports (redact secrets).
 
 ### Versioning
 
-Every trace starts with `session.start` carrying `schema_version` (semver) and the `thee` version. Minor versions only add fields; readers ignore unknown fields. Resume and replay refuse a newer **major** version with a message naming the version needed. Checkpoints carry the same field.
+Every trace starts with `session.start` carrying `schema_version` (semver) and the `muxon` version. Minor versions only add fields; readers ignore unknown fields. Resume and replay refuse a newer **major** version with a message naming the version needed. Checkpoints carry the same field.
 
 ## Event types
 
 | Event | Fields |
 |-------|--------|
-| `session.start` | schema_version, thee_version, workspace, profile, permission tier, trusted, base_ref, dirty |
+| `session.start` | schema_version, muxon_version, workspace, profile, permission tier, trusted, base_ref, dirty |
 | `goal.start` | goal_id, task_type, router_confidence |
 | `state.transition` | from, to, reason |
 | `model.request` | role, provider_id, api, model_id, tool_protocol, structured_output, prompt_variant, served_context, estimated_input_tokens, prefix_hash (no body in strict ZDR export) |
@@ -64,8 +64,8 @@ Dev profile: optional full prompt logging locally (required for trace replay fix
 
 Commands:
 
-- `thee cost` — session totals  
-- `thee cost --last` — last task block  
+- `muxon cost` — session totals  
+- `muxon cost --last` — last task block  
 
 Display example:
 
@@ -75,10 +75,10 @@ Session: 4.2M in (3.1M cached) / 180k out (40k reasoning)  ~$1.14  (worker 92%, 
 
 ## Eval integration
 
-- `thee eval run task.json` copies the fixture into a fresh temp workspace, runs the director, then runs the task's hidden `check` (files copied in only after the agent exits). Reward is 1 only when that check exits 0. A timeout is reward 0 with `timeout_hit`.
-- `thee eval basket --matrix testdata/eval/matrix.yaml --trials 3` writes `.thee/eval/runs/<run-id>/results.jsonl` and `run.json`. `--budget-usd` stops scheduling once spent cost reaches the cap.
-- `thee eval report <run-id>` groups by model and capability overrides and prints a task-clustered 95% bootstrap interval. `thee eval compare <run-a> <run-b>` pairs tasks and prints an exact McNemar p-value.
-- `thee run --eval tasks/fix-test-001.json` still appends one row to the workspace `.thee/eval/results.jsonl` from `session.end`. That path is not the hidden grader.
+- `muxon eval run task.json` copies the fixture into a fresh temp workspace, runs the director, then runs the task's hidden `check` (files copied in only after the agent exits). Reward is 1 only when that check exits 0. A timeout is reward 0 with `timeout_hit`.
+- `muxon eval basket --matrix testdata/eval/matrix.yaml --trials 3` writes `.muxon/eval/runs/<run-id>/results.jsonl` and `run.json`. `--budget-usd` stops scheduling once spent cost reaches the cap.
+- `muxon eval report <run-id>` groups by model and capability overrides and prints a task-clustered 95% bootstrap interval. `muxon eval compare <run-a> <run-b>` pairs tasks and prints an exact McNemar p-value.
+- `muxon run --eval tasks/fix-test-001.json` still appends one row to the workspace `.muxon/eval/results.jsonl` from `session.end`. That path is not the hidden grader.
 - Weekly workflow (`.github/workflows/eval.yml`) runs the DeepInfra slice. The frontier row is manual. A harness change that helps the frontier row while hurting the 9B row is a regression.
 - How those rows become a score, and how SWE-bench gets graded outside this binary: [benchmarks.md](../benchmarks.md).
 
@@ -91,7 +91,7 @@ Dev-profile traces double as **golden fixtures** for deterministic loop tests:
 - A `replay` provider serves recorded `model.response` bodies in order. Each request is matched by sequence number and the hash of its assembled messages.
 - A hash mismatch fails the test and prints the prompt diff. That catches unintended prompt-layout and cache-prefix changes, not just behavior changes.
 - Tests assert the sequence of state transitions, tool calls, and the `session.end` outcome. Tool side effects run against a fixture repo in `testdata/`.
-- `thee trace record` captures a fixture; `thee trace replay` re-runs one. Fixtures are re-recorded deliberately when the prompt layout changes on purpose.
+- `muxon trace record` captures a fixture; `muxon trace replay` re-runs one. Fixtures are re-recorded deliberately when the prompt layout changes on purpose.
 
 See [tech-stack.md](./tech-stack.md#testing-lint-ci).
 

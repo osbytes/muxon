@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 // RatesFromModel extracts list prices from a model definition.

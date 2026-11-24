@@ -3,7 +3,7 @@ version: "3"
 
 vars:
   HARNESS: ./harness
-  THEE: ./harness/cmd/thee
+  MUXON: ./harness/cmd/muxon
 
 tasks:
   default:
@@ -12,14 +12,14 @@ tasks:
     silent: true
 
   build:
-    desc: Build harness/thee binary
+    desc: Build harness/muxon binary
     cmds:
-      - go build -o harness/thee{{exeExt}} {{.THEE}}
+      - go build -o harness/muxon{{exeExt}} {{.MUXON}}
 
-  thee:
-    desc: go run thee CLI (pass args after --, e.g. task thee -- run -p "hi")
+  muxon:
+    desc: go run muxon CLI (pass args after --, e.g. task muxon -- run -p "hi")
     cmds:
-      - go run {{.THEE}} {{.CLI_ARGS}}
+      - go run {{.MUXON}} {{.CLI_ARGS}}
 
   test:
     desc: go test ./harness/...
@@ -46,4 +46,4 @@ tasks:
     desc: OpenCode Go basket
     dir: harness
     cmds:
-      - go run ./cmd/thee eval basket --matrix testdata/eval/matrix-opencode.yaml --tasks 'testdata/eval/*.json' --trials 1 --concurrency 2 --budget-usd 5 --trust
+      - go run ./cmd/muxon eval basket --matrix testdata/eval/matrix-opencode.yaml --tasks 'testdata/eval/*.json' --trials 1 --concurrency 2 --budget-usd 5 --trust

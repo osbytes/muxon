@@ -5,7 +5,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/assets"
+	"github.com/PLACEHOLDER/muxon/harness/internal/assets"
 )
 
 // Manifest is the parsed models.yaml document.

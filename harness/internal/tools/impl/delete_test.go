@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
-	"github.com/PLACEHOLDER/thee/harness/internal/workspace"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/workspace"
 )
 
 func TestDeleteFile(t *testing.T) {

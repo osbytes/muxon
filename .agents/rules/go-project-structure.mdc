@@ -1,5 +1,5 @@
 ---
-description: Package boundaries, interfaces, and thee internal layout
+description: Package boundaries, interfaces, and muxon internal layout
 globs: "harness/**/*.go"
 alwaysApply: false
 ---

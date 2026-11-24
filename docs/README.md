@@ -1,4 +1,4 @@
-# thee-harness — documentation
+# muxon — documentation
 
 **Product:** [product.md](./product.md)
 
@@ -21,7 +21,7 @@ Foundational research for a **frugal, model-agnostic engineering harness** (CLI-
 |----------|-------------|
 | [01-deepinfra.md](./research/01-deepinfra.md) | DeepInfra product deep dive: architecture, APIs, pricing, privacy, competitors, harness implications |
 | [02-harness-landscape.md](./research/02-harness-landscape.md) | Harness landscape, techniques, influence matrix, product fit |
-| [03-awesome-cli-coding-agents-survey.md](./research/03-awesome-cli-coding-agents-survey.md) | Full survey of bradAGI list (381 entries), Tier A/B for thee-harness |
+| [03-awesome-cli-coding-agents-survey.md](./research/03-awesome-cli-coding-agents-survey.md) | Full survey of bradAGI list (381 entries), Tier A/B for muxon |
 | [benchmarks.md](./benchmarks.md) | How harness scores are calculated, and how to run them from this repo |
 
 **Last updated:** 2026-10-12 (research pass).

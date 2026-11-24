@@ -14,7 +14,7 @@ Replacing an existing file the user changed since the model last read it is reje
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | Full contents for a new or small file, capped at 32 KiB. A large existing file is patched. |  |
+| **muxon** | Full contents for a new or small file, capped at 32 KiB. A large existing file is patched. |  |
 | **OpenCode** | A write can drop a large new file in one call. | closest |
 | **Aider** | New files usually arrive as a diff. |  |
 | **Ante** | A profile can allow write. Size limits are not part of the public design. |  |

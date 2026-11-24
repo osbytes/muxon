@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/toolcall"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/toolcall"
 )
 
 func repairableToolErr(err error) bool {

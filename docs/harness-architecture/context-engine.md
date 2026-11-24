@@ -77,7 +77,7 @@ The engine auto-loads, in order of precedence, the first that exists at the work
 2. `CONVENTIONS.md` (Aider)
 3. `CLAUDE.md`, `.cursorrules` (read for compatibility)
 
-Nested `AGENTS.md` files in subdirectories are loaded lazily into the tail when the model first reads or patches a file in that subtree. The root file is capped in the prefix by the window ([Small windows](#small-windows)); beyond that it is trimmed with a note pointing the model at `read`. User-level `~/.thee/AGENTS.md` is prepended.
+Nested `AGENTS.md` files in subdirectories are loaded lazily into the tail when the model first reads or patches a file in that subtree. The root file is capped in the prefix by the window ([Small windows](#small-windows)); beyond that it is trimmed with a note pointing the model at `read`. User-level `~/.muxon/AGENTS.md` is prepended.
 
 Project instructions are guidance, never policy. They cannot change the permission tier, the verify command, or approvals. In an untrusted workspace they are wrapped as untrusted content (below).
 
@@ -114,11 +114,11 @@ Compaction and elision apply to **tool trace**, not a growing paste of the repo.
 1. **Repo map** — symbol map from tree + index; regenerated on git HEAD / dirty set change or TTL.
 2. **search** — ripgrep with path/glob limits; return paths + line hits only. Respects ignore rules.
 3. **read** — bounded line ranges into snippets (max lines/tokens per read).
-4. **Symbol index** — local **SQLite** at `.thee/index/<workspace-id>.db` (v1), built from tree-sitter or language-specific extractors where available, else ctags/`go list`-style fallbacks; LSP enriches when installed. Used for `repo-map` ranking and `lsp` fallback.
+4. **Symbol index** — local **SQLite** at `.muxon/index/<workspace-id>.db` (v1), built from tree-sitter or language-specific extractors where available, else ctags/`go list`-style fallbacks; LSP enriches when installed. Used for `repo-map` ranking and `lsp` fallback.
 
 **Ranking (v1):** score symbols for the repo-map slice using (a) token overlap between the current goal text and symbol/path strings, (b) router `tags`, (c) recency of paths the model already read this goal, (d) deprioritize generated/vendor paths already ignored by search. Drop lowest scores until the map fits its budget share ([small windows](#small-windows)).
 
-Ignore rules (`.gitignore`, `.theeignore`, secret deny list) apply to retrieval and to the repo map. See [security-and-policy.md](./security-and-policy.md#ignore-rules-and-secret-paths).
+Ignore rules (`.gitignore`, `.muxonignore`, secret deny list) apply to retrieval and to the repo map. See [security-and-policy.md](./security-and-policy.md#ignore-rules-and-secret-paths).
 
 ## Compaction pipeline
 

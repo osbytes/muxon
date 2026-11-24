@@ -23,7 +23,7 @@ The tool returns the path, a short diff stat, and which ladder step applied. Obs
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | Unified diff or SEARCH/REPLACE, picked per model. One file. Exact, then whitespace-tolerant, then unique fuzzy match, then a targeted reject. |  |
+| **muxon** | Unified diff or SEARCH/REPLACE, picked per model. One file. Exact, then whitespace-tolerant, then unique fuzzy match, then a targeted reject. |  |
 | **OpenCode** | Search-replace and whole-file edits are both common. |  |
 | **Aider** | Several edit formats chosen per model, with flexible matching when a hunk does not apply exactly. | closest |
 | **Ante** | Edits are whatever tools the profile exposes. |  |

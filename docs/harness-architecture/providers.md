@@ -4,7 +4,7 @@ Providers are **adapters** from the harness to inference backends. The default p
 
 ## Bring your own keys (BYOK)
 
-**thee-harness never requires our API keys or a thee-harness account** to run inference. Users authenticate to whatever backends they choose; the harness only reads credentials from the user’s machine (or their team secret store).
+**muxon never requires our API keys or a muxon account** to run inference. Users authenticate to whatever backends they choose; the harness only reads credentials from the user’s machine (or their team secret store).
 
 The harness lets users bring their own key. Our own inference is the provider we want them to select, specified in [../api/README.md](../api/README.md): lower price, and prompts, completions, and code are never retained. The client protocol is the same OpenAI-compatible call either way.
 
@@ -13,21 +13,21 @@ The harness lets users bring their own key. Our own inference is the provider we
 | **User-owned credentials** | Keys live in env vars, OS keychain, or a user-level config file—not embedded in the binary. |
 | **Any supported host** | If it speaks OpenAI-compatible chat completions (+ tools), you can register it. |
 | **Default ≠ exclusive** | Shipped `models.yaml` recommends frugal OSS routes (often DeepInfra); users replace providers, models, and rates freely. |
-| **No key escrow** | CLI talks directly to the provider; we do not proxy or store keys on our servers. Choosing our API means using a thee key against our endpoint, not handing us a vendor key. |
+| **No key escrow** | CLI talks directly to the provider; we do not proxy or store keys on our servers. Choosing our API means using a muxon key against our endpoint, not handing us a vendor key. |
 | **Multi-provider** | Different roles (router / worker / escalated) may use different providers and keys in one session. |
 
 ### Credential resolution order
 
-1. Per-provider `api_key_env` in `models.yaml` or `catalog.json` (e.g. `DEEPINFRA_API_KEY`). At startup `thee` loads the nearest `.env` at or above the current directory (stopping at the directory that holds `.git`). It never overrides variables already set in the environment.
+1. Per-provider `api_key_env` in `models.yaml` or `catalog.json` (e.g. `DEEPINFRA_API_KEY`). At startup `muxon` loads the nearest `.env` at or above the current directory (stopping at the directory that holds `.git`). It never overrides variables already set in the environment.
 2. Generic fallbacks where documented (e.g. `OPENAI_API_KEY` for OpenAI-compatible base URLs)—explicit in config, not magic.
-3. OS keychain entries via `thee auth login <provider>`.
+3. OS keychain entries via `muxon auth login <provider>`.
 4. **(team)** CI/org secret injection—same env-based contract.
 
-`thee doctor` should report which providers are configured (key present, base URL reachable) without printing secret values.
+`muxon doctor` should report which providers are configured (key present, base URL reachable) without printing secret values.
 
 ### User provider registry: `catalog.json`
 
-Ante-style file (default `~/.thee/catalog.json` or path in `thee.toml`) for providers and models **without** waiting for a release:
+Ante-style file (default `~/.muxon/catalog.json` or path in `muxon.toml`) for providers and models **without** waiting for a release:
 
 ```json
 {
@@ -50,11 +50,11 @@ Ante-style file (default `~/.thee/catalog.json` or path in `thee.toml`) for prov
 
 Model entries in `models.yaml` reference `provider: my-deepinfra` (or inline overrides).
 
-Project `thee.toml` cannot register providers or redirect base URLs; that would let a repo route your code to its own endpoint. Provider config is user-level only ([security-and-policy.md](./security-and-policy.md#workspace-trust)).
+Project `muxon.toml` cannot register providers or redirect base URLs; that would let a repo route your code to its own endpoint. Provider config is user-level only ([security-and-policy.md](./security-and-policy.md#workspace-trust)).
 
 ### Our API as a provider
 
-The [thee API](../api/README.md) (pay-as-you-go credits) is one provider entry like any other: `base_url` plus `THEE_API_KEY`. It is **optional**. BYOK remains fully supported for solo devs, air-gapped, and teams with existing vendor contracts, and choosing our API never disables direct BYOK.
+The [muxon API](../api/README.md) (pay-as-you-go credits) is one provider entry like any other: `base_url` plus `MUXON_API_KEY`. It is **optional**. BYOK remains fully supported for solo devs, air-gapped, and teams with existing vendor contracts, and choosing our API never disables direct BYOK.
 
 ## Recommended defaults (not lock-in)
 
@@ -133,7 +133,7 @@ Rules:
 Most "small models don't work in this harness" reports come from the server, not the model. The harness checks the usual failures instead of trusting defaults:
 
 - **Silent truncation.** Ollama's default context is far smaller than the model's window and it drops the start of the prompt without an error, which deletes the system prompt and tool catalog first. The adapter sends `num_ctx` (Ollama `options`) sized to the turn budget, and the probe measures `served_context` for every local endpoint. When usage shows `prompt_tokens` well below the harness estimate, the turn is flagged as truncated and the session drops to the measured window.
-- **Chat template and tool parser.** vLLM and llama.cpp only return native tool calls when the server runs with the right tool parser and template. Without them, calls arrive as text. The salvage parser handles this, and `thee doctor` reports when a native-profile model is producing text calls.
+- **Chat template and tool parser.** vLLM and llama.cpp only return native tool calls when the server runs with the right tool parser and template. Without them, calls arrive as text. The salvage parser handles this, and `muxon doctor` reports when a native-profile model is producing text calls.
 - **Stop sequences.** Some templates leak end-of-turn tokens or continue past them. Per-model `sampling.stop` covers this.
 - **Concurrency.** Local servers often serve one request at a time. The harness does not send concurrent model calls (subagents, background summarization) to an endpoint marked `max_concurrency: 1`; they queue.
 - **No usage.** Some servers omit usage in streams. Token budgets then use the harness estimate, marked as estimated in the trace.
@@ -203,7 +203,7 @@ Request `stream_options.include_usage` when streaming on `openai_chat`. Cost for
 
 ## Manifest: `models.yaml`
 
-Shipped as a **starter** manifest; users override path via `thee.toml` or `--models-manifest`. All `provider` names must exist in `providers:` or `catalog.json`.
+Shipped as a **starter** manifest; users override path via `muxon.toml` or `--models-manifest`. All `provider` names must exist in `providers:` or `catalog.json`.
 
 ```yaml
 version: 1
@@ -260,7 +260,7 @@ models:
     model: qwen3-coder:30b
     capabilities:
       context_window: 262144
-      served_context: 32768      # measured by `thee models probe`; adapter sends num_ctx
+      served_context: 32768      # measured by `muxon models probe`; adapter sends num_ctx
       tool_protocol: two_step
       structured_output: json_schema  # Ollama `format`
       text_tool_dialect: qwen_xml
@@ -299,7 +299,7 @@ What each field drives is in [model-router.md](./model-router.md#capability-prof
 - Missing fields take conservative defaults, so an unknown model works, just less efficiently. `parallel_tool_calls` stays off.
 - Native models connected through `/providers` are the exception: they are created with `tool_protocol: native` and `parallel_tool_calls: true`. A later `/model` switch on that provider keeps the flag. One reply may then contain up to 8 calls, run in order.
 - `catalog.json` entries can carry the same `capabilities` block; user values override the shipped manifest.
-- `thee models probe <id>` measures served context, structured-output support, tool protocols, edit formats, and reasoning behavior against the real endpoint, and writes a suggested block to the catalog ([Probe](./model-router.md#probe)).
+- `muxon models probe <id>` measures served context, structured-output support, tool protocols, edit formats, and reasoning behavior against the real endpoint, and writes a suggested block to the catalog ([Probe](./model-router.md#probe)).
 - A gateway that publishes capabilities on `GET /v1/models` (our API, or a LiteLLM-style proxy that exposes model info) fills defaults automatically; local config still wins.
 
 ## Related

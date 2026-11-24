@@ -14,7 +14,7 @@ The argv is exec'd directly, not through a shell. `sh -c "..."` and similar are 
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | One argv, no shell strings, a timeout, an output cap, a scrubbed env, and a blocklist. Off unless the user allows it. Not used for verify. |  |
+| **muxon** | One argv, no shell strings, a timeout, an output cap, a scrubbed env, and a blocklist. Off unless the user allows it. Not used for verify. |  |
 | **OpenCode** | Shell is a normal tool, with approvals, and a wider command surface. |  |
 | **Aider** | Optional and usually user-triggered (`/run`). |  |
 | **Ante** | The daemon confirms commands. A profile can remove shell. |  |

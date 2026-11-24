@@ -10,19 +10,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/contextengine"
-	"github.com/PLACEHOLDER/thee/harness/internal/db"
-	"github.com/PLACEHOLDER/thee/harness/internal/observability"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider/openai"
-	"github.com/PLACEHOLDER/thee/harness/internal/router"
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/toolcall"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools"
-	"github.com/PLACEHOLDER/thee/harness/internal/tools/impl"
-	"github.com/PLACEHOLDER/thee/harness/internal/verifier"
-	"github.com/PLACEHOLDER/thee/harness/internal/workspace"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/contextengine"
+	"github.com/PLACEHOLDER/muxon/harness/internal/db"
+	"github.com/PLACEHOLDER/muxon/harness/internal/observability"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider/openai"
+	"github.com/PLACEHOLDER/muxon/harness/internal/router"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/toolcall"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools"
+	"github.com/PLACEHOLDER/muxon/harness/internal/tools/impl"
+	"github.com/PLACEHOLDER/muxon/harness/internal/verifier"
+	"github.com/PLACEHOLDER/muxon/harness/internal/workspace"
 )
 
 const defaultSessionID = "test-session"
@@ -40,7 +40,7 @@ type Config struct {
 	Goal                string
 	Workspace           string
 	Trusted             bool
-	TheeVersion         string
+	MuxonVersion        string
 	Provider            provider.Provider
 	Manifest            *config.Manifest
 	MaxRounds           int
@@ -129,7 +129,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 	if sid == "" {
 		sid = defaultSessionID
 	}
-	traceDir := filepath.Join(ws.Root(), ".thee", "sessions", sid)
+	traceDir := filepath.Join(ws.Root(), ".muxon", "sessions", sid)
 	if err := os.MkdirAll(traceDir, 0o755); err != nil {
 		return Outcome{State: StateFailed, Reason: "setup", ExitCode: 3}, err
 	}
@@ -202,7 +202,7 @@ func Run(ctx context.Context, cfg Config) (Outcome, error) {
 		return o
 	}
 
-	emit(observability.SessionStartEvent(cfg.TheeVersion, ws.Root()))
+	emit(observability.SessionStartEvent(cfg.MuxonVersion, ws.Root()))
 	_ = workspace.EnsureSessionBase(ws.Root(), sid)
 
 	class := router.ClassifyGoal(ctx, cfg.Goal, manifest, routerProv)

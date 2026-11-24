@@ -7,7 +7,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-// UserConfig is ~/.thee/config.toml (user-level only).
+// UserConfig is ~/.muxon/config.toml (user-level only).
 type UserConfig struct {
 	Providers struct {
 		Catalog string `toml:"catalog"`
@@ -22,7 +22,7 @@ type UserConfig struct {
 
 // LoadUserConfig reads user config when present.
 func LoadUserConfig() (UserConfig, error) {
-	home, err := TheeHome()
+	home, err := MuxonHome()
 	if err != nil {
 		return UserConfig{}, err
 	}

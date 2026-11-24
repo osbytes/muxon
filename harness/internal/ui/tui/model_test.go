@@ -6,11 +6,11 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
 )
 
 func TestModelCommandSwitchesWorker(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	m := sessionModel(t.TempDir())
 	m.modelCommand("qwen3-coder")
 	if m.opt.WorkerModel != "qwen3-coder" {
@@ -68,7 +68,7 @@ func TestModelSuggestionsFilter(t *testing.T) {
 }
 
 func TestModelPickerSelects(t *testing.T) {
-	t.Setenv("THEE_HOME", t.TempDir())
+	t.Setenv("MUXON_HOME", t.TempDir())
 	m := sessionModel(t.TempDir())
 	m.modelChoices = []string{"kimi-k2.7-code", "qwen3-coder"}
 	m.modelsAuthoritative = true

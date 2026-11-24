@@ -6,12 +6,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
 )
 
 var rootCmd = &cobra.Command{
-	Use:          "thee",
-	Short:        "thee coding agent harness",
+	Use:          "muxon",
+	Short:        "muxon coding agent harness",
 	SilenceUsage: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		wd, err := os.Getwd()

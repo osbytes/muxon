@@ -14,7 +14,7 @@ Ignored and bulk directories are collapsed to one entry with a count, so a listi
 
 | Harness | What it does | Closer to |
 |---------|--------------|-----------|
-| **thee** | A capped listing inside the workspace. Always available. One call. |  |
+| **muxon** | A capped listing inside the workspace. Always available. One call. |  |
 | **OpenCode** | Listing is part of the file tools, along with LSP. | closest |
 | **Aider** | The repo map stands in for browsing the tree. |  |
 | **Ante** | A profile can include or drop a list tool. |  |

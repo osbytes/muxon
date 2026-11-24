@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 // Client is an OpenAI-compatible chat completions client.

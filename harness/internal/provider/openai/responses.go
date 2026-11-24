@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
 )
 
 const openCodeGoResponsesURL = "https://opencode.ai/inference/go/v1/responses"

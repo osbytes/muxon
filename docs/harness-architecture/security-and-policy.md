@@ -7,38 +7,38 @@ Security wraps **tool runtime**, **subprocess** execution, and **repo-supplied c
 | Layer | Policy |
 |-------|--------|
 | **Our API** | Optional; no prompt/completion persistence; billing metadata only. **BYOK direct mode unchanged.** |
-| **Credentials** | **BYOK** — keys never sent to thee-harness servers unless user opts into hosted proxy. Never passed to subprocesses. |
+| **Credentials** | **BYOK** — keys never sent to muxon servers unless user opts into hosted proxy. Never passed to subprocesses. |
 | **Recommended defaults** | OSS models on DeepInfra when user configures `DEEPINFRA_API_KEY`; strict mode blocks unwanted third-party model routes |
 | **Local traces** | User-owned disk; optional body-free mode |
 
 ## Workspace trust
 
-Cloning a hostile repo and running `thee` must not be equivalent to running its scripts. Repo-supplied surfaces that can execute or steer:
+Cloning a hostile repo and running `muxon` must not be equivalent to running its scripts. Repo-supplied surfaces that can execute or steer:
 
 | Surface | Risk | Untrusted behavior |
 |---------|------|--------------------|
-| `.thee/hooks/` | Runs as the user | Not run |
-| Verify command (`thee.toml`, `package.json`, `Makefile`) | Runs as the user | Interactive: shown and approved once. Headless: setup error unless `--trust` or `--verify-cmd` |
+| `.muxon/hooks/` | Runs as the user | Not run |
+| Verify command (`muxon.toml`, `package.json`, `Makefile`) | Runs as the user | Interactive: shown and approved once. Headless: setup error unless `--trust` or `--verify-cmd` |
 | `test` tool | Runs repo code | Disabled |
-| Project `thee.toml` `[security]` | Could loosen policy | Can only **tighten** (lower tier, add blocks) |
-| Project `thee.toml` `[providers]` | Could redirect inference and leak code | Ignored |
-| `.thee/skills/`, `.thee/memory/` | Prompt injection | Not loaded |
+| Project `muxon.toml` `[security]` | Could loosen policy | Can only **tighten** (lower tier, add blocks) |
+| Project `muxon.toml` `[providers]` | Could redirect inference and leak code | Ignored |
+| `.muxon/skills/`, `.muxon/memory/` | Prompt injection | Not loaded |
 | `AGENTS.md` and source files | Prompt injection | Loaded, wrapped as untrusted content |
 
-Trust is per workspace root and stored in `~/.thee/trust.json` with a hash of the trust-relevant files (`thee.toml`, `.thee/hooks/*`, resolved verify command). When that hash changes, interactive mode asks again and shows what changed.
+Trust is per workspace root and stored in `~/.muxon/trust.json` with a hash of the trust-relevant files (`muxon.toml`, `.muxon/hooks/*`, resolved verify command). When that hash changes, interactive mode asks again and shows what changed.
 
 - **Interactive first run:** one prompt listing hooks, the verify command, and any policy the project config sets. Choices: trust, trust once, don't trust.
-- **Headless / CI:** `--trust`, `THEE_TRUST=1`, or a path prefix in the user's `trusted_roots`. CI checkouts of your own repo normally pass `--trust`.
-- `thee trust list | add | rm` manages the store.
+- **Headless / CI:** `--trust`, `MUXON_TRUST=1`, or a path prefix in the user's `trusted_roots`. CI checkouts of your own repo normally pass `--trust`.
+- `muxon trust list | add | rm` manages the store.
 
 ## Config precedence
 
 Lowest to highest:
 
 1. Built-in defaults
-2. User `~/.thee/config.toml`
-3. Project `thee.toml` (only its tightening keys when untrusted)
-4. Environment `THEE_*`
+2. User `~/.muxon/config.toml`
+3. Project `muxon.toml` (only its tightening keys when untrusted)
+4. Environment `MUXON_*`
 5. CLI flags
 
 Security keys are the exception: the user's `max_permission`, `deny` patterns, and `zdr_strict` are ceilings that later layers cannot loosen. `--yolo` raises the tier to the user's `max_permission` and auto-approves within it; it never exceeds it.
@@ -81,7 +81,7 @@ The user's next message clears the taint because the user has seen the content i
 
 - **argv only;** `sh -c` style strings denied unless `allow_shell_strings = true`.
 - Blocklist: `rm -rf /`, `curl | sh`, fork bombs, writing outside workspace root. The blocklist is a backstop, not a boundary; the sandbox is the boundary.
-- Allowlist optional in `thee.toml` for CI.
+- Allowlist optional in `muxon.toml` for CI.
 - Provider keys and secret env vars scrubbed from every subprocess.
 - Secret redaction in trace: patterns for API keys, `.env` paths.
 
@@ -99,7 +99,7 @@ Backends: macOS `sandbox-exec` profile; Linux bubblewrap, falling back to Landlo
 
 Prevention, not just redaction:
 
-- `search`, `list`, and `repo-map` respect `.gitignore`, `.theeignore` (gitignore syntax), and skip bulk directories (`node_modules`, `vendor`, `dist`, `build`, `target`, `.git`, `.venv`).
+- `search`, `list`, and `repo-map` respect `.gitignore`, `.muxonignore` (gitignore syntax), and skip bulk directories (`node_modules`, `vendor`, `dist`, `build`, `target`, `.git`, `.venv`).
 - **Secret deny list** — contents never returned by `read`/`search`, writes need approval:
 
 ```text
@@ -116,10 +116,10 @@ Users extend it with `[security] deny_read = [...]`. A denied read returns "path
 Memory is injected into future sessions, so a poisoned note outlives the session that wrote it.
 
 - Every note stores provenance: session id, the tool results it followed, timestamp, and whether the session was tainted.
-- Project memory (`.thee/memory/`) is written at `edit`; it is loaded only in trusted workspaces.
-- User-global memory (`~/.thee/memory/`) writes always need approval (headless: denied), because they affect every repo.
-- Notes written while tainted are stored as `pending` and not injected until the user accepts them (`thee memory review`).
-- `thee memory list | show | rm` for inspection.
+- Project memory (`.muxon/memory/`) is written at `edit`; it is loaded only in trusted workspaces.
+- User-global memory (`~/.muxon/memory/`) writes always need approval (headless: denied), because they affect every repo.
+- Notes written while tainted are stored as `pending` and not injected until the user accepts them (`muxon memory review`).
+- `muxon memory list | show | rm` for inspection.
 
 ## Network egress
 
@@ -133,11 +133,11 @@ DvalinCode-style:
 - Hash-chained log of tool calls and approvals for compliance export.
 - Off for solo use; on when a team policy requires it.
 
-## Config surface: `thee.toml`
+## Config surface: `muxon.toml`
 
 ```toml
-[providers]                          # honored only in ~/.thee/config.toml
-catalog = "~/.thee/catalog.json"     # BYOK provider registry (optional)
+[providers]                          # honored only in ~/.muxon/config.toml
+catalog = "~/.muxon/catalog.json"     # BYOK provider registry (optional)
 models_manifest = "models.yaml"      # or path to user override
 
 [security]
@@ -159,7 +159,7 @@ backend = "auto"     # auto | sandbox-exec | bubblewrap | landlock | docker
 network = false
 ```
 
-User-level `~/.thee/config.toml` adds `max_permission` and `trusted_roots`.
+User-level `~/.muxon/config.toml` adds `max_permission` and `trusted_roots`.
 
 ## Related
 

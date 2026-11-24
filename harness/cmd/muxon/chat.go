@@ -6,11 +6,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/PLACEHOLDER/thee/harness/internal/config"
-	"github.com/PLACEHOLDER/thee/harness/internal/provider"
-	"github.com/PLACEHOLDER/thee/harness/internal/router"
-	"github.com/PLACEHOLDER/thee/harness/internal/security"
-	"github.com/PLACEHOLDER/thee/harness/internal/ui/tui"
+	"github.com/PLACEHOLDER/muxon/harness/internal/config"
+	"github.com/PLACEHOLDER/muxon/harness/internal/provider"
+	"github.com/PLACEHOLDER/muxon/harness/internal/router"
+	"github.com/PLACEHOLDER/muxon/harness/internal/security"
+	"github.com/PLACEHOLDER/muxon/harness/internal/ui/tui"
 )
 
 var chatCmd = &cobra.Command{
@@ -73,7 +73,7 @@ func startChat(cmd *cobra.Command, args []string) error {
 }
 
 func autoConnectID(prov provider.Provider) string {
-	if prov != nil || os.Getenv("THEE_SCRIPTED_PROVIDER_FILE") != "" {
+	if prov != nil || os.Getenv("MUXON_SCRIPTED_PROVIDER_FILE") != "" {
 		return ""
 	}
 	return config.LastProvider()
@@ -82,7 +82,7 @@ func autoConnectID(prov provider.Provider) string {
 // loadInteractiveProvider opens the TUI even when the worker key is missing.
 // The second result is the provider id. The third is a setup hint when the key is absent.
 func loadInteractiveProvider(manifest *config.Manifest) (provider.Provider, string, string, error) {
-	if os.Getenv("THEE_SCRIPTED_PROVIDER_FILE") != "" {
+	if os.Getenv("MUXON_SCRIPTED_PROVIDER_FILE") != "" {
 		p, _, err := loadRunProvider(manifest, "")
 		return p, "", "", err
 	}
@@ -96,7 +96,7 @@ func loadInteractiveProvider(manifest *config.Manifest) (provider.Provider, stri
 		if envName == "" {
 			envName = "the provider API key"
 		}
-		hint := "No provider key yet. Set " + envName + ", or run: thee auth login " + bind.ProviderName
+		hint := "No provider key yet. Set " + envName + ", or run: muxon auth login " + bind.ProviderName
 		return nil, bind.ProviderName, hint, nil
 	}
 	return p, bind.ProviderName, "", nil

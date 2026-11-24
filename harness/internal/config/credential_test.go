@@ -5,16 +5,16 @@ import (
 )
 
 func TestResolveAPIKeyMissing(t *testing.T) {
-	t.Setenv("THEE_TEST_KEY", "")
-	_, err := ResolveAPIKey("THEE_TEST_KEY")
+	t.Setenv("MUXON_TEST_KEY", "")
+	_, err := ResolveAPIKey("MUXON_TEST_KEY")
 	if err == nil {
 		t.Fatal("expected error")
 	}
 }
 
 func TestResolveAPIKeyPresent(t *testing.T) {
-	t.Setenv("THEE_TEST_KEY", "secret")
-	v, err := ResolveAPIKey("THEE_TEST_KEY")
+	t.Setenv("MUXON_TEST_KEY", "secret")
+	v, err := ResolveAPIKey("MUXON_TEST_KEY")
 	if err != nil {
 		t.Fatal(err)
 	}
