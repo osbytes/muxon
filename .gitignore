@@ -21,6 +21,7 @@
 # Env / secrets
 .env
 .env.*
+!.env.example
 
 # Release tooling (changesets)
 node_modules/
